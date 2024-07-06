@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import CommonTable from '@/components/Table';
 import FormModal from '@/components/Form/FormModal';
 
-import { getRoleList, addRole, updateRole, deleteRole } from '@/utils/request/role';
+import { getPermissionSourceList, addPermissionSource, updatePermissionSource, deletePermissionSource } from '@/utils/request/permissions';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeFormat';
 import Permission from '@/components/Permission';
 
@@ -16,13 +16,22 @@ const columns = (handleDelete: Function, handleUpdate: Function) => [
     key: 'id',
   },
   {
-    title: '角色',
-    dataIndex: 'role',
-    key: 'role',
-    search: true,
+    title: '权限资源',
+    dataIndex: 'resource',
+    key: 'resource',
   },
   {
-    title: '角色名称',
+    title: '资源类别',
+    dataIndex: 'category',
+    key: 'category',
+  },
+  {
+    title: '资源属性',
+    dataIndex: 'properties',
+    key: 'properties',
+  },
+  {
+    title: '名称',
     dataIndex: 'name',
     key: 'name',
   },
@@ -30,11 +39,6 @@ const columns = (handleDelete: Function, handleUpdate: Function) => [
     title: '描述',
     dataIndex: 'describe',
     key: 'describe',
-  },
-  {
-    title: '创建人',
-    dataIndex: 'operator',
-    key: 'operator',
   },
   {
     title: '创建时间',
@@ -63,7 +67,7 @@ const columns = (handleDelete: Function, handleUpdate: Function) => [
         <Popconfirm
           title="Delete the task"
           description="Are you sure to delete this task?"
-          onConfirm={() => handleDelete(record.role)}
+          onConfirm={() => handleDelete(record.resource)}
           okText="Yes"
           cancelText="No"
         >
@@ -78,13 +82,13 @@ const columns = (handleDelete: Function, handleUpdate: Function) => [
 
 const addFormItems = [
   {
-    label: "角色",
-    name: "role",
+    label: "权限资源",
+    name: "resource",
     required: true,
     type: "Input"
   },
   {
-    label: "角色名称",
+    label: "资源名称",
     name: "name",
     required: true,
     type: "Input"
@@ -94,23 +98,28 @@ const addFormItems = [
     name: "describe",
     type: "Input"
   },
+  {
+    label: "分类",
+    name: "category",
+    type: "Input"
+  },
 ];
 
 export default function List() {
-  const [roleList, setRoleList] = useState([]);
-  const [roleLoading, setRoleLoading] = useState(false);
+  const [sourceList, setSourceList] = useState([]);
+  const [sourceLoading, setSourceLoading] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [editInfo, setEditInfo] = useState<any>({});
   const [filter, setFilter] = useState<any>({});
   const [messageApi, contextHolder] = message.useMessage();
 
   const getList = (value?: any) => {
-    setRoleLoading(true);
+    setSourceLoading(true);
     setFilter(value || {});
-    getRoleList(value)
+    getPermissionSourceList()
       .then((res: any) => {
-        setRoleList(res.Data || []);
-        setRoleLoading(false)
+        setSourceList(res.Data || []);
+        setSourceLoading(false)
       })
   };
 
@@ -120,8 +129,8 @@ export default function List() {
   }
 
   const onAdd = (values: any) => {
-    setRoleLoading(true)
-    const request = editInfo.id ? updateRole : addRole;
+    setSourceLoading(true)
+    const request = editInfo.id ? updatePermissionSource : addPermissionSource;
     request({ ...values, id: editInfo.id })
       .then(() => {
         getList(filter);
@@ -135,8 +144,8 @@ export default function List() {
     }
   }
 
-  const handleDelete = (role: string) => {
-    deleteRole({ role }).then(() => {
+  const handleDelete = (resource: string) => {
+    deletePermissionSource({ resource }).then(() => {
       messageApi.success('删除成功!');
       getList(filter);
     }).catch(() => {})
@@ -152,7 +161,7 @@ export default function List() {
       type="primary"
       onClick={handleAdd}
     >
-      新增角色
+      新增权限资源
     </Button>,
   ];
 
@@ -167,10 +176,10 @@ export default function List() {
         <CommonTable
           rowKey="id"
           columns={columns(handleDelete, handleUpdate)}
-          loading={roleLoading}
+          loading={sourceLoading}
           handleSearch={handleSearch}
           leftActions={actions}
-          data={roleList}
+          data={sourceList}
           scroll={{ x: 1000 }}
         />
         {addOpen ? (

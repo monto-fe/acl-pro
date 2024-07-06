@@ -14,7 +14,7 @@
     "userManage": "用户管理",
     "userList": "用户列表",
     "userRole": "角色管理",
-    "permissions": "ACL 权限管理"
+    "permissions": "权限资源管理"
   },
   "404": {
     "tip": "next-admin: 您访问的页面不存在",

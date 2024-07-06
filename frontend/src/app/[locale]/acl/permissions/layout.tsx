@@ -6,7 +6,6 @@ interface Props {
 };
 
 export default function LocaleLayout({ children, params: { locale } }: Props) {
-  // Receive messages provided in `i18n.ts`
   const messages = useMessages();
 
   return <NextIntlClientProvider locale={locale} messages={messages}>

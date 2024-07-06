@@ -48,3 +48,7 @@ main {
   height: 100vh;
   flex-wrap: wrap;
 }
+
+.operation-btn-group {
+  padding-left: 0 !important;
+}
