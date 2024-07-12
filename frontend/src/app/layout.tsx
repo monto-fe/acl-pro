@@ -8,6 +8,6 @@ interface Props {
 
 export default function RootLayout({ children }: Props) {
   return <GlobalContext.Provider value={{ a: 123 }}>
-      {children}
-    </GlobalContext.Provider>;
+    {children}
+  </GlobalContext.Provider>;
 }

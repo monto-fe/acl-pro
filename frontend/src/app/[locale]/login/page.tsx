@@ -1,9 +1,11 @@
 'use client'
-import { useTranslations } from 'next-intl';
-import { Button, Form, Input, Segmented, type FormProps } from 'antd';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { loginApi, registerApi } from './api';
+import { setCookie } from "nookies";
+import { Button, Form, Input, Segmented, type FormProps } from 'antd';
+
+import { login } from '@/utils/request/user';
 
 import styles from './index.module.less';
 
@@ -14,7 +16,7 @@ interface FieldType {
   remember?: string;
 };
 
-const mode = ['登录', '注册'];
+const mode = ['登录'];
 
 export default function Home() {
   const t = useTranslations();
@@ -24,23 +26,16 @@ export default function Home() {
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values: any) => {
     if (curMode === mode[0]) {
-      const { email, pwd } = values;
-      loginApi(email, pwd).then(res => {
-        console.log(res)
-        // login logic
-        // router.push('/acl/user');
-      })
+      const { user, password } = values;
+      login({ user, password })
+        .then((res: any) => {
+          if (res && res.data) {
+            setCookie(null, 'MONTO_ACL_JWT_TOKEN', res.data.jwt_token, { secure: true, sameSite: 'strict' });
+            router.push('/');
+          }
+        })
       return
     }
-
-    if (curMode === mode[1]) {
-      const { email, pwd } = values;
-      registerApi(email, pwd).then(res => {
-        // register logic
-        router.push('/dashboard');
-      })
-    }
-
   };
 
   return (
@@ -70,8 +65,8 @@ export default function Home() {
             form={form}
             onFinish={onFinish}
             initialValues={{
-              email: 'dooring@next.com',
-              pwd: 'dooring.vip'
+              user: '',
+              password: ''
             }}
             autoComplete="off"
           >
@@ -79,26 +74,22 @@ export default function Home() {
               curMode === mode[0] ?
                 <>
                   <Form.Item<FieldType>
-                    name="email"
+                    name="user"
                     rules={[
                       {
-                        type: 'email',
-                        message: '邮箱不合法!',
-                      },
-                      {
                         required: true,
-                        message: '请输入邮箱',
+                        message: '请输入用户名',
                       },
                     ]}
                   >
-                    <Input placeholder='请输入邮箱' size='large' variant="filled" />
+                    <Input placeholder='用户名' size='large' variant="filled" />
                   </Form.Item>
 
                   <Form.Item<FieldType>
-                    name="pwd"
+                    name="password"
                     rules={[{ required: true, message: '请输入密码' }]}
                   >
-                    <Input.Password size='large' placeholder='请输入密码' variant="filled" />
+                    <Input.Password size='large' placeholder='密码' variant="filled" />
                   </Form.Item>
 
                   <Form.Item wrapperCol={{ span: 24 }}>
@@ -106,45 +97,11 @@ export default function Home() {
                       登录
                     </Button>
                   </Form.Item>
-                </> :
-                <>
-                  <Form.Item<FieldType>
-                    name="email"
-                    rules={[
-                      {
-                        type: 'email',
-                        message: '邮箱不合法!',
-                      },
-                      {
-                        required: true,
-                        message: '请输入邮箱',
-                      },
-                    ]}
-                  >
-                    <Input placeholder='请输入邮箱' size='large' variant="filled" />
-                  </Form.Item>
-
-                  <Form.Item<FieldType>
-                    name="pwd"
-                    rules={[{ required: true, message: '请输入密码' }]}
-                  >
-                    <Input.Password size='large' placeholder='请输入密码' variant="filled" />
-                  </Form.Item>
-
-                  <Form.Item wrapperCol={{ span: 24 }}>
-                    <Button type="primary" htmlType="submit" block size='large'>
-                      注册
-                    </Button>
-                  </Form.Item>
-                </>
+                </> : null
             }
-
           </Form>
         </div>
-
       </div>
-
-
     </main>
   );
 }
