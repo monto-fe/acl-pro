@@ -15,7 +15,7 @@ RUN ls -al
 
 # RUN npm prune --production
 
-EXPOSE 80
+EXPOSE 3000
 
 FROM common-build-stage as production-build-stage
 

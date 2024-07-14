@@ -25,9 +25,9 @@ module.exports = {
     {
       name: 'monto-acl',
       script: 'node_modules/next/dist/bin/next',
-      args: 'start -p 80',
-      instances: RUN_ENV_MAP[argEnv].instances,
-      exec_mode: 'cluster',
+      // args: 'start -p 80',
+      // instances: RUN_ENV_MAP[argEnv].instances,
+      // exec_mode: 'cluster',
       watch: false,
       max_memory_restart: RUN_ENV_MAP[argEnv].max_memory_restart,
       env_local: {
