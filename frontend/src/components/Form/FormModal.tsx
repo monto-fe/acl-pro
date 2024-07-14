@@ -70,6 +70,7 @@ export default function FormModal(props: IFormModal) {
     ...resProps
   } = props;
 
+  // eslint-disable-next-line
   const [form] = formInstance || Form.useForm();
 
   const onOk = () => {

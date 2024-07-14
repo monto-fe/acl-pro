@@ -9,8 +9,8 @@ interface ITableDataType {
   rowKey: string;
   data: any[];
   columns: any[];
-  loading: boolean;
-  handleSearch: Function;
+  loading?: boolean;
+  handleSearch?: Function;
   leftActions?: React.ReactElement[];
   scroll?: { x: number };
   onChange?: TableProps<any>['onChange']
@@ -103,7 +103,9 @@ export default function CommonTable(props: ITableDataType) {
       {Array.isArray(leftActions) ? (
         <Flex className='mt-4 mb-16'>
           {leftActions.map((action, index) => {
-            return <Fragment key={index}>{action}</Fragment>
+            return <Fragment key={index}>
+              {action}
+            </Fragment>
           })}
         </Flex>
       ) : null}

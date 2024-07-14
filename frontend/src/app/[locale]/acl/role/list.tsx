@@ -149,6 +149,7 @@ export default function List() {
 
   const actions = [
     <Button
+      key={0}
       type="primary"
       onClick={handleAdd}
     >

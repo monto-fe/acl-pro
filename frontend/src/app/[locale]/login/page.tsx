@@ -10,6 +10,8 @@ import { login } from '@/utils/request/user';
 import styles from './index.module.less';
 
 interface FieldType {
+  user?: string;
+  password?: string;
   email?: string;
   pwd?: string;
   code?: string;
