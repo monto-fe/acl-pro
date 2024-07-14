@@ -1,0 +1,39 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "feature/deploy" ]
+  pull_request:
+    branches: [ "feature/deploy" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      # 设置时间戳环境变量
+      - name: Set timestamp
+        id: vars
+        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+
+
+      - name: show dir
+        run: ls -l
+      
+      # 构建 Docker 镜像
+      - name: Build the Docker image
+        run: docker build . --file ./fronted/Dockerfile.prod --tag uacl-fronted:${{ env.TIMESTAMP }}
+
+      # 更换 Docker 名称
+      - name: Rename the Docker image
+        run: docker tag library/uacl:${{ env.TIMESTAMP }} ${{ secrets.DOCKER_REGISTRY }}/uacl/uacl-fronted:${{ env.TIMESTAMP }}
+      
+      # 登录 Docker Hub
+      - name: Log in to Docker Hub
+        run: docker login ${{ secrets.DOCKER_REGISTRY }} -u ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+      
+      # 推送 Docker 镜像到 Docker Hub
+      - name: Push the Docker image
+        run: docker push ${{ secrets.DOCKER_REGISTRY }}/uacl/uacl-fronted:${{ env.TIMESTAMP }}
+    
