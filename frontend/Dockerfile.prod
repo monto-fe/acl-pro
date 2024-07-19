@@ -5,9 +5,7 @@ COPY ./frontend ./app
 
 WORKDIR /app
 
-# RUN npm i -g pm2 --registry=https://registry.npm.taobao.org
-RUN npm i -g pm2 && npm install -g pnpm
-RUN pnpm install && pnpm build:prod
+RUN pnpm install && pnpm build
 
 RUN ls -al
 
@@ -19,4 +17,4 @@ EXPOSE 3000
 
 FROM common-build-stage as production-build-stage
 
-CMD ["pnpm", "deploy:prod", "&&", "sleep", "infinity"]
+# CMD ["pnpm", "deploy:prod", "&&", "sleep", "infinity"]
