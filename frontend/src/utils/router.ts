@@ -17,6 +17,7 @@ import {
   TabNavType,
   IPathKeyRouteObject,
 } from '@/@types/router';
+import { IRoleInfo } from '@/@types/permission';
 
 /**
  * 根据 configRoutes: IRouter[] 生成 useRoutes 的参数 routes: RouteObject[] 的数据
@@ -153,12 +154,12 @@ export const formatRoutes = (routes: IRouter[], parentPath = '/', parentPaths: s
  * @returns boolean
  * @author duheng1992
  */
-export const hasPermissionRoles = (userRoles: string[], roles?: string | string[]): boolean => {
+export const hasPermissionRoles = (userRoles: IRoleInfo[], roles?: string | string[]): boolean => {
   if (userRoles.length < 1) {
     return false;
   }
 
-  if (userRoles.includes('admin')) {
+  if (userRoles.find(role => role.role === 'admin')) {
     return true;
   }
 
@@ -167,7 +168,7 @@ export const hasPermissionRoles = (userRoles: string[], roles?: string | string[
   }
 
   if (typeof roles === 'string') {
-    return userRoles.includes(roles);
+    return userRoles.findIndex(role => role.role.includes(roles)) > -1;
   }
 
   if (roles instanceof Array && roles.length === 0) {
@@ -175,7 +176,7 @@ export const hasPermissionRoles = (userRoles: string[], roles?: string | string[
   }
 
   if (roles instanceof Array && roles.length > 0) {
-    return roles.some((role) => userRoles.includes(role));
+    return roles.some((role) => userRoles.findIndex(currentRole => currentRole.role.includes(role)) > -1);
   }
 
   return false;

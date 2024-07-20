@@ -1,19 +1,19 @@
-import { memo, useState, useMemo, useLayoutEffect } from 'react';
+import { memo, useState, useMemo, useLayoutEffect, useContext } from 'react';
 import { Menu } from 'antd';
 import { unionWith } from 'lodash';
 
-import { useRecoilValue } from 'recoil';
 import { useI18n } from '@/store/i18n';
-import locales from '../locales';
 
 import { hasPermissionRoles } from '@/utils/router';
 import { isExternal } from '@/utils/validate';
 import ALink from '@/components/ALink';
 import IconSvg from '@/components/IconSvg';
 
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import { ItemType } from 'antd/lib/menu/interface';
 import { Theme } from '@/@types/settings';
 import { IRouter } from '@/@types/router';
+import { BasicContext } from '@/store/context';
+import { IRoleInfo } from '@/@types/permission';
 
 /**
  * 根据 routes: IRouter[] 生成 antd menu:ItemType[] 菜单
@@ -24,7 +24,7 @@ import { IRouter } from '@/@types/router';
  */
 const createMenuItems = (
   t: (key: string) => string,
-  userRoles: string[],
+  userRoles: IRoleInfo[],
   routes: IRouter[],
   parentPath = '/',
 ): ItemType[] => {
@@ -94,7 +94,7 @@ const createMenuItems = (
 export interface SiderMenuProps {
   menuData: IRouter[];
   routeItem: IRouter;
-  userRoles?: string[];
+  userRoles?: IRoleInfo[];
   collapsed?: boolean;
   mode?: 'horizontal' | 'inline';
   theme?: Theme;
@@ -102,7 +102,9 @@ export interface SiderMenuProps {
 
 export default memo(
   ({ menuData, routeItem, userRoles = [], collapsed = false, mode = 'inline', theme = 'dark' }: SiderMenuProps) => {
-    const t = useRecoilValue(useI18n(locales));
+    const context = useContext(BasicContext) as any;
+    const { i18nLocale } = context.storeContext;
+    const t = useI18n(i18nLocale);
     const selectedKeys = useMemo(() => {
       if (!routeItem) {
         return [];

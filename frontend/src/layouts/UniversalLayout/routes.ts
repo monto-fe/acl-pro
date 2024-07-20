@@ -48,8 +48,8 @@ const universalLayoutRotes: IRouter[] = [
               path: '/home',
             },
             {
-              title: 'universal-layout.menu.home.custom-breadcrumbs.liqingsong.cc',
-              path: 'http://liqingsong.cc',
+              title: 'universal-layout.menu.home.custom-breadcrumbs.montoacl.cc',
+              path: 'http://montoacl.cc',
             },
           ],
           tabNavCloseBefore: (close: () => void): void => {
@@ -62,7 +62,7 @@ const universalLayoutRotes: IRouter[] = [
         component: lazy(() => import('@/pages/CustomBreadcrumbs')),
       },
       {
-        path: 'http://admin-antd-react.liqingsong.cc/',
+        path: 'http://admin-antd-react.montoacl.cc/',
         meta: {
           icon: 'detail',
           title: 'universal-layout.menu.home.docs',
@@ -238,15 +238,16 @@ const universalLayoutRotes: IRouter[] = [
     },
     children: [
       {
-        path: 'all',
+        path: 'user',
         meta: {
-          icon: 'detail',
+          icon: 'user',
           title: 'universal-layout.menu.roles.all',
+          roles: ['admin'],
         },
-        component: lazy(() => import('@/pages/roles/all')),
+        component: lazy(() => import('@/pages/user/list')),
       },
       {
-        path: 'user',
+        path: 'role',
         meta: {
           icon: 'detail',
           title: 'universal-layout.menu.roles.user',
@@ -255,7 +256,7 @@ const universalLayoutRotes: IRouter[] = [
         component: lazy(() => import('@/pages/roles/user')),
       },
       {
-        path: 'test',
+        path: 'resource',
         meta: {
           icon: 'detail',
           title: 'universal-layout.menu.roles.test',

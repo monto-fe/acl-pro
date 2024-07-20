@@ -1,19 +1,19 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dropdown, Menu } from 'antd';
 
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { initialState } from '@/store/user';
 import { useI18n } from '@/store/i18n';
-import locales from '../locales';
 
 import { removeToken } from '@/utils/localToken';
 
 import IconSvg from '@/components/IconSvg';
+import { BasicContext } from '@/store/context';
+import { observer } from 'mobx-react-lite';
 
-export default memo(() => {
-  const t = useRecoilValue(useI18n(locales));
-
+export default memo(observer(() => {
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale, user } = context.storeContext;
+  const t = useI18n(i18nLocale);
   const navigate = useNavigate();
 
   const onMenuClick = useCallback(
@@ -30,26 +30,25 @@ export default memo(() => {
   );
   return (
     <Dropdown
-      overlay={
-        <Menu
-          onClick={onMenuClick}
-          items={[
-            {
-              key: 'userinfo',
-              label: <>{t('universal-layout.topmenu.userinfo')}</>,
-            },
-            {
-              key: 'logout',
-              label: <>{t('universal-layout.topmenu.logout')}</>,
-            },
-          ]}
-        />
-      }
+      trigger={['hover']}
+      menu={{
+        items: [
+          {
+            key: 'userinfo',
+            label: <>{t('universal-layout.topmenu.userinfo')}</>,
+          },
+          {
+            key: 'logout',
+            label: <>{t('universal-layout.topmenu.logout')}</>,
+          },
+        ],
+        onClick: onMenuClick
+      }}
     >
       <a className='universallayout-top-usermenu ant-dropdown-link' onClick={(e) => e.preventDefault()}>
-        {'name'}
+        <span className='username'>{user.name}</span>
         <IconSvg name='arrow-down' />
       </a>
     </Dropdown>
   );
-});
+}));

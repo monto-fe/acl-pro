@@ -1,10 +1,9 @@
-import { memo, useState } from 'react';
+import { memo, useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Form, Input, message } from 'antd';
+import { observer } from 'mobx-react-lite';
 
-import { useRecoilValue } from 'recoil';
 import { useI18n } from '@/store/i18n';
-import locales from './locales';
 
 import IconSvg from '@/components/IconSvg';
 
@@ -14,12 +13,14 @@ import { LoginParamsType, LoginResponseData } from './data.d';
 import { accountLogin } from './service';
 
 import style from './index.module.less';
+import { BasicContext } from '@/store/context';
 
-export default memo(() => {
+export default memo(observer(() => {
   const navigate = useNavigate();
 
-  const t = useRecoilValue(useI18n(locales));
-
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
   const [loginStatus, setLoginStatus] = useState<string>('');
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
@@ -89,4 +90,4 @@ export default memo(() => {
       </Form>
     </div>
   );
-});
+}));

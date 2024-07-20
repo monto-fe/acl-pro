@@ -6,9 +6,3 @@ export async function queryCurrent(): Promise<any> {
     method: 'get',
   });
 }
-
-export async function queryMessage(): Promise<any> {
-  return request({
-    url: '/user/message',
-  });
-}

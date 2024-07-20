@@ -1,5 +1,3 @@
-import { atom } from 'recoil';
-
 import settings from '@/config/settings';
 
 import { Theme, NavMode } from '@/@types/settings.d';
@@ -25,7 +23,7 @@ export interface StateType {
   navMode: NavMode;
 }
 
-const initialState: StateType = {
+export const initialGlobalState: StateType = {
   collapsed: false,
   headFixed: settings.headFixed,
   theme: settings.theme,
@@ -34,8 +32,3 @@ const initialState: StateType = {
   headTabNavList: [],
   navMode: settings.navMode,
 };
-
-export const globalState = atom({
-  key: 'globalState',
-  default: initialState,
-});

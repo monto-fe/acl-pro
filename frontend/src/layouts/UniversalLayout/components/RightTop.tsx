@@ -1,9 +1,7 @@
-import { memo, Suspense } from 'react';
+import { memo, Suspense, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
-import { useRecoilState } from 'recoil';
-import { globalState } from '@/store/global';
 import IconSvg from '@/components/IconSvg';
 import BreadCrumbs from '@/components/BreadCrumbs';
 import SelectLang from '@/components/SelectLang';
@@ -17,37 +15,42 @@ import RightTopMessage from './RightTopMessage';
 import Settings from './Settings';
 
 import { IRouter, IPathKeyRouter, BreadcrumbType } from '@/@types/router';
+import { BasicContext } from '@/store/context';
+import { IRoleInfo } from '@/@types/permission';
+// import { useI18n } from '@/store/i18n';
 
 export interface RightTopProps {
   menuData: IRouter[];
   jsonMenuData: IPathKeyRouter;
   routeItem: IRouter;
-  userRoles?: string[];
+  userRoles?: IRoleInfo[];
   breadCrumbs?: BreadcrumbType[];
 }
 
 export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadCrumbs = [] }: RightTopProps) => {
-  const [global, setGlobal] = useRecoilState(globalState);
+  const storeContext = (useContext(BasicContext) as any).storeContext;
+  const { globalConfig } = storeContext;
+  // const t = useI18n(i18nLocale);
 
   const toggleCollapsed = () => {
-    setGlobal({ ...global, collapsed: !global.collapsed });
+    storeContext.updateGlobalConfig({ ...globalConfig, collapsed: !globalConfig.collapsed });
   };
 
   return (
     <div
       id='universallayout-right-top'
       className={classnames({
-        fiexd: global.headFixed,
-        narrow: global.collapsed,
-        tabNavEnable: !global.tabNavEnable,
-        navModeHorizontal: global.navMode === 'horizontal',
+        fiexd: globalConfig.headFixed,
+        narrow: globalConfig.collapsed,
+        tabNavEnable: !globalConfig.tabNavEnable,
+        navModeHorizontal: globalConfig.navMode === 'horizontal',
       })}
     >
       <div className='universallayout-right-top-header'>
-        {global.navMode === 'inline' ? (
+        {globalConfig.navMode === 'inline' ? (
           <div className='universallayout-right-top-top'>
             <div className='universallayout-flexible' onClick={toggleCollapsed}>
-              {global.collapsed ? <IconSvg name='menu-unfold'></IconSvg> : <IconSvg name='menu-fold'></IconSvg>}
+              {globalConfig.collapsed ? <IconSvg name='menu-unfold'></IconSvg> : <IconSvg name='menu-fold'></IconSvg>}
             </div>
             <div className='universallayout-top-menu'>
               <BreadCrumbs className='breadcrumb' list={breadCrumbs} />
@@ -74,7 +77,7 @@ export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadC
                 userRoles={userRoles}
                 menuData={menuData}
                 routeItem={routeItem}
-                theme={global.theme}
+                theme={globalConfig.theme}
                 mode='horizontal'
               />
             </div>
@@ -88,7 +91,7 @@ export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadC
             </div>
           </div>
         )}
-        {global.tabNavEnable && <RightTabNav routeItem={routeItem} jsonMenuData={jsonMenuData} />}
+        {globalConfig.tabNavEnable && <RightTabNav routeItem={routeItem} jsonMenuData={jsonMenuData} />}
       </div>
     </div>
   );

@@ -1,15 +1,14 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useContext } from 'react';
 import { Spin, Card, Tag, Divider, Row, Col } from 'antd';
 import useEcharts, { EChartsOption } from '@/hooks/useEcharts';
 
-import { useRecoilValue } from 'recoil';
 import { useI18n } from '@/store/i18n';
-import locales from '../../locales';
 
 import styles from '../../index.module.less';
 import { WorksChartDataType } from './data';
 import { ResponseData } from '@/utils/request';
 import { weeknewWorks } from './service';
+import { BasicContext } from '@/store/context';
 
 const worksChartOption: EChartsOption = {
   tooltip: {},
@@ -63,7 +62,9 @@ const worksChartOption: EChartsOption = {
 };
 
 const WorksChartCard: React.FC = () => {
-  const t = useRecoilValue(useI18n(locales));
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);  
   const [loading, setLoading] = useState<boolean>(false);
   const [visitData, setVisitData] = useState<WorksChartDataType>({
     total: 0,

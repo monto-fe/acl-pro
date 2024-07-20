@@ -1,5 +1,6 @@
 import { memo, useCallback, useContext, useMemo } from 'react';
-import { Dropdown, Menu } from 'antd';
+import { Dropdown } from 'antd';
+import { observer } from 'mobx-react-lite';
 import { setLocale } from '@/utils/i18n';
 
 import IconSvg from '@/components/IconSvg';
@@ -12,9 +13,9 @@ export interface SelectLangProps {
   className?: string;
 }
 
-export default memo(({ className }: SelectLangProps) => {
-  const context = useContext(BasicContext) as any;
-  const { i18n, updateI18n } = context.storeContext;
+export default memo(observer(({ className }: SelectLangProps) => {
+  const storeContext = (useContext(BasicContext) as any).storeContext;
+  const { i18nLocale, updateI18n } = storeContext;
 
   const menuItems = useMemo<ItemType[]>(
     () => [
@@ -22,37 +23,37 @@ export default memo(({ className }: SelectLangProps) => {
         key: 'zh-CN',
         label: <> 简体中文</>,
         icon: <>🇨🇳 </>,
-        disabled: i18n === 'zh-CN',
+        disabled: i18nLocale === 'zh-CN',
       },
       {
         key: 'zh-TW',
         label: <> 繁体中文</>,
         icon: <>🇭🇰 </>,
-        disabled: i18n === 'zh-TW',
+        disabled: i18nLocale === 'zh-TW',
       },
       {
         key: 'en-US',
         label: <> English</>,
         icon: <>🇺🇸 </>,
-        disabled: i18n === 'en-US',
+        disabled: i18nLocale === 'en-US',
       },
     ],
-    [i18n],
+    [i18nLocale],
   );
 
   const onMenuClick = useCallback(
     ({ key }: { key: string }) => {
       const lang = key as I18nKey;
-      updateI18n(lang);
+      storeContext.updateI18n(lang);
       setLocale(lang);
     },
-    [i18n, updateI18n],
+    [i18nLocale, updateI18n],
   );
   return (
-    <Dropdown className={className} overlay={<Menu onClick={onMenuClick} items={menuItems} />}>
+    <Dropdown className={className} menu={{ items: menuItems, onClick: onMenuClick }}>
       <span>
         <IconSvg name='language-outline' />
       </span>
     </Dropdown>
   );
-});
+}));

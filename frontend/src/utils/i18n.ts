@@ -1,7 +1,7 @@
 import { I18nKey } from '@/@types/i18n.d';
 
 // window.localStorage 存储key
-export const localeKey = 'locale';
+export const localeKey = 'monto-acl-locale';
 
 // 默认语言
 export const defaultLang: I18nKey = 'zh-CN';

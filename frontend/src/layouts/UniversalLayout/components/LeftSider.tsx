@@ -7,11 +7,12 @@ import SiderMenu from './SiderMenu';
 
 import { IRouter } from '@/@types/router';
 import { Theme } from '@/@types/settings';
+import { IRoleInfo } from '@/@types/permission';
 
 export interface LeftSiderProps {
   menuData: IRouter[];
   routeItem: IRouter;
-  userRoles?: string[];
+  userRoles?: IRoleInfo[];
   collapsed?: boolean;
   theme?: Theme;
   leftSiderFixed?: boolean;

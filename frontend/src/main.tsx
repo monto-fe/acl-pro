@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter /* , HashRouter */ } from 'react-router-dom';
-import { observer } from "mobx-react-lite";
 import { ConfigProvider } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
@@ -13,19 +12,18 @@ import '@/assets/css/index.less';
 import App from '@/App';
 import { BasicContext } from '@/store/context';
 import { observerRoot } from '@/store';
-import { getAntdI18nMessage, i18nLocaleDefault } from '@/store/i18n';
+import { getAntdI18nMessage } from '@/store/i18n';
 
-const antdMessage = getAntdI18nMessage(i18nLocaleDefault);
-const ObserveredApp = observer(() => <App />);
+const antdMessage = getAntdI18nMessage(observerRoot.i18nLocale.toLocaleLowerCase());
 
-dayjs.locale(i18nLocaleDefault.toLocaleLowerCase());
+dayjs.locale(observerRoot.i18nLocale.toLocaleLowerCase());
 
 // 挂载
 ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
   <BrowserRouter>
     <BasicContext.Provider value={{ storeContext: observerRoot }}>
       <ConfigProvider locale={antdMessage}>
-        <ObserveredApp />
+        <App />
       </ConfigProvider>
     </BasicContext.Provider>
   </BrowserRouter>

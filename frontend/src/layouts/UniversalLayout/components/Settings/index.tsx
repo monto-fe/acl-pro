@@ -1,42 +1,41 @@
-import { memo } from 'react';
+import { memo, useContext } from 'react';
 import { Popover, Divider, Switch } from 'antd';
 import classnames from 'classnames';
-
-import { useRecoilState } from 'recoil';
-import { globalState } from '@/store/global';
 
 import IconSvg from '@/components/IconSvg';
 
 import { Theme, NavMode } from '@/@types/settings';
 
 import style from './index.module.less';
+import { BasicContext } from '@/store/context';
 
 export default memo(() => {
-  const [global, setGlobal] = useRecoilState(globalState);
-
+  const storeContext = (useContext(BasicContext) as any).storeContext;
+  const { globalConfig } = storeContext;
+  
   // 模板主题
   const setTheme = (theme: Theme) => {
-    setGlobal({ ...global, theme });
+    storeContext.updateGlobalConfig({ ...globalConfig, theme });
   };
 
   // 导航模式
   const setNavMode = (navMode: NavMode) => {
-    setGlobal({ ...global, navMode });
+    storeContext.updateGlobalConfig({ ...globalConfig, navMode });
   };
 
   // 固定头部
   const onChangeHeadFixed = () => {
-    setGlobal({ ...global, headFixed: !global.headFixed });
+    storeContext.updateGlobalConfig({ ...globalConfig, headFixed: !globalConfig.headFixed });
   };
 
   // tabNavEnable
   const onChangeTabNavEnable = () => {
-    setGlobal({ ...global, tabNavEnable: !global.tabNavEnable });
+    storeContext.updateGlobalConfig({ ...globalConfig, tabNavEnable: !globalConfig.tabNavEnable });
   };
 
   // 固定左侧
   const onChangeLeftSiderFixed = () => {
-    setGlobal({ ...global, leftSiderFixed: !global.leftSiderFixed });
+    storeContext.updateGlobalConfig({ ...globalConfig, leftSiderFixed: !globalConfig.leftSiderFixed });
   };
   return (
     <Popover
@@ -52,7 +51,7 @@ export default memo(() => {
                 setTheme('dark');
               }}
             >
-              {global.theme === 'dark' && (
+              {globalConfig.theme === 'dark' && (
                 <span className={style['choose-icon']}>
                   <IconSvg name='tick' />
                 </span>
@@ -65,7 +64,7 @@ export default memo(() => {
                 setTheme('light');
               }}
             >
-              {global.theme === 'light' && (
+              {globalConfig.theme === 'light' && (
                 <span className={style['choose-icon']}>
                   <IconSvg name='tick' />
                 </span>
@@ -84,7 +83,7 @@ export default memo(() => {
                 setNavMode('inline');
               }}
             >
-              {global.navMode === 'inline' && (
+              {globalConfig.navMode === 'inline' && (
                 <span className={style['choose-icon']}>
                   <IconSvg name='tick' />
                 </span>
@@ -97,7 +96,7 @@ export default memo(() => {
                 setNavMode('horizontal');
               }}
             >
-              {global.navMode === 'horizontal' && (
+              {globalConfig.navMode === 'horizontal' && (
                 <span className={style['choose-icon']}>
                   <IconSvg name='tick' />
                 </span>
@@ -114,7 +113,7 @@ export default memo(() => {
                 <Switch
                   checkedChildren='开启'
                   unCheckedChildren='关闭'
-                  checked={global.headFixed}
+                  checked={globalConfig.headFixed}
                   onChange={onChangeHeadFixed}
                 />
               </span>
@@ -125,7 +124,7 @@ export default memo(() => {
                 <Switch
                   checkedChildren='开启'
                   unCheckedChildren='关闭'
-                  checked={global.tabNavEnable}
+                  checked={globalConfig.tabNavEnable}
                   onChange={onChangeTabNavEnable}
                 />
               </span>
@@ -136,7 +135,7 @@ export default memo(() => {
                 <Switch
                   checkedChildren='开启'
                   unCheckedChildren='关闭'
-                  checked={global.leftSiderFixed}
+                  checked={globalConfig.leftSiderFixed}
                   onChange={onChangeLeftSiderFixed}
                 />
               </span>

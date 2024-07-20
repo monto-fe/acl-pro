@@ -1,12 +1,9 @@
-import { memo, useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState, useRef, useContext } from 'react';
 import { useLocation, useNavigate, Location } from 'react-router-dom';
 import classnames from 'classnames';
 import { Dropdown, Menu } from 'antd';
 
-import { useRecoilValue, useRecoilState } from 'recoil';
-import { globalState } from '@/store/global';
 import { useI18n } from '@/store/i18n';
-import locales from '../locales';
 
 import settings from '@/config/settings';
 
@@ -15,6 +12,7 @@ import { equalTabNavRoute } from '@/utils/router';
 import IconSvg from '@/components/IconSvg';
 
 import { IRouter, IPathKeyRouter, TabNavItem } from '@/@types/router';
+import { BasicContext } from '@/store/context';
 
 export interface RightTabNavProps {
   jsonMenuData: IPathKeyRouter;
@@ -25,7 +23,9 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const t = useRecoilValue(useI18n(locales));
+  const storeContext = (useContext(BasicContext) as any).storeContext;
+  const { i18nLocale, globalConfig } = storeContext;
+  const t = useI18n(i18nLocale);
 
   // tabNav 下标
   const [tabNavIndex, setTabNavIndex] = useState<number>(0);
@@ -89,21 +89,17 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
   };
 
   /* 其他操作 */
-  const [global, setGlobal] = useRecoilState(globalState);
-  const tabNavList = useMemo(() => global.headTabNavList, [global]);
+  const tabNavList = useMemo(() => globalConfig.headTabNavList, [globalConfig]);
 
   // 设置state global navList
   const setGlobalHeadTabNavList = useCallback(
-    (val: (currVal: typeof global) => TabNavItem[]) => {
-      setGlobal((preVal) => {
-        const navList = val(preVal);
-        return {
-          ...preVal,
-          headTabNavList: [...navList],
-        };
+    (navList: TabNavItem[]) => {
+      storeContext.updateGlobalConfig({
+        ...globalConfig,
+        headTabNavList: [...navList],
       });
     },
-    [global, setGlobal],
+    [globalConfig, storeContext],
   );
 
   // 设置TabNav
@@ -112,26 +108,20 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
     if (!routeItem || location.pathname !== routeItem.path || (routeItem.children && routeItem.children?.length > 0)) {
       return;
     }
-    let index = 0;
-    setGlobalHeadTabNavList((val) => {
-      // 数组里是否已经存在当前route规则，不存在下标为-1
-      index = val.headTabNavList.findIndex((item) =>
-        equalTabNavRoute(item.location, location, routeItem?.meta?.tabNavType),
-      );
-      if (index < 0) {
-        index = val.headTabNavList.length;
-        return [
-          ...val.headTabNavList,
-          {
-            location,
-            menu: {
-              ...routeItem,
-            },
+    const index = globalConfig.headTabNavList?.findIndex((item: TabNavItem) =>
+      equalTabNavRoute(item.location, location, routeItem?.meta?.tabNavType),
+    );
+    // 数组里是否已经存在当前route规则，不存在下标为-1
+    if (index < 0) {
+      setGlobalHeadTabNavList([
+        {
+          location,
+          menu: {
+            ...routeItem,
           },
-        ];
-      }
-      return val.headTabNavList;
-    });
+        },
+      ]);
+    }
     setTabNavIndex(index);
   };
 
@@ -144,7 +134,7 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
         item.menu.path === settings.tabNavHomePath,
     );
 
-    setGlobalHeadTabNavList(() => [...navList]);
+    setGlobalHeadTabNavList([...navList]);
 
     navigate(settings.tabNavHomePath);
   };
@@ -158,13 +148,13 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
         item.menu.path === settings.tabNavHomePath ||
         equalTabNavRoute(location, item.location, item.menu.meta?.tabNavType),
     );
-    setGlobalHeadTabNavList(() => [...navList]);
+    setGlobalHeadTabNavList([...navList]);
   };
 
   // 关闭TabNav左侧和右侧
   const closeTabNavLeftRight = (param: 'left' | 'right'): void => {
     // 获取当前打开tabNav索引
-    const index = tabNavList.findIndex((item) => equalTabNavRoute(location, item.location, item.menu.meta?.tabNavType));
+    const index = tabNavList.findIndex((item: TabNavItem) => equalTabNavRoute(location, item.location, item.menu.meta?.tabNavType));
 
     // 有关闭回调的和当前打开的和首页和左侧或右侧无法关闭
     const navList: TabNavItem[] = tabNavList.filter(
@@ -174,7 +164,7 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
         (param === 'left' ? i >= index : i <= index),
     );
 
-    setGlobalHeadTabNavList(() => [...navList]);
+    setGlobalHeadTabNavList([...navList]);
   };
 
   // 关闭TabNav
@@ -193,10 +183,10 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
     const navList: TabNavItem[] = tabNavList.filter(
       (item2: TabNavItem) => !equalTabNavRoute(item2.location, item.location, item.menu?.meta?.tabNavType),
     );
-    setGlobalHeadTabNavList(() => [...navList]);
+    setGlobalHeadTabNavList([...navList]);
 
     if (isRouterPush !== false) {
-      navigate(isRouterPush.location);
+      navigate((isRouterPush as TabNavItem)?.location);
     }
   };
 
@@ -231,7 +221,7 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
           break;
       }
     },
-    [global],
+    [globalConfig],
   );
 
   // 设置锁定的首页,默认初始化，第一次加载一次
@@ -266,7 +256,7 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
       </div>
       <div className='middle' ref={scrollBoxRef} onWheel={handleRolling}>
         <div className='tab' ref={scrollContentRef} style={{ transform: `translateX(${translateX}px)` }}>
-          {tabNavList.map((item, index) => (
+          {tabNavList.map((item: TabNavItem, index: number) => (
             <span
               key={`tab-nav-${index}`}
               className={classnames('item', {
@@ -300,49 +290,47 @@ export default memo(({ jsonMenuData, routeItem }: RightTabNavProps) => {
       </div>
       <div className='down'>
         <Dropdown
-          overlay={
-            <Menu
-              onClick={onMenuClick}
-              items={[
-                {
-                  key: 'closeleft',
-                  label: (
-                    <>
-                      <IconSvg name='arrow-left2' />
-                      关闭左侧
-                    </>
-                  ),
-                },
-                {
-                  key: 'closeright',
-                  label: (
-                    <>
-                      <IconSvg name='arrow-right2' />
-                      关闭右侧
-                    </>
-                  ),
-                },
-                {
-                  key: 'closeother',
-                  label: (
-                    <>
-                      <IconSvg name='close' />
-                      关闭其他
-                    </>
-                  ),
-                },
-                {
-                  key: 'closeall',
-                  label: (
-                    <>
-                      <IconSvg name='close2' />
-                      关闭所有
-                    </>
-                  ),
-                },
-              ]}
-            />
-          }
+          menu={{
+            items: [
+              {
+                key: 'closeleft',
+                label: (
+                  <>
+                    <IconSvg name='arrow-left2' />
+                    关闭左侧
+                  </>
+                ),
+              },
+              {
+                key: 'closeright',
+                label: (
+                  <>
+                    <IconSvg name='arrow-right2' />
+                    关闭右侧
+                  </>
+                ),
+              },
+              {
+                key: 'closeother',
+                label: (
+                  <>
+                    <IconSvg name='close' />
+                    关闭其他
+                  </>
+                ),
+              },
+              {
+                key: 'closeall',
+                label: (
+                  <>
+                    <IconSvg name='close2' />
+                    关闭所有
+                  </>
+                ),
+              },
+            ],
+            onClick: onMenuClick
+          }}
         >
           <span className='icon-box icon'>
             <IconSvg name='more' />

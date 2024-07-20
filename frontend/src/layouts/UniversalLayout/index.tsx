@@ -2,12 +2,8 @@ import { memo, useContext, useMemo } from 'react';
 import { /* Outlet, */ useLocation } from 'react-router-dom';
 import classnames from 'classnames';
 
-import { useRecoilValue } from 'recoil';
-import { globalState } from '@/store/global';
-
 import { BasicContext } from '@/store/context';
 import { useI18n } from '@/store/i18n';
-import locales from './locales';
 
 import { formatRoutes, getBreadcrumbRoutes } from '@/utils/router';
 
@@ -20,18 +16,18 @@ import layoutRotes from './routes';
 import useTitle from '@/hooks/useTitle';
 
 import './css/index.less';
+import { observer } from 'mobx-react-lite';
 
 export interface UniversalLayoutProps {
   children: React.ReactNode;
 }
 
-export default memo(({ children }: UniversalLayoutProps) => {
+export default memo(observer(({ children }: UniversalLayoutProps) => {
   const location = useLocation();
   const context = useContext(BasicContext) as any;
-  const user = context.storeContext.userInfo;
+  const { i18nLocale, user, globalConfig } = context.storeContext;
 
-  const t = useRecoilValue(useI18n(locales));
-  const global = useRecoilValue(globalState);
+  const t = useI18n(i18nLocale);
 
   // 框架所有菜单路由 与 patch key格式的所有菜单路由
   const routerPathKeyRouter = useMemo(() => formatRoutes(layoutRotes), []);
@@ -53,20 +49,20 @@ export default memo(({ children }: UniversalLayoutProps) => {
   useTitle(t(routeItem?.meta?.title || ''));
 
   return (
-    <div id='universallayout' className={classnames({ light: global.theme === 'light' })}>
-      {global.navMode === 'inline' && (
+    <div id='universallayout' className={classnames({ light: globalConfig.theme === 'light' })}>
+      {globalConfig.navMode === 'inline' && (
         <LeftSider
-          collapsed={global.collapsed}
-          userRoles={user.roles}
+          collapsed={globalConfig.collapsed}
+          userRoles={user.roleList}
           menuData={routerPathKeyRouter.router}
           routeItem={routeItem}
-          theme={global.theme}
-          leftSiderFixed={global.leftSiderFixed}
+          theme={globalConfig.theme}
+          leftSiderFixed={globalConfig.leftSiderFixed}
         />
       )}
       <div id='universallayout-right'>
         <RightTop
-          userRoles={user.roles}
+          userRoles={user.roleList}
           menuData={routerPathKeyRouter.router}
           jsonMenuData={routerPathKeyRouter.pathKeyRouter}
           routeItem={routeItem}
@@ -82,4 +78,4 @@ export default memo(({ children }: UniversalLayoutProps) => {
       </div>
     </div>
   );
-});
+}));

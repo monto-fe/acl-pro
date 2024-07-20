@@ -1,10 +1,13 @@
 import { Card } from 'antd';
-import { useRecoilValue } from 'recoil';
 import { useI18n } from '@/store/i18n';
-import locales from './locales';
+import { BasicContext } from '@/store/context';
+import { useContext } from 'react';
 
 function App() {
-  const t = useRecoilValue(useI18n(locales));
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+  
   return (
     <div className='layout-main-conent'>
       <Card>

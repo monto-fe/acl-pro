@@ -4,15 +4,21 @@ import { Result, Button } from 'antd';
 
 import { BasicContext } from '@/store/context';
 import { hasPermissionRoles } from '@/utils/router';
+import { observer } from 'mobx-react-lite';
 
 const Forbidden = (
   <Result
     status={403}
     title='403'
-    subTitle='Sorry, you are not authorized to access this page.'
+    subTitle={
+      <div>
+        <p>抱歉，您没有当前页面的权限.</p>
+        <p>Sorry, you are not authorized to access this page.</p>
+      </div>
+    }
     extra={
       <Button type='primary'>
-        <Link to='/'>Go Home</Link>
+        <Link to='/'>Home</Link>
       </Button>
     }
   />
@@ -24,10 +30,10 @@ export interface ALinkProps {
   noNode?: React.ReactNode;
 }
 
-const Permission: React.FC<ALinkProps> = ({ role, noNode = Forbidden, children }) => {
+const Permission: React.FC<ALinkProps> = observer(({ role, noNode = Forbidden, children }) => {
   const context = useContext(BasicContext) as any;
   const user = context.storeContext.userInfo;
-  return hasPermissionRoles(user.roles, role) ? <>{children}</> : <>{noNode}</>;
-};
+  return hasPermissionRoles(user.roleList, role) ? <>{children}</> : <>{noNode}</>;
+});
 
 export default Permission;

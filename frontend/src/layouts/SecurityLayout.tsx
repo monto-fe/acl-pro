@@ -1,5 +1,6 @@
 import { memo, useCallback, useContext, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 import PageLoading from '@/components/PageLoading';
 
@@ -12,12 +13,12 @@ export interface SecurityLayoutProps {
   children: React.ReactNode;
 }
 
-export default memo(({ children }: SecurityLayoutProps) => {
+export default memo(observer(({ children }: SecurityLayoutProps) => {
   const navigate = useNavigate();
   const context = useContext(BasicContext) as any;
   const storeContext = context.storeContext;
   const user = storeContext.userInfo;
-  console.log(user.id)
+
   const isLogin = useMemo(() => user.id > 0, [user]);
   const getUser = useCallback(async () => {
     try {
@@ -45,4 +46,4 @@ export default memo(({ children }: SecurityLayoutProps) => {
   return <>
     {isLogin ? children : <PageLoading />}
   </>;
-});
+}));
