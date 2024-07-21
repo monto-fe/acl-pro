@@ -19,7 +19,7 @@ jobs:
       
       # 构建 Docker 镜像
       - name: Build the Docker image
-        run: docker build . --file Dockerfile.prod --tag uacl:${{ env.TIMESTAMP }}
+        run: docker build . --file ./backend/Dockerfile.prod --tag uacl:${{ env.TIMESTAMP }}
 
       # 更换 Docker 名称
       - name: Rename the Docker image
