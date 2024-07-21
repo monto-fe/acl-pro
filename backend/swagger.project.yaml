@@ -1,0 +1,137 @@
+servers:
+  - url: http://localhost:9000/
+    description: 开发环境API url
+
+paths:
+  /v1/project:
+    get:
+      tags: 
+      - Project
+      summary: "项目组"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: namespace
+          description: 项目组名称
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: children
+          description: 是否返回子项目组
+          default: false
+          required: false
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+    post:
+      tags:
+      - Project
+      summary: "创建项目"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: body
+          name: requestBody
+          schema:
+            type: object
+            required:
+              - namespace
+              - name
+            properties:
+              namespace:
+                description: 所属项目组
+                type: string
+              parent:
+                description: 父级项目组
+                type: string
+                default: ''
+              name:
+                description: 项目组名称
+                type: string
+              describe:
+                description: 项目组描述
+                type: string
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+        default:
+          description: "Server Error"
+    put:
+      tags: 
+      - Project
+      summary: "更新项目组"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: body
+          name: requestBody
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                description: 项目组ID
+                type: number
+              namespace:
+                description: 所属项目组
+                type: string
+              name:
+                description: 项目组名称
+                type: string
+              describe:
+                description: 项目组描述
+                type: string
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+    delete:
+      tags: 
+      - Project
+      summary: "删除项目组"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: body
+          name: requestBody
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                description: 待删除项目组ID
+                type: number
+              namespace:
+                description: 待删除项目组
+                type: string
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+schemes:
+ - https
+ - http

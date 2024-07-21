@@ -1,0 +1,194 @@
+servers:
+  - url: http://localhost:9000/
+    description: 开发环境API url
+
+paths:
+  /v1/role:
+    get:
+      tags: 
+      - Role
+      summary: "获取角色列表"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: namespace
+          description: 项目组名称
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: role
+          description: 指定角色
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+    post:
+      tags:
+      - Role
+      summary: "创建角色"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: body
+          name: requestBody
+          schema:
+            type: object
+            required:
+              - namespace
+              - role
+              - name
+            properties:
+              namespace:
+                description: 所属项目组
+                type: string
+              role:
+                description: 角色标识
+                type: string
+              name:
+                description: 角色名
+                type: string
+              describe:
+                description: 描述
+                type: string
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+        default:
+          description: "Server Error"
+    put:
+      tags: 
+      - Role
+      summary: "更新角色信息"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: body
+          name: requestBody
+          schema:
+            type: object
+            required:
+              - id
+              - namespace
+              - role
+            properties:
+              id:
+                description: 角色ID
+                type: number
+              namespace:
+                description: 所属项目组
+                type: string
+              role:
+                description: 待更新角色
+                type: string
+              name:
+                description: 角色名
+                type: string
+              describe:
+                description: 描述
+                type: string
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+    delete:
+      tags: 
+      - Role
+      summary: "删除角色"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: body
+          name: requestBody
+          schema:
+            type: object
+            required:
+              - id
+              - namespace
+            properties:
+              id:
+                description: 待删除角色ID
+                type: number
+              namespace:
+                description: 所属项目组
+                type: string
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+  /v1/role/permission:
+    post:
+      tags:
+      - Role
+      summary: "创建角色并赋予其操作"
+      parameters:
+        - in: header
+          name: jwt_token
+          schema:
+            type: string
+          required: true
+        - in: body
+          name: requestBody
+          schema:
+            type: object
+            required:
+              - namespace
+              - role
+              - name
+            properties:
+              namespace:
+                description: 所属项目组
+                type: string
+              role:
+                description: 角色标识
+                type: string
+              name:
+                description: 角色名
+                type: string
+              describe:
+                description: 描述
+                type: string
+              permissions:
+                description: 角色权限
+                type: array
+                items:
+                  type: object
+                  properties:
+                    resource_id:
+                      type: number
+                      description: 资源标识符
+                    describe:
+                      type: string
+                      description: 权限描述
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+        default:
+          description: "Server Error"
+  
+schemes:
+ - https
+ - http
