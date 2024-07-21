@@ -5,6 +5,8 @@ COPY ./frontend ./app
 
 WORKDIR /app
 
+RUN npm i -g vite && npm i -g pnpm
+
 RUN pnpm install && pnpm build
 
 RUN ls -al

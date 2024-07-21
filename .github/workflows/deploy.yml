@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "feature/*" ]
+    branches: [ "main", "feature/*" ]
   pull_request:
-    branches: [ "feature/*" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -16,17 +16,14 @@ jobs:
       - name: Set timestamp
         id: vars
         run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-
-      - name: show dir
-        run: ls -l
       
       # 构建 Docker 镜像
       - name: Build the Docker image
-        run: docker build . --file ./frontend/Dockerfile.prod --tag uacl-frontend:${{ env.TIMESTAMP }}
+        run: docker build . --file Dockerfile.prod --tag uacl:${{ env.TIMESTAMP }}
 
       # 更换 Docker 名称
       - name: Rename the Docker image
-        run: docker tag library/uacl-frontend:${{ env.TIMESTAMP }} ${{ secrets.DOCKER_REGISTRY }}/uacl/uacl-frontend:${{ env.TIMESTAMP }}
+        run: docker tag library/uacl:${{ env.TIMESTAMP }} ${{ secrets.DOCKER_REGISTRY }}/uacl/api:${{ env.TIMESTAMP }}
       
       # 登录 Docker Hub
       - name: Log in to Docker Hub
@@ -34,5 +31,5 @@ jobs:
       
       # 推送 Docker 镜像到 Docker Hub
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKER_REGISTRY }}/uacl/uacl-frontend:${{ env.TIMESTAMP }}
+        run: docker push ${{ secrets.DOCKER_REGISTRY }}/uacl/api:${{ env.TIMESTAMP }}
     
