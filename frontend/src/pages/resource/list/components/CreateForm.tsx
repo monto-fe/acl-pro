@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FormInstance } from 'antd/lib/form';
-import { Form } from 'antd';
+import { Modal, Form, Input, Button, message } from 'antd';
 
-import { queryList as queryRoleList } from '@/pages/role/service';
+// import { queryList as queryRoleList } from '../../service';
 
-import { TableListItem } from '../data.d';
-import { TableListItem as RoleTableListItem } from '@/pages/role/data.d';
+import { TableListItem } from '../../data.d';
 import FormModal from '@/pages/component/form/FormModal';
 
 interface CreateFormProps {
@@ -21,54 +20,30 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { open, setOpen, initialValues, onSubmit, onSubmitLoading, onCancel } = props;
 
   const [form] = Form.useForm();
-  const [roleList, setRoleList] = useState([]);
 
   const addFormItems = [
     {
-      label: "英文名",
-      name: "user",
-      required: true,
-      type: "Input"
-    },
-    {
-      label: "中文名",
+      label: "资源名",
       name: "name",
       required: true,
       type: "Input"
     },
     {
-      label: "密码",
-      name: "password",
-      option: {
-        placeholder: 'default: 12345678'
-      },
+      label: "资源",
+      name: "resource",
+      required: true,
       type: "Input"
     },
     {
-      label: "职位",
-      name: "job",
+      label: "资源属性",
+      name: "properties",
+      required: true,
       type: "Input"
     },
     {
-      label: "邮箱",
-      name: "email",
+      label: "描述",
+      name: "describe",
       type: "Input"
-    },
-    {
-      label: "手机号",
-      name: "phone_number",
-      type: "Input"
-    },
-    {
-      label: "角色",
-      name: "role_ids",
-      type: "SelectMultiple",
-      options: roleList.map((role: RoleTableListItem) => {
-        return {
-          label: `${role.name} (${role.role})`,
-          value: role.id
-        }
-      })
     },
   ];  
 
@@ -78,9 +53,9 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   useEffect(() => {
     if (open) {
-      queryRoleList().then(res => {
-        setRoleList(res.data || []);
-      });
+      // queryRoleList().then(res => {
+      //   setRoleList(res.data || []);
+      // });
     }
   }, [open]);
 
@@ -91,7 +66,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         setVisible={setOpen}
         confirmLoading={onSubmitLoading}
         initialValues={initialValues}
-        title={initialValues?.id ? '编辑用户' : '新增用户'}
+        title="新增资源"
         ItemOptions={addFormItems}
         onFinish={onFinish}
         onCancel={onCancel}

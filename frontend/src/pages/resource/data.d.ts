@@ -7,20 +7,19 @@ export interface PaginationConfig {
 }
 
 export interface TableQueryParam {
-  user?: string;
   current?: number;
   pageSize?: number;
 }
 
 export interface TableListItem {
   id: number;
-  o_id: number;
-  namespace: 'string';
-  user: 'string';
-  name: 'string';
-  job: 'string';
-  phone_number: number;
-  email: 'string';
+  namespace: string;
+  category: string;
+  resource: string;
+  properties: string;
+  name: string;
+  describe: string;
+  operator: string;
   create_time: number;
   update_time: number;
 }

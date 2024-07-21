@@ -5,7 +5,7 @@ const namespace = 'acl';
 
 export async function queryList(params?: TableQueryParam): Promise<any> {
   return request({
-    url: `/user?namespace=${namespace}`,
+    url: `/resource?namespace=${namespace}`,
     method: 'get',
     params,
   });
@@ -13,7 +13,7 @@ export async function queryList(params?: TableQueryParam): Promise<any> {
 
 export async function createData(params: TableListItem): Promise<any> {
   return request({
-    url: '/user',
+    url: '/resource',
     method: 'POST',
     data: {
       ...params,
@@ -24,7 +24,7 @@ export async function createData(params: TableListItem): Promise<any> {
 
 export async function updateData(params: TableListItem): Promise<any> {
   return request({
-    url: `/user`,
+    url: `/resource`,
     method: 'PUT',
     data: {
       ...params,
@@ -33,13 +33,12 @@ export async function updateData(params: TableListItem): Promise<any> {
   });
 }
 
-export async function removeData(id: number, user: string): Promise<any> {
+export async function removeData(id: number): Promise<any> {
   return request({
-    url: `/user`,
+    url: `/resource`,
     method: 'delete',
     data: {
       id,
-      user,
       namespace
     },
   });

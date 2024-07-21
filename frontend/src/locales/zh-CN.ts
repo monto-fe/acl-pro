@@ -35,10 +35,10 @@ export default {
   'universal-layout.menu.pages.detail.module': '模块详情',
   'universal-layout.menu.pages.detail.table': '表格详情',
 
-  'universal-layout.menu.roles': '权限验证',
-  'universal-layout.menu.roles.all': '用户列表',
-  'universal-layout.menu.roles.user': 'Users有权限',
-  'universal-layout.menu.roles.test': 'Tests有权限',
+  'universal-layout.menu.roles': '权限管理',
+  'universal-layout.menu.roles.user': '用户列表',
+  'universal-layout.menu.roles.role': '角色列表',
+  'universal-layout.menu.roles.resource': '资源列表',
 
   'user-layout.menu.login': '登录',
   'user-layout.menu.register': '注册',

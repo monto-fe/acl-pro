@@ -1,5 +1,5 @@
 import { memo, useState, useMemo, useLayoutEffect, useContext } from 'react';
-import { Menu } from 'antd';
+import { Flex, Menu } from 'antd';
 import { unionWith } from 'lodash';
 
 import { useI18n } from '@/store/i18n';
@@ -39,7 +39,7 @@ const createMenuItems = (
       continue;
     }
 
-    const icon = item.meta?.icon || undefined;
+    const Icon = item.meta?.icon || undefined;
     const hidden = item.meta?.hidden || false;
     if (hidden === true) {
       // eslint-disable-next-line no-continue
@@ -60,14 +60,12 @@ const createMenuItems = (
       items.push({
         key: path,
         label: (
-          <>
-            {icon && (
-              <span className='anticon'>
-                <IconSvg name={icon} />
-              </span>
+          <Flex align='center'>
+            {Icon && (
+              <Icon />
             )}
             <span>{t(title)}</span>
-          </>
+          </Flex>
         ),
         children: createMenuItems(t, userRoles, item.children, path),
       });
@@ -76,12 +74,12 @@ const createMenuItems = (
         key: path,
         label: (
           <ALink to={path}>
-            {icon && (
-              <span className='anticon'>
-                <IconSvg name={icon} />
-              </span>
-            )}
-            <span>{t(title)}</span>
+            <Flex align='center'>
+              {Icon && (
+                <Icon />
+              )}
+              <span>{t(title)}</span>
+            </Flex>
           </ALink>
         ),
       });

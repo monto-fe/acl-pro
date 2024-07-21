@@ -35,10 +35,10 @@ export default {
   'universal-layout.menu.pages.detail.module': 'Module details',
   'universal-layout.menu.pages.detail.table': 'Table details',
 
-  'universal-layout.menu.roles': 'Permission to verify',
-  'universal-layout.menu.roles.all': 'User list',
-  'universal-layout.menu.roles.user': 'Users have permission',
-  'universal-layout.menu.roles.test': 'Tests have permission',
+  'universal-layout.menu.roles': 'Permission config',
+  'universal-layout.menu.roles.user': 'User list',
+  'universal-layout.menu.roles.role': 'Role list',
+  'universal-layout.menu.roles.resource': 'Resource list',
 
   'user-layout.menu.login': 'Login',
   'user-layout.menu.register': 'Register',

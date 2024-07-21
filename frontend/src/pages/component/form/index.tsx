@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Space, theme } from 'antd';
 import { DownOutlined } from '@ant-design/icons';

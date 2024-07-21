@@ -6,6 +6,6 @@ import IconSvg from '@/components/IconSvg';
 
 export default memo(() => {
   return (
-    '公告'
+    <span>'公告'</span>
   );
 });

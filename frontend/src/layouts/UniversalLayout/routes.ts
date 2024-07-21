@@ -4,23 +4,25 @@
  */
 
 import { lazy } from 'react';
+
+import {
+  HomeOutlined,
+  DashboardOutlined,
+  BarChartOutlined,
+  UnorderedListOutlined,
+  InsuranceOutlined,
+  UserOutlined,
+  TeamOutlined,
+  KeyOutlined
+} from '@ant-design/icons';
+
 import { IRouter } from '@/@types/router.d';
 
 const universalLayoutRotes: IRouter[] = [
-  /*
   {
     path: '/home',
     meta: {
-      icon: 'home',
-      title: 'universal-layout.menu.home',
-    },
-    component: lazy(() => import('@/pages/Home')),
-  },
-  */
-  {
-    path: '/home',
-    meta: {
-      icon: 'home',
+      icon: HomeOutlined,
       title: 'universal-layout.menu.home',
     },
     redirect: '/home/workplace',
@@ -28,7 +30,7 @@ const universalLayoutRotes: IRouter[] = [
       {
         path: 'workplace',
         meta: {
-          icon: 'control',
+          icon: DashboardOutlined,
           title: 'universal-layout.menu.home.workplace',
         },
         component: lazy(() => import('@/pages/Home')),
@@ -36,7 +38,7 @@ const universalLayoutRotes: IRouter[] = [
       {
         path: 'custombreadcrumbs',
         meta: {
-          icon: 'edit',
+          icon: DashboardOutlined,
           title: 'universal-layout.menu.home.custom-breadcrumbs',
           breadcrumb: [
             {
@@ -64,7 +66,7 @@ const universalLayoutRotes: IRouter[] = [
       {
         path: 'http://admin-antd-react.montoacl.cc/',
         meta: {
-          icon: 'detail',
+          icon: DashboardOutlined,
           title: 'universal-layout.menu.home.docs',
           selectLeftMenu: '/home',
         },
@@ -75,7 +77,7 @@ const universalLayoutRotes: IRouter[] = [
     path: '/component',
     redirect: '/component/icon/svg',
     meta: {
-      icon: 'components',
+      icon: BarChartOutlined,
       title: 'universal-layout.menu.component',
     },
     children: [
@@ -83,7 +85,7 @@ const universalLayoutRotes: IRouter[] = [
         path: 'icon',
         redirect: '/component/icon/svg',
         meta: {
-          icon: 'icon',
+          icon: BarChartOutlined,
           title: 'universal-layout.menu.component.icon',
         },
         children: [
@@ -100,7 +102,7 @@ const universalLayoutRotes: IRouter[] = [
         path: 'editor',
         redirect: '/component/editor/tuieditor',
         meta: {
-          icon: 'editor',
+          icon: BarChartOutlined,
           title: 'universal-layout.menu.component.editor',
         },
         children: [
@@ -126,7 +128,7 @@ const universalLayoutRotes: IRouter[] = [
     path: '/pages',
     redirect: '/pages/list/basic',
     meta: {
-      icon: 'page',
+      icon: UnorderedListOutlined,
       title: 'universal-layout.menu.pages',
     },
     children: [
@@ -134,7 +136,7 @@ const universalLayoutRotes: IRouter[] = [
         path: 'list',
         redirect: '/pages/list/basic',
         meta: {
-          icon: 'list',
+          icon: UnorderedListOutlined,
           title: 'universal-layout.menu.pages.list',
         },
         children: [
@@ -174,7 +176,7 @@ const universalLayoutRotes: IRouter[] = [
         path: 'form',
         redirect: '/pages/form/basic',
         meta: {
-          icon: 'edit',
+          icon: UnorderedListOutlined,
           title: 'universal-layout.menu.pages.form',
         },
         children: [
@@ -197,7 +199,7 @@ const universalLayoutRotes: IRouter[] = [
       {
         path: 'detail',
         meta: {
-          icon: 'detail',
+          icon: UnorderedListOutlined,
           title: 'universal-layout.menu.pages.detail',
         },
         children: [
@@ -230,18 +232,18 @@ const universalLayoutRotes: IRouter[] = [
     ],
   },
   {
-    path: '/roles',
-    redirect: '/roles/all',
+    path: '/acl',
+    redirect: '/acl/user',
     meta: {
-      icon: 'permissions',
+      icon: InsuranceOutlined,
       title: 'universal-layout.menu.roles',
     },
     children: [
       {
         path: 'user',
         meta: {
-          icon: 'user',
-          title: 'universal-layout.menu.roles.all',
+          icon: UserOutlined,
+          title: 'universal-layout.menu.roles.user',
           roles: ['admin'],
         },
         component: lazy(() => import('@/pages/user/list')),
@@ -249,20 +251,20 @@ const universalLayoutRotes: IRouter[] = [
       {
         path: 'role',
         meta: {
-          icon: 'detail',
-          title: 'universal-layout.menu.roles.user',
-          roles: ['user'],
+          icon: TeamOutlined,
+          title: 'universal-layout.menu.roles.role',
+          roles: ['admin'],
         },
-        component: lazy(() => import('@/pages/roles/user')),
+        component: lazy(() => import('@/pages/role/list')),
       },
       {
         path: 'resource',
         meta: {
-          icon: 'detail',
-          title: 'universal-layout.menu.roles.test',
+          icon: KeyOutlined,
+          title: 'universal-layout.menu.roles.resource',
           roles: ['test'],
         },
-        component: lazy(() => import('@/pages/roles/test')),
+        component: lazy(() => import('@/pages/resource/list')),
       },
     ],
   },

@@ -36,9 +36,9 @@ export default {
   'universal-layout.menu.pages.detail.table': '表格詳情',
 
   'universal-layout.menu.roles': '權限驗證',
-  'universal-layout.menu.roles.all': '用戶列表',
-  'universal-layout.menu.roles.user': 'Users有權限',
-  'universal-layout.menu.roles.test': 'Tests有權限',
+  'universal-layout.menu.roles.user': '用戶列表',
+  'universal-layout.menu.roles.role': '角色列表',
+  'universal-layout.menu.roles.resource': '資源列表',
 
   'user-layout.menu.login': '登錄',
   'user-layout.menu.register': '註冊',

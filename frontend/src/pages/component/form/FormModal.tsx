@@ -1,4 +1,3 @@
-'use client'
 import React, { useEffect } from 'react';
 import { Modal, Form } from 'antd';
 import FormItemComponent from './Item';

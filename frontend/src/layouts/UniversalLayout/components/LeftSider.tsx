@@ -31,7 +31,7 @@ export default memo(
       <div className='universallayout-left-sider'>
         <div className='universallayout-left-logo'>
           <Link to='/' className='logo-url'>
-            {collapsed ? <img alt='' src={logo} width='30' /> : <h3 className='logo-title'>AdminAntdReact</h3>}
+            {collapsed ? <img alt='' src={logo} width='30' /> : <h3 className='logo-title'>Monto-Acl</h3>}
           </Link>
         </div>
         <div className='universallayout-left-menu'>

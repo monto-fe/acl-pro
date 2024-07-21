@@ -35,7 +35,7 @@ export interface IRouteMeta {
   // 菜单中是否隐藏
   hidden?: boolean;
   // 图标的名称，显示在菜单标题前
-  icon?: string;
+  icon?: ForwardRefExoticComponent<Omit<AntdIconProps, "ref">>;
   // 权限控制，页面角色(您可以设置多个角色)
   roles?: string[];
   /**

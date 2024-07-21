@@ -14,8 +14,8 @@ import {
 import { ColumnsType } from 'antd/lib/table';
 
 import { ResponseData } from '@/utils/request';
-import { createData, queryList, removeData, updateData as updateDataService } from './service';
-import { TableQueryParam, PaginationConfig, TableListItem } from './data.d';
+import { createData, queryList, removeData, updateData as updateDataService } from '../service';
+import { TableQueryParam, PaginationConfig, TableListItem } from '../data.d';
 
 import CreateForm from './components/CreateForm';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
@@ -33,7 +33,7 @@ function App() {
     showQuickJumper: true,
   });
 
-  const getList = async (current: number, pageSize: number, filter?: TableQueryParam): Promise<void> => {
+  const getList = async (current: number, pageSize: number): Promise<void> => {
     setLoading(true);
 
     const response: ResponseData<TableListItem[]> = await queryList({
@@ -60,17 +60,17 @@ function App() {
 
   // 搜索
   const handleSearch = (value: string) => {
-    getList(pagination.current, pagination.pageSize, { user: value });
+    getList(pagination.current, pagination.pageSize);
   };
 
   // 删除
   const [deleteOpen, setDeleteOpen] = useState<number | undefined>();
   const handleDelete = (id: number) => setDeleteOpen(id);
-  const deleteConfirm = async (id: number, user: string) => {
+  const deleteConfirm = async (id: number) => {
     setLoading(true);
-    await removeData(id, user);
+    await removeData(id);
     message.success('删除成功！');
-    getList(1, pagination.pageSize, filter);
+    getList(1, pagination.pageSize);
     setLoading(false);
     setDeleteOpen(void 0);
   };
@@ -88,10 +88,6 @@ function App() {
     setUpdateData({});
     setCreateFormVisible(true);
   }
-  const handleCreateCancel = () => {
-    setCreateFormVisible(false);
-    setUpdateData({});
-  }
   const createSubmit = async (values: TableListItem, form: FormInstance) => {
     setCreateSubmitLoading(true);
     const request = updateData.id ? updateDataService : createData;
@@ -99,7 +95,7 @@ function App() {
       form.resetFields();
       setCreateFormVisible(false);
       message.success(values.id ? '修改成功' : '新增成功！');
-      getList(pagination.current, pagination.pageSize, filter);
+      getList(pagination.current, pagination.pageSize);
   
       setCreateSubmitLoading(false);
     }).catch(() => {
@@ -116,71 +112,35 @@ function App() {
 
   const columns: ColumnsType<TableListItem> = [
     {
-      title: 'userId',
+      title: 'id',
       dataIndex: 'id',
       key: 'id',
     },
     {
-      title: '英文名',
-      dataIndex: 'user',
-      key: 'user',
-    },
-    {
-      title: '姓名',
+      title: '资源名',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: '角色',
-      dataIndex: 'role_info',
-      key: 'role_info',
-      render: (text) => (
-        <div>
-          {Array.isArray(text) ? (
-            <span>
-              {text.length > 1 ? (
-                <Popover
-                  placement='right'
-                  content={
-                    <div>
-                      {text.map((item: any) => (
-                        <div key={item.role}>{item.role_name}</div>
-                      ))}
-                    </div>
-                  }
-                  trigger='hover'
-                >
-                  {text[0].role_name + '...'}
-                </Popover>
-              ) : (
-                text[0].role_name
-              )}
-            </span>
-          ) : (
-            ''
-          )}
-        </div>
-      ),
-      // filters: roles.map((item) => ({
-      //   text: item.name,
-      //   value: item.role,
-      // })),
+      title: '资源',
+      dataIndex: 'resource',
+      key: 'resource',
+    },
+    {
+      title: '类别',
+      dataIndex: 'category',
+      key: 'category',
       onFilter: (value, record: any) => record.role_info.findIndex((item: any) => item.role === value) > -1,
     },
     {
-      title: '职位',
-      dataIndex: 'job',
-      key: 'job',
+      title: '描述',
+      dataIndex: 'describe',
+      key: 'describe',
     },
     {
-      title: '邮箱',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: '手机号',
-      dataIndex: 'phone_number',
-      key: 'phone_number',
+      title: '更新人',
+      dataIndex: 'operator',
+      key: 'operator',
     },
     {
       title: '更新时间',
@@ -201,7 +161,7 @@ function App() {
             open={deleteOpen === record.id}
             title='Delete the task'
             description='Are you sure to delete this task?'
-            onConfirm={async () => deleteConfirm(record.id, record.user)}
+            onConfirm={async () => deleteConfirm(record.id)}
             onCancel={deleteCancel}
             okText='Yes'
             cancelText='No'
@@ -221,7 +181,7 @@ function App() {
         bordered={false}
         title={
           <Button type='primary' onClick={handleCreate}>
-            新增用户
+            新增资源
           </Button>
         }
         extra={
@@ -236,7 +196,7 @@ function App() {
           pagination={{
             ...pagination,
             onChange: (page: number, pageSize: number) => {
-              getList(page, pageSize, filter);
+              getList(page, pageSize);
             },
           }}
         />
@@ -244,7 +204,7 @@ function App() {
 
       <CreateForm
         initialValues={updateData}
-        onCancel={handleCreateCancel}
+        onCancel={() => setCreateFormVisible(false)}
         open={createFormVisible}
         setOpen={setCreateFormVisible}
         onSubmit={createSubmit}
