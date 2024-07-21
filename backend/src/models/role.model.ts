@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import { Role } from '../interfaces/role.interface';
+// import { RolePermissionModel } from './rolePermission.model';
 
 export type RoleCreationAttributes = Optional<Role, 'id'>;
 
@@ -13,6 +14,11 @@ export class RoleModel extends Model<Role, RoleCreationAttributes> implements Ro
     public readonly create_time: number;
     public readonly update_time: number;
 }
+
+// RoleModel.hasMany(RolePermissionModel, {
+    // foreignKey: 'role_id',
+    // as: 'role_permission'
+// });
 
 export default function (sequelize: Sequelize): typeof RoleModel {
     RoleModel.init(

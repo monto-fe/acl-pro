@@ -182,6 +182,14 @@ paths:
               role_id:
                 description: 角色 ID
                 type: number
+              current:
+                description: 页码
+                type: number
+                default: 1
+              pageSize:
+                description: 每页条数
+                type: number
+                default: 10
       responses:
         200:
           description: "OK"
@@ -213,6 +221,7 @@ paths:
               category:
                 description: 资源分类
                 type: string
+                default: 'menu'
       responses:
         200:
           description: "OK"

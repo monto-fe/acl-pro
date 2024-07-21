@@ -9,14 +9,16 @@ class PermissionService {
 	public Resource = DB.Resource;
 
 	public async getRolePermissions(Data: any): Promise<any> {
-		const { namespace, role_id } = Data;
+		const { namespace, role_id, limit, offset } = Data;
 		const { count, rows } = await this.RolePermission.findAndCountAll({
 			where: {  
 				namespace,
 				role_id: role_id
 			},
+			limit,
+			offset,
 			order: [
-				['create_time', 'desc']
+				['id', 'DESC']
 			]
 		});
 		return { rows, count };

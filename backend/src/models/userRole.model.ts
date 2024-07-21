@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-import { ResourceModel } from './resource.model';
-import { RolePermissionModel } from './rolePermission.model';
+// import { ResourceModel } from './resource.model';
+// import { RolePermissionModel } from './rolePermission.model';
 import { UserRole } from '../interfaces/role.interface';
 
 export type UserRoleCreationAttributes = Optional<UserRole, 'id'>;

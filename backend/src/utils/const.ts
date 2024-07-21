@@ -38,7 +38,11 @@ export const ResponseMap = {
     TokenExpired: {
         ret_code: 10009,
         message: '登录凭证已过期'
-    }
+    },
+    SystemEmptyError: {
+        ret_code: 10010,
+        message: '未查询到数据'
+    },
 }
 
 export const [HttpCodeSuccess, HttpCodeNotFound] = [200, 400]

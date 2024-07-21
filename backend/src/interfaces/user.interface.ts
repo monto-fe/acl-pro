@@ -1,3 +1,4 @@
+import { PageModel } from './common.interface';
 export enum UserStatus {
     Init,
     Enable,
@@ -45,9 +46,11 @@ export interface Token {
 }
 
 
-export interface UserListReq {
+export interface UserListReq extends PageModel {
     id?: number;
-    user?: string;
+    user?: string[];
+    name?: string;
+    roleName?: string;
 }
 
 export interface UserReq {

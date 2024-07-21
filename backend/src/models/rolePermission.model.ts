@@ -1,4 +1,6 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
+import { ResourceModel } from './resource.model'
+import { RoleModel } from './role.model';
 import { RolePermission } from '../interfaces/role.interface';
 
 export type RolePermissionCreationAttributes = Optional<RolePermission, 'id'>;
@@ -13,6 +15,9 @@ export class RolePermissionModel extends Model<RolePermission, RolePermissionCre
     public readonly create_time: number;
     public readonly update_time: number;
 }
+
+// RolePermissionModel.belongsTo(ResourceModel, { foreignKey:'resource_id' })
+// RolePermissionModel.belongsTo(RoleModel, { foreignKey:'role_id' })
 
 export default function (sequelize: Sequelize): typeof RolePermissionModel {
     RolePermissionModel.init(

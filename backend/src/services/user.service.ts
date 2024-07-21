@@ -1,4 +1,5 @@
 import md5 from 'md5';
+import { Op } from 'sequelize';
 import DB from '../databases';
 import { HttpException } from '../exceptions/HttpException';
 import { User, UserResponse, UpdateUserReq, UserReq } from '../interfaces/user.interface';
@@ -99,35 +100,31 @@ class UserService {
     return res
   }
 
-  // 写入邮件验证
-  // public async createAuthCode(Data: AuthCode): Promise<any> {
-  //   console.log("AuthCode", Data)
-  //   const res: any = await this.AuthCode.create(Data)
-  //   return res
-  // }
-
-  // 读取邮件验证码
-  // public async checkAuthCode(email: string, AuthCode: string): Promise<any> {
-  //   const res: any = await this.AuthCode.findOne({
-  //     where: {
-  //       email,
-  //       code: AuthCode,
-  //     }
-  //   })
-  //   console.log("res", res)
-  //   // 判断下时间是否已经过了有效期
-  //   return true
-  // }
   // getUserList
   public async getUserList(query: any): Promise<any> {
-    const { count, rows }  = await this.User.findAndCountAll({
+    const { offset, limit, user, id, ...rest } = query
+    let params:any = {
       where: {
-        ...query
+        ...rest
       },
+      offset,
+      limit,
+      order: [
+        ['id', 'DESC']
+      ],
       attributes: {
         exclude: ['password']
       }
-    });
+    }
+    if(user && user.length){
+      params.where.user = {
+        [Op.in]: user
+      }
+    }
+    if(id){
+      params.where.id = id
+    }
+    const { count, rows }  = await this.User.findAndCountAll(params);
     return { data: rows, count: count };
   }
   // createUser
@@ -209,6 +206,14 @@ class UserService {
     }})
     return res
   }
+
+  // 通过用户名查询user[]
+	public async findUserByUserName(userName: string) {
+		const result: any = await DB.sequelize.query(`SELECT
+		t_user.user FROM t_user WHERE
+		t_user.name LIKE ?`, { replacements: [`%${userName}%`], type: DB.sequelize.QueryTypes.SELECT })
+		return result
+	}
 }
 
 export default UserService;

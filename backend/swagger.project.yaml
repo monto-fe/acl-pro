@@ -17,16 +17,21 @@ paths:
         - in: query
           name: namespace
           description: 项目组名称
-          required: true
+          required: false
           schema:
             type: string
         - in: query
-          name: children
-          description: 是否返回子项目组
-          default: false
-          required: false
+          name: current
+          description: 页码
+          default: 1
           schema:
-            type: boolean
+            type: number
+        - in: query
+          name: pageSize
+          description: 每页条数
+          default: 10
+          schema:
+            type: number
       responses:
         200:
           description: "OK"

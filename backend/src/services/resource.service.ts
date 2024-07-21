@@ -1,4 +1,4 @@
-// const { Op } = require("sequelize");
+import { Op } from "sequelize";
 import DB from '../databases';
 import { ResourceReq, ResourceParams, Resource } from '../interfaces/resource.interface';
 import { getUnixTimestamp } from '../utils';
@@ -45,12 +45,28 @@ class ResourceService {
 	 * 获取项目组及其子项目组信息
 	*/
 	public async findWithAllChildren(Data: any): Promise<any> {
-		const { namespace } = Data;
+		const { namespace, limit, offset } = Data;
 		const result: any = await this.Resource.findAndCountAll({ 
 			where: {
 				namespace,
-			}
+			},
+			limit,
+			offset,
+			order: [['id', 'DESC']]
 		 })
+		return result;
+	}
+	/*
+		查询所有的资源，通过resourceIds
+	*/
+	public async findAllByIds(resourceIds: number[]): Promise<any> {
+		const result: any = await this.Resource.findAll({
+			where: {
+				id: {
+					[Op.in]: resourceIds
+				}
+			}
+		})
 		return result;
 	}
 }

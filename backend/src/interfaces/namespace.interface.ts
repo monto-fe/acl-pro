@@ -1,3 +1,4 @@
+import { PageModel } from './common.interface';
 // 命名空间
 export interface Namespace {
     id: number;
@@ -10,9 +11,8 @@ export interface Namespace {
     update_time: number;
 }
 
-export interface NamespaceReqList {
-    namespace: string;
-    children?: boolean;
+export interface NamespaceReqList extends PageModel {
+    namespace?: string;
 }
 
 export interface NamespaceReq {

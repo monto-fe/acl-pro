@@ -1,4 +1,4 @@
-// const { Op } = require("sequelize");
+const { Op } = require("sequelize");
 import DB from '../databases';
 import { NamespaceReq, NamespaceParams, Namespace } from '../interfaces/namespace.interface';
 import { getUnixTimestamp } from '../utils';
@@ -52,13 +52,37 @@ class NamespaceService {
 	 * 获取项目组及其子项目组信息
 	*/
 	public async findWithAllChildren(Data: any): Promise<any> {
-		const { namespace } = Data;
-		const result: any = await this.Namespace.findAndCountAll({ 
-			where: {
+		const { namespace, offset, limit } = Data;
+		let queryOptions:any = {
+			offset,
+			limit,
+			order: [['id', 'DESC']]
+		};
+		
+		if (namespace) {
+			queryOptions.where = {
 				namespace
-			}
-		 })
+			};
+		}
+		const result: any = await this.Namespace.findAndCountAll(queryOptions)
 		return result;
+	}
+
+	/* 校验项目组是否存在
+	 */
+	public async checkNamespace({
+		namespace,
+		name
+	}:{
+		namespace: string,
+		name: string
+	}): Promise<any> {
+		const result: any = await this.Namespace.findOne({
+			where: {
+				[Op.or]: [{ namespace }, { name }],
+			}
+		})
+		return result ? true : false;
 	}
 }
 

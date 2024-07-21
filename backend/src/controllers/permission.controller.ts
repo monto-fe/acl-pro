@@ -3,6 +3,8 @@ import { RolePermissionReq, UserRoleReq } from '../interfaces/permission.interfa
 import PermissionService from '../services/permission.service';
 import { ResponseMap, HttpCodeSuccess } from '../utils/const';
 import { getUnixTimestamp } from '../utils';
+import { pageCompute } from '../utils/pageCompute';
+import { totalmem } from 'os';
 
 const { Success, ParamsError } = ResponseMap
 
@@ -12,13 +14,13 @@ class PermissionController {
 
   public getRolePermissions = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { namespace, role_id } = req.body;
-      const getData: any = await this.PermissionService.getRolePermissions(
-				{
-          namespace,
-          role_id
-        }
-			);
+      const { namespace, role_id, current, pageSize } = req.body;
+      const params: any = {
+        namespace,
+        role_id,
+        ...pageCompute(current, pageSize)
+      }
+      const getData: any = await this.PermissionService.getRolePermissions(params);
       const { rows, count } = getData;
       res.status(HttpCodeSuccess).json({ 
         ...Success, 
@@ -34,13 +36,12 @@ class PermissionController {
     try {
       const { namespace, category } = req.body;
       const remoteUser = req.headers['remoteUser'] as string;
-      const result: any = await this.PermissionService.getSelfPermissions(
-				{
-          namespace,
-          user: remoteUser,
-          category
-        }
-			);
+      const params = {
+        namespace,
+        user: remoteUser,
+        category
+      }
+      const result: any = await this.PermissionService.getSelfPermissions(params);
       res.status(HttpCodeSuccess).json({ 
         ...Success, 
         data: result

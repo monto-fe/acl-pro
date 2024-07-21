@@ -20,6 +20,18 @@ paths:
           required: true
           schema:
             type: string
+        - in: query
+          name: current
+          description: 页码
+          default: 1
+          schema:
+            type: number
+        - in: query
+          name: pageSize
+          description: 每页条数
+          default: 10
+          schema:
+            type: number
       responses:
         200:
           description: "OK"

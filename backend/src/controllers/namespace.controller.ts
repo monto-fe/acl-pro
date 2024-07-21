@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { NamespaceReq, Namespace, NamespaceReqList } from '../interfaces/namespace.interface';
 import NamespaceService from '../services/namespace.service';
 import { ResponseMap, HttpCodeSuccess } from '../utils/const';
+import { pageCompute } from '../utils/pageCompute';
 
 const { Success, ParamsError } = ResponseMap
 
@@ -14,18 +15,15 @@ class NamespaceController {
   public NamespaceService = new NamespaceService();
 
   public getProjects = async (req: Request, res: Response, next: NextFunction) => {
-    const { namespace, children } = req.query as any;
-    if (!namespace) {
-      res.status(HttpCodeSuccess).json({ ...ParamsError });
-      return;
-    }
+    const { namespace, current, pageSize } = req.query as any;
+    const pageParams = pageCompute(current, pageSize)
     const params: NamespaceReqList = {
-      namespace
+      ...pageParams
     }
-    if (children) {
-      params.children = children
+    if(namespace){
+      params.namespace = namespace;
     }
-
+    
     try {
       const result: NamespaceResult = await this.NamespaceService.findWithAllChildren(params);
       const { rows, count } = result;
@@ -47,10 +45,23 @@ class NamespaceController {
       const query: NamespaceReq = req.body;
       const remoteUser = req.headers['remoteUser']
       const { namespace, parent, name, describe } = query;
-
+      
       if (!namespace || !name ) {
         res.status(HttpCodeSuccess).json({ ...ParamsError });
         return;
+      }
+
+      const result = await this.NamespaceService.checkNamespace({
+        namespace,
+        name
+      });
+
+      if(result){
+        res.status(HttpCodeSuccess).json({ 
+          ...ParamsError, 
+          message: 'namespace or name already exists'
+        });
+        return
       }
 
       const namespaceParams: any = {

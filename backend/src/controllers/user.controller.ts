@@ -4,10 +4,12 @@ import md5 from 'md5';
 import nodeSendEmail from 'node-send-email'
 import { User, UserListReq, UserReq } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
+import RoleService from '../services/role.service';
 import { 
   TokenExpired, 
 } from '../utils/util'
 import { ResponseMap, HttpCodeSuccess } from '../utils/const'
+import { pageCompute } from '../utils/pageCompute';
 // import { getCodeHtml, registerEmailInfo } from '../utils/registerEmail';
 
 const { 
@@ -24,6 +26,7 @@ const {
 const { sendEmail } = nodeSendEmail as any
 class UsersController {
   public UserService = new UserService();
+  public RoleService = new RoleService();
   
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -55,58 +58,6 @@ class UsersController {
     }
   };
 
-  // public register = async (req: Request, res: Response, next: NextFunction) => {
-  //   try {
-  //     const { username, password, email, phone, job, authCode }: any = req.body;
-
-  //     console.log('注册用户信息：');
-  //     console.log(username);
-  //     // 参数校验
-  //     if (!username || !password || !email || !authCode) {
-  //       res.status(HttpCodeSuccess).json(ParamsError);
-  //       return;
-  //     }
-  //     // 检查邮箱验证码是否正确
-  //     const checkAuthCode: any = await this.UserService.checkAuthCode(email, authCode)
-  //     if(!checkAuthCode){
-  //       res.status(HttpCodeSuccess).json(AuthCodeError);
-  //       return
-  //     }
-  //     // 用户是否已存在
-  //     const usernameExists: any = await this.UserService.checkUsernameExists("namespace", username);
-  //     if(usernameExists){
-  //       res.status(HttpCodeSuccess).json(UserExist);
-  //       return
-  //     }
-  //     // 邮箱是否已存在
-  //     const emailExists: any = await this.UserService.checkEmailExists(email);
-  //     if(emailExists){
-  //       res.status(HttpCodeSuccess).json(EmailError);
-  //       return
-  //     }
-      
-  //     const params: any = {
-  //       username,
-  //       password: md5(password),
-  //       job,
-  //       phone,
-  //       email,
-  //       status: UserStatus.Init
-  //     }
-      
-  //     try {
-  //       await this.UserService.createUser(params);
-  //     }catch(err:any){
-  //       res.status(HttpCodeSuccess).json({ ...SystemError, message: err.message });
-  //       return
-  //     }
-  //     res.status(HttpCodeSuccess).json({ ...Success, data: null });
-  //   } catch (error) {
-  //     console.log(error)
-  //     next(error);
-  //   }
-  // };
-
   public getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.headers['userId'] as string;
@@ -124,75 +75,6 @@ class UsersController {
     }
   };
 
-  // public getEmailCode = async ({ Email, CodeType } : {Email: string, CodeType: number}) => {
-  //   console.log("Email", Email, CodeType)
-  //   try {
-  //     // 校验一下Email的格式
-  //     const EmailCode = String(Math.floor(Math.random() * 1000000)).padEnd(6, '0')
-  //     const params:any = {
-  //       ...registerEmailInfo,
-  //       to: Email,
-  //       html: getCodeHtml(EmailCode)
-  //     }
-  //     console.log("params", params)
-  //     // 增加安全验证，在发送之前要确认下当前邮箱的验证码是否过期
-  //     // 如果没有过期不允许重复发送，15分钟
-  //     const sendResult = await sendEmail(params, (result:any) => {
-  //       return result
-  //     })
-  //     console.log("sendResult", sendResult)
-  //     if(!sendResult){
-  //       // 插入数据到数据库，注册code码，保存邮箱、code、时间、是否已失效、type(注册、修改密码)
-  //       const expiredAt = dayjs().add(15, 'minutes').unix()
-  //       const data:any = {
-  //         code: EmailCode,
-  //         email: Email,
-  //         expiredAt,
-  //         type: CodeType
-  //       }
-  //       await this.UserService.createAuthCode(data)
-  //       return true
-  //     }else{
-  //       return false;
-  //     }   
-  //   }catch(err){
-  //     return false
-  //   }
-  // }
-
-  // public sendEmailCode = async (req: Request, res: Response) => {
-  //   const { email, codeType } = req.body;
-  //   const result = await this.getEmailCode({ Email: email, CodeType: codeType })
-  //   if(result){
-  //     res.status(HttpCodeSuccess).json({...Success, data: null});
-  //     return
-  //   }
-  //   res.status(HttpCodeSuccess).json(SystemError);
-  // }
-
-  // 重置密码
-  // 1、用户输入邮箱（验证邮箱code），发送重置密
-  // 邮箱、密码
-  // public changePassword = async (req: Request, res: Response) => {
-  //   const { id, email, authCode, password } = req.body;
-  //   // 检查邮箱验证码是否正确
-  //   const checkAuthCode: any = await this.UserService.checkAuthCode(email, authCode)
-  //   if(!checkAuthCode){
-  //     res.status(HttpCodeSuccess).json(AuthCodeError);
-  //     return
-  //   }
-  //   const data:any = {
-  //     password: md5(password)
-  //   }
-  //   const result = await this.UserService.updateUser(data, id)
-  //   // 更新用户密码
-  //   if(result){
-  //     res.status(HttpCodeSuccess).json({...Success, data: null});
-  //     return
-  //   }
-  //   res.status(HttpCodeSuccess).json(SystemError);
-  // }
-
   // 更新用户
   public updateUser = async (req: Request, res: Response) => {
     const { id, username, email, phone, status, job } = req.body;
@@ -208,17 +90,45 @@ class UsersController {
 
   // getUserList
   public getUserList = async (req: Request, res: Response) => {
-    const { id, user }:UserListReq = req.query;
-    const query:UserListReq = {}
+    const { id, user, userName, roleName, current, pageSize } = req.query as any;
+    const query:UserListReq = {
+      ...pageCompute(current, pageSize)
+    }
     if(id){
       query.id = Number(id);
     }
     if(user){
-      query.user = user;
+      query.user = [user];
     }
     try{
+      // 如果roleName存在，则查询user，number[]
+      if(roleName){
+        const userListLike = await this.RoleService.findUserByRoleName(roleName)
+        const users = userListLike.length > 0 ? userListLike.map((item:any) => item.user) : [];
+        query.user = users.concat(query.user)
+      }
+      if(userName){
+        const userListLike = await this.UserService.findUserByUserName(userName)
+        const users = userListLike.length > 0 ? userListLike.map((item:any) => item.user) : [];
+        query.user = users.concat(query.user)
+      }
+      // 如果name存在，则查询对应的user，User[]
+      // 合并user,进行查询
       const result = await this.UserService.getUserList(query)
-      res.status(HttpCodeSuccess).json({...Success, ...result});
+      const { data, count } = result;
+      if(count > 0){
+        // 给每个user，查询对应角色
+        const userList = data.map((user:any) => {
+          return user.dataValues.user;
+        })
+        const roleList = await this.RoleService.findRoleByUser(userList);
+        data.forEach((user:any) => {
+          user.dataValues.role = roleList.filter((role:any) => {
+            return role.user === user.dataValues.user
+          });
+        })
+      }
+      res.status(HttpCodeSuccess).json({...Success, count, data});
     }catch(err:any){
       res.status(HttpCodeSuccess).json({...SystemError, message: err.message});
     }

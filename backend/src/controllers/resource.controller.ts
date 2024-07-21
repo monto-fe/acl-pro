@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ResourceReq } from '../interfaces/resource.interface';
 import ResourceService from '../services/resource.service';
 import { ResponseMap, HttpCodeSuccess } from '../utils/const';
+import { pageCompute } from '../utils/pageCompute';
 
 const { Success, ParamsError } = ResponseMap
 
@@ -11,9 +12,18 @@ class ResourceController {
   public getResources = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: any = req.query;
+      const { namespace, current, pageSize } = query;
+      if (!namespace) {
+        res.status(HttpCodeSuccess).json(ParamsError);
+        return;
+      }
+      const { offset, limit } = pageCompute(current, pageSize);
+
       const getData: any = await this.ResourceService.findWithAllChildren(
 				{
-          ...query
+          namespace,
+          offset,
+          limit
         }
 			);
       const { rows, count } = getData;
