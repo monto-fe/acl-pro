@@ -14,9 +14,8 @@ export const getToken = () => Cookies.get(settings.siteTokenKey);
  * 设置存储本地
  */
 export const setToken = (token: string) => {
-  console.log(token)
-  //  { secure: true, sameSite: 'strict' }
-  Cookies.set(settings.siteTokenKey, token);
+  // https 下应设置 { secure: true, sameSite: 'strict' }
+  Cookies.set(settings.siteTokenKey, token, { secure: true });
 };
 
 /**

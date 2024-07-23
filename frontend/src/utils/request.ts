@@ -80,7 +80,7 @@ const errorHandler = (error: any) => {
  */
 const request = axios.create({
   baseURL: import.meta.env.VITE_APP_APIHOST || '',
-  withCredentials: false, // 当跨域请求时发送cookie
+  withCredentials: false, // 当跨域请求时不发送cookie
   timeout: 5000, // 请求超时时间,5000(单位毫秒) / 0 不做限制
 });
 
