@@ -40,7 +40,7 @@ export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadC
     <div
       id='universallayout-right-top'
       className={classnames({
-        fiexd: globalConfig.headFixed,
+        fixed: globalConfig.headFixed,
         narrow: globalConfig.collapsed,
         tabNavEnable: !globalConfig.tabNavEnable,
         navModeHorizontal: globalConfig.navMode === 'horizontal',

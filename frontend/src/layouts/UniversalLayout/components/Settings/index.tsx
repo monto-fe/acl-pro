@@ -8,11 +8,12 @@ import { Theme, NavMode } from '@/@types/settings';
 
 import style from './index.module.less';
 import { BasicContext } from '@/store/context';
+import { observer } from 'mobx-react-lite';
 
-export default memo(() => {
+export default memo(observer(() => {
   const storeContext = (useContext(BasicContext) as any).storeContext;
   const { globalConfig } = storeContext;
-  
+
   // 模板主题
   const setTheme = (theme: Theme) => {
     storeContext.updateGlobalConfig({ ...globalConfig, theme });
@@ -151,4 +152,4 @@ export default memo(() => {
       </span>
     </Popover>
   );
-});
+}));

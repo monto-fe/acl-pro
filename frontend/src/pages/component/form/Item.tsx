@@ -20,7 +20,7 @@ interface IFormItem {
  * }
  * @param initialValues 表单整体的默认值，不再使用单个表单默认值
  * */
-export default function FormItemComponent(props: IFormItem) {
+function FormItemComponent(props: IFormItem) {
   const { field } = props;
   // 选项的类型：Input-输入框，NumberInput-数字输入框，Select-下拉框，SelectMultiple-下拉框多选，
   // Date-日期，DateRange-日期范围，DateRangeButton-日期范围按钮
@@ -97,3 +97,5 @@ export default function FormItemComponent(props: IFormItem) {
 
   return filterItem[field.type];
 }
+
+export default FormItemComponent;

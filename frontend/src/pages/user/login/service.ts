@@ -6,7 +6,7 @@ const namespace = 'acl';
 export async function accountLogin(params: LoginParamsType): Promise<any> {
   return request({
     url: '/login',
-    method: 'POST',
+    method: 'post',
     data: { ...params, namespace },
   });
 }

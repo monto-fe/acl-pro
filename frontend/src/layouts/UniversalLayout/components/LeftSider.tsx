@@ -27,7 +27,7 @@ export default memo(
     theme = 'dark',
     leftSiderFixed = true,
   }: LeftSiderProps) => (
-    <div id='universallayout-left' className={classnames({ narrow: collapsed, fiexd: leftSiderFixed })}>
+    <div id='universallayout-left' className={classnames({ narrow: collapsed, fixed: leftSiderFixed })}>
       <div className='universallayout-left-sider'>
         <div className='universallayout-left-logo'>
           <Link to='/' className='logo-url'>
@@ -45,5 +45,5 @@ export default memo(
         </div>
       </div>
     </div>
-  ),
+  )
 );

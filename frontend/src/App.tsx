@@ -4,8 +4,6 @@ import { setHtmlLang } from '@/utils/i18n';
 import Routes from '@/config/routes';
 import { BasicContext } from '@/store/context';
 
-import './App.css';
-
 export default memo(() => {
   const context = useContext(BasicContext) as any;
   const { i18nLocale } = context.storeContext;

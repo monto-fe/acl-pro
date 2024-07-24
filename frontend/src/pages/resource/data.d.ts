@@ -1,11 +1,3 @@
-export interface PaginationConfig {
-  count: number;
-  current: number;
-  pageSize: number;
-  showSizeChanger: boolean;
-  showQuickJumper: boolean;
-}
-
 export interface TableQueryParam {
   current?: number;
   pageSize?: number;

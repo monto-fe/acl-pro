@@ -1,82 +1,41 @@
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Button,
-  Card,
   FormInstance,
-  Input,
   message,
   Popconfirm,
   PopconfirmProps,
-  Popover,
   Space,
-  Table,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 
-import { ResponseData } from '@/utils/request';
 import { createData, queryList, removeData, updateData as updateDataService } from '../service';
-import { TableQueryParam, PaginationConfig, TableListItem } from '../data.d';
+import { TableListItem } from '../data.d';
 
 import CreateForm from './components/CreateForm';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
+import CommonTable from '@/pages/component/table';
+import { ITable } from '@/pages/component/table/data';
 
 function App() {
-  // 获取数据
-  const [loading, setLoading] = useState<boolean>(false);
-  const [list, setList] = useState<TableListItem[]>([]);
-  const [filter, setFilter] = useState<TableQueryParam>();
-  const [pagination, setPagination] = useState<PaginationConfig>({
-    count: 0,
-    current: 1,
-    pageSize: 10,
-    showSizeChanger: true,
-    showQuickJumper: true,
-  });
+  const tableRef = useRef<ITable<TableListItem>>();
 
-  const getList = async (current: number, pageSize: number): Promise<void> => {
-    setLoading(true);
-
-    const response: ResponseData<TableListItem[]> = await queryList({
-      current,
-      pageSize: pageSize || 10,
-      ...filter
-    });
-    if (response) {
-      setList(response.data || []);
-      setPagination({
-        ...pagination,
-        current,
-        count: response.count || 0,
-      });
-      setFilter(filter);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getList(pagination.current, pagination.pageSize);
-  }, []);
-
-  // 搜索
-  const handleSearch = (value: string) => {
-    getList(pagination.current, pagination.pageSize);
-  };
+  const reload = () => {
+    tableRef.current && tableRef.current.reload && tableRef.current.reload()
+  }
 
   // 删除
   const [deleteOpen, setDeleteOpen] = useState<number | undefined>();
   const handleDelete = (id: number) => setDeleteOpen(id);
-  const deleteConfirm = async (id: number) => {
-    setLoading(true);
-    await removeData(id);
-    message.success('删除成功！');
-    getList(1, pagination.pageSize);
-    setLoading(false);
-    setDeleteOpen(void 0);
+  const deleteConfirm = (id: number) => {
+    removeData(id).then(() => {
+      message.success('删除成功！');
+      reload();
+      setDeleteOpen(void 0);
+    })
   };
 
   const deleteCancel: PopconfirmProps['onCancel'] = (e) => {
-    message.error('Click on No');
     setDeleteOpen(void 0);
   };
 
@@ -95,8 +54,8 @@ function App() {
       form.resetFields();
       setCreateFormVisible(false);
       message.success(values.id ? '修改成功' : '新增成功！');
-      getList(pagination.current, pagination.pageSize);
-  
+      reload();
+
       setCreateSubmitLoading(false);
     }).catch(() => {
       setCreateSubmitLoading(false);
@@ -146,15 +105,17 @@ function App() {
       title: '更新时间',
       dataIndex: 'update_time',
       key: 'update_time',
+      width: 200,
       render: (text: number) => renderDateFromTimestamp(text, timeFormatType.time)
     },
     {
       title: '操作',
       dataIndex: 'action',
       key: 'action',
+      fixed: 'right',
       render: (text, record: TableListItem) => (
         <Space size='small'>
-          <Button loading={loading} className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
+          <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
             编辑
           </Button>
           <Popconfirm
@@ -166,7 +127,7 @@ function App() {
             okText='Yes'
             cancelText='No'
           >
-            <Button danger loading={loading} className='btn-group-cell' onClick={() => handleDelete(record.id)} size='small' type='link'>
+            <Button danger className='btn-group-cell' onClick={() => handleDelete(record.id)} size='small' type='link'>
               删除
             </Button>
           </Popconfirm>
@@ -177,36 +138,25 @@ function App() {
 
   return (
     <div className='layout-main-conent'>
-      <Card
-        bordered={false}
+      <CommonTable
+        ref={tableRef}
+        columns={columns}
+        queryList={queryList}
         title={
           <Button type='primary' onClick={handleCreate}>
             新增资源
           </Button>
         }
-        extra={
-          <Input.Search placeholder='请输入' style={{ width: '270px', marginLeft: '16px' }} onSearch={handleSearch} />
-        }
-      >
-        <Table
-          rowKey='id'
-          columns={columns}
-          dataSource={list}
-          loading={loading}
-          pagination={{
-            ...pagination,
-            onChange: (page: number, pageSize: number) => {
-              getList(page, pageSize);
-            },
-          }}
-        />
-      </Card>
+        useTools
+        fuzzySearchKey='resource'
+        fuzzySearchPlaceholder='输入资源搜索'
+        scroll={{ x: 1200 }}
+      />
 
       <CreateForm
         initialValues={updateData}
-        onCancel={() => setCreateFormVisible(false)}
-        open={createFormVisible}
-        setOpen={setCreateFormVisible}
+        visible={createFormVisible}
+        setVisible={setCreateFormVisible}
         onSubmit={createSubmit}
         onSubmitLoading={createSubmitLoading}
       />

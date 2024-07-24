@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FormInstance } from 'antd/lib/form';
-import { Modal, Form, Input, Button, message } from 'antd';
-
-// import { queryList as queryRoleList } from '../../service';
+import { Form } from 'antd';
 
 import { TableListItem } from '../../data.d';
 import FormModal from '@/pages/component/form/FormModal';
 
-interface CreateFormProps {
-  open: boolean;
-  setOpen: Function;
+interface ICreateFormProps {
+  visible: boolean;
+  setVisible: Function;
   initialValues?: Partial<TableListItem>;
   onSubmitLoading: boolean;
   onSubmit: (values: TableListItem, form: FormInstance) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
-const CreateForm: React.FC<CreateFormProps> = (props) => {
-  const { open, setOpen, initialValues, onSubmit, onSubmitLoading, onCancel } = props;
+function CreateForm(props: ICreateFormProps) {
+  const { visible, setVisible, initialValues, onSubmit, onSubmitLoading, onCancel } = props;
 
   const [form] = Form.useForm();
 
@@ -45,33 +43,23 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       name: "describe",
       type: "Input"
     },
-  ];  
+  ];
 
   const onFinish = async (values: TableListItem) => {
     onSubmit({ ...values }, form);
   };
 
-  useEffect(() => {
-    if (open) {
-      // queryRoleList().then(res => {
-      //   setRoleList(res.data || []);
-      // });
-    }
-  }, [open]);
-
   return <>
-    {open ? (
-      <FormModal
-        visible={open}
-        setVisible={setOpen}
-        confirmLoading={onSubmitLoading}
-        initialValues={initialValues}
-        title="新增资源"
-        ItemOptions={addFormItems}
-        onFinish={onFinish}
-        onCancel={onCancel}
-      />
-    ) : null}
+    <FormModal
+      visible={visible}
+      setVisible={setVisible}
+      confirmLoading={onSubmitLoading}
+      initialValues={initialValues}
+      title="新增资源"
+      ItemOptions={addFormItems}
+      onFinish={onFinish}
+      onCancel={onCancel}
+    />
   </>
 };
 

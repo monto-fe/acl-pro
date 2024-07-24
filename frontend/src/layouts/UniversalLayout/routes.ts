@@ -125,118 +125,12 @@ const universalLayoutRotes: IRouter[] = [
     ],
   },
   {
-    path: '/pages',
-    redirect: '/pages/list/basic',
-    meta: {
-      icon: UnorderedListOutlined,
-      title: 'universal-layout.menu.pages',
-    },
-    children: [
-      {
-        path: 'list',
-        redirect: '/pages/list/basic',
-        meta: {
-          icon: UnorderedListOutlined,
-          title: 'universal-layout.menu.pages.list',
-        },
-        children: [
-          {
-            path: 'basic',
-            meta: {
-              title: 'universal-layout.menu.pages.list.basic',
-            },
-            component: lazy(() => import('@/pages/pagesample/list/basic')),
-          },
-          {
-            path: 'table',
-            meta: {
-              title: 'universal-layout.menu.pages.list.table',
-            },
-            component: lazy(() => import('@/pages/pagesample/list/table')),
-          },
-          {
-            path: 'search',
-            redirect: '/pages/list/search/table',
-            meta: {
-              title: 'universal-layout.menu.pages.list.search',
-            },
-            children: [
-              {
-                path: 'table',
-                meta: {
-                  title: 'universal-layout.menu.pages.list.search.table',
-                },
-                component: lazy(() => import('@/pages/pagesample/list/search/table')),
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'form',
-        redirect: '/pages/form/basic',
-        meta: {
-          icon: UnorderedListOutlined,
-          title: 'universal-layout.menu.pages.form',
-        },
-        children: [
-          {
-            path: 'basic',
-            meta: {
-              title: 'universal-layout.menu.pages.form.basic',
-            },
-            component: lazy(() => import('@/pages/pagesample/form/basic')),
-          },
-          {
-            path: 'complex',
-            meta: {
-              title: 'universal-layout.menu.pages.form.complex',
-            },
-            component: lazy(() => import('@/pages/pagesample/form/complex')),
-          },
-        ],
-      },
-      {
-        path: 'detail',
-        meta: {
-          icon: UnorderedListOutlined,
-          title: 'universal-layout.menu.pages.detail',
-        },
-        children: [
-          {
-            path: 'basic',
-            meta: {
-              title: 'universal-layout.menu.pages.detail.basic',
-              tabNavType: 'querypath',
-            },
-            component: lazy(() => import('@/pages/pagesample/detail/basic')),
-          },
-          {
-            path: 'module',
-            meta: {
-              title: 'universal-layout.menu.pages.detail.module',
-              tabNavType: 'querypath',
-            },
-            component: lazy(() => import('@/pages/pagesample/detail/module')),
-          },
-          {
-            path: 'table',
-            meta: {
-              title: 'universal-layout.menu.pages.detail.table',
-              tabNavType: 'querypath',
-            },
-            component: lazy(() => import('@/pages/pagesample/detail/table')),
-          },
-        ],
-      },
-    ],
-  },
-  {
     path: '/acl',
     redirect: '/acl/user',
     meta: {
       icon: InsuranceOutlined,
       title: 'universal-layout.menu.roles',
+      roles: ['admin'],
     },
     children: [
       {
@@ -244,7 +138,6 @@ const universalLayoutRotes: IRouter[] = [
         meta: {
           icon: UserOutlined,
           title: 'universal-layout.menu.roles.user',
-          roles: ['admin'],
         },
         component: lazy(() => import('@/pages/user/list')),
       },
@@ -253,7 +146,6 @@ const universalLayoutRotes: IRouter[] = [
         meta: {
           icon: TeamOutlined,
           title: 'universal-layout.menu.roles.role',
-          roles: ['admin'],
         },
         component: lazy(() => import('@/pages/role/list')),
       },
@@ -262,7 +154,6 @@ const universalLayoutRotes: IRouter[] = [
         meta: {
           icon: KeyOutlined,
           title: 'universal-layout.menu.roles.resource',
-          roles: ['test'],
         },
         component: lazy(() => import('@/pages/resource/list')),
       },

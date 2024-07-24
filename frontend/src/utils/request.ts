@@ -11,7 +11,7 @@ export interface ResponseData<T = unknown> {
   ret_code: number;
   data: T;
   message?: string;
-  count?: number;
+  total?: number;
 }
 
 const customCodeMessage: { [key: number]: string } = {

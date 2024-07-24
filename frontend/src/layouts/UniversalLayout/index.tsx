@@ -69,6 +69,9 @@ export default memo(observer(({ children }: UniversalLayoutProps) => {
           breadCrumbs={breadCrumbs}
         />
         <div id='universallayout-right-main'>
+          <button onClick={() => {
+            context.storeContext.updateGlobalConfig({ ...globalConfig, collapsed: !globalConfig.collapsed });
+          }}>sfcsdfcsdfc</button>
           <Permission role={routeItem?.meta?.roles}>
             {/* <Outlet /> */}
             {children}

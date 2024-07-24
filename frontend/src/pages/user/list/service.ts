@@ -14,7 +14,7 @@ export async function queryList(params?: TableQueryParam): Promise<any> {
 export async function createData(params: TableListItem): Promise<any> {
   return request({
     url: '/user',
-    method: 'POST',
+    method: 'post',
     data: {
       ...params,
       namespace
@@ -25,7 +25,7 @@ export async function createData(params: TableListItem): Promise<any> {
 export async function updateData(params: TableListItem): Promise<any> {
   return request({
     url: `/user`,
-    method: 'PUT',
+    method: 'put',
     data: {
       ...params,
       namespace,

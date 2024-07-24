@@ -1,12 +1,5 @@
-export interface PaginationConfig {
-  count: number;
-  current: number;
-  pageSize: number;
-  showSizeChanger: boolean;
-  showQuickJumper: boolean;
-}
-
 export interface TableQueryParam {
+  id?: number;
   role?: string;
   current?: number;
   pageSize?: number;
@@ -19,7 +12,11 @@ export interface TableListItem {
   name: string;
   describe: string;
   operator: string;
+  resource?: any[];
   create_time: number;
   update_time: number;
 }
 
+export type Permission = {
+  resource_id: number;
+}

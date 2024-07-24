@@ -3,13 +3,16 @@ import { Button, Col, Form, Row, Space, theme } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import FormItemComponent from './Item';
+import { SizeType } from 'antd/lib/config-provider/SizeContext';
 
 interface IForm {
-  items: any[],
+  items: any[];
+  size?: SizeType;
+  handleSearch?: Function;
 }
 
-export default function CommonForm(props: IForm) {
-  const { items } = props;
+function CommonForm(props: IForm) {
+  const { items, size, handleSearch } = props;
 
   const { token } = theme.useToken();
   const [form] = Form.useForm();
@@ -20,12 +23,16 @@ export default function CommonForm(props: IForm) {
     maxWidth: 'none',
     // background: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
-    paddingBottom: 24,
   };
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
+  const onFinish = (values: unknown) => {
+    console.log('Receivd values of form: ', values);
+    handleSearch && handleSearch(values);
   };
+
+  const onClear = () => {
+    handleSearch && handleSearch({});
+  }
 
   useEffect(() => {
     if (items) {
@@ -43,18 +50,19 @@ export default function CommonForm(props: IForm) {
   }, [items]);
 
   return (
-    <Form form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
+    <Form size={size} form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
       <Row gutter={24}>
         {
           items.filter((item, index) => expand ? true : (index + 1) <= colCount).map((item, index) => (
             item.hidden ? null :
               <Col span={item.span ? item.span : 6} key={index}>
                 <Form.Item
+                  style={{ marginBottom: size === 'small' ? '10px' : '24px' }}
                   name={item.key || item.name}
                   label={item.label}
                   required={item.required}
                 >
-                  <FormItemComponent field={item} />
+                  {FormItemComponent({ field: item })}
                 </Form.Item>
               </Col>))
         }
@@ -67,6 +75,7 @@ export default function CommonForm(props: IForm) {
           <Button
             onClick={() => {
               form.resetFields();
+              onClear();
             }}
           >
             重置
@@ -83,3 +92,5 @@ export default function CommonForm(props: IForm) {
     </Form>
   );
 };
+
+export default CommonForm;

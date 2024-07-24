@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Modal, Form } from 'antd';
 import FormItemComponent from './Item';
 
@@ -48,7 +48,7 @@ const layout = {
  * }
  * @param initialValues 表单整体的默认值，不再使用单个表单默认值
  * */
-export default function FormModal(props: IFormModal) {
+function FormModal(props: IFormModal) {
   const {
     formInstance,
     visible,
@@ -83,13 +83,6 @@ export default function FormModal(props: IFormModal) {
     }
   };
 
-  // 自动重置表单
-  useEffect(() => {
-    if (!visible) {
-      form.resetFields();
-    }
-  }, [visible]);
-
   return (
     <Modal
       title={title}
@@ -97,6 +90,7 @@ export default function FormModal(props: IFormModal) {
       onCancel={() => {
         onCancel && onCancel();
         setVisible(false);
+        form.resetFields();
       }}
       destroyOnClose
       maskClosable={false}
@@ -106,31 +100,36 @@ export default function FormModal(props: IFormModal) {
       confirmLoading={confirmLoading}
     >
       {description && <Form.Item>{description}</Form.Item>}
-      <Form
-        form={form}
-        {...layout}
-        {...formLayout}
-        {...resProps}
-        initialValues={initialValues}
-        onFieldsChange={handleFieldChange}
-      >
-        {ItemOptions.map((item, index) =>
-          item.hidden ? null : (
-            <Form.Item
-              key={index}
-              {...item}
-              rules={
-                item.validators
-                  ? [{ required: item.required, message: `${item.label}必填！` }, ...item.validators]
-                  : [{ required: item.required, message: `${item.label}必填！` }]
-              }
-            >
-              {FormItemComponent({ field: item })}
-            </Form.Item>
-          )
-        )}
-      </Form>
+      {visible ? (
+        <Form
+          form={form}
+          {...layout}
+          {...formLayout}
+          {...resProps}
+          initialValues={initialValues}
+          onFieldsChange={handleFieldChange}
+          clearOnDestroy
+        >
+          {ItemOptions.map((item, index) =>
+            item.hidden ? null : (
+              <Form.Item
+                key={index}
+                {...item}
+                rules={
+                  item.validators
+                    ? [{ required: item.required, message: `${item.label}必填！` }, ...item.validators]
+                    : [{ required: item.required, message: `${item.label}必填！` }]
+                }
+              >
+                {FormItemComponent({ field: item })}
+              </Form.Item>
+            )
+          )}
+        </Form>
+      ) : null}
       {footer}
     </Modal>
   );
 }
+
+export default FormModal;
