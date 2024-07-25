@@ -1,14 +1,12 @@
 import { memo, Suspense, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { Flex, theme } from 'antd';
 import classnames from 'classnames';
 
-import IconSvg from '@/components/IconSvg';
 import BreadCrumbs from '@/components/BreadCrumbs';
 import SelectLang from '@/components/SelectLang';
 
 import logo from '@/assets/images/logo.png';
-import RightTabNav from './RightTabNav';
-import SiderMenu from './SiderMenu';
 import RightTopUser from './RightTopUser';
 import RightTopMessage from './RightTopMessage';
 
@@ -17,6 +15,7 @@ import Settings from './Settings';
 import { IRouter, IPathKeyRouter, BreadcrumbType } from '@/@types/router';
 import { BasicContext } from '@/store/context';
 import { IRoleInfo } from '@/@types/permission';
+import LeftSider from './LeftSider';
 // import { useI18n } from '@/store/i18n';
 
 export interface RightTopProps {
@@ -30,69 +29,69 @@ export interface RightTopProps {
 export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadCrumbs = [] }: RightTopProps) => {
   const storeContext = (useContext(BasicContext) as any).storeContext;
   const { globalConfig } = storeContext;
-  // const t = useI18n(i18nLocale);
-
-  const toggleCollapsed = () => {
-    storeContext.updateGlobalConfig({ ...globalConfig, collapsed: !globalConfig.collapsed });
-  };
+  const {
+    token: { colorTextLightSolid, colorTextBase },
+  } = theme.useToken();
 
   return (
     <div
       id='universallayout-right-top'
+      style={{ flex: 1 }}
       className={classnames({
         fixed: globalConfig.headFixed,
-        narrow: globalConfig.collapsed,
-        tabNavEnable: !globalConfig.tabNavEnable,
         navModeHorizontal: globalConfig.navMode === 'horizontal',
       })}
     >
-      <div className='universallayout-right-top-header'>
-        {globalConfig.navMode === 'inline' ? (
-          <div className='universallayout-right-top-top'>
-            <div className='universallayout-flexible' onClick={toggleCollapsed}>
-              {globalConfig.collapsed ? <IconSvg name='menu-unfold'></IconSvg> : <IconSvg name='menu-fold'></IconSvg>}
-            </div>
-            <div className='universallayout-top-menu'>
-              <BreadCrumbs className='breadcrumb' list={breadCrumbs} />
-            </div>
-            <div className='universallayout-top-menu-right'>
-              <Suspense fallback={<>...</>}>
-                <RightTopMessage />
-              </Suspense>
-              <RightTopUser />
-              <SelectLang className='universallayout-top-selectlang' />
-              <Settings />
-            </div>
-          </div>
-        ) : (
-          <div className='universallayout-right-top-top menu'>
-            <div className='universallayout-right-top-logo'>
-              <Link to='/' className='logo-url'>
-                <img alt='' src={logo} width='30' />
-                <h3 className='logo-title'>Monto-Acl</h3>
+      <Flex className='universallayout-right-top-header' style={{ height: '100%' }}>
+        <Flex className='universallayout-right-top-top' align='center' justify="space-between" style={{ width: '100%', padding: '0 24px' }}>
+          {globalConfig.navMode === 'inline' ? (
+            <>
+              <div className='universallayout-top-menu'>
+                <BreadCrumbs className='breadcrumb' list={breadCrumbs} />
+              </div>
+              <Flex gap={12} className='universallayout-top-menu-right'>
+                <Suspense fallback={<>...</>}>
+                  <RightTopMessage />
+                </Suspense>
+                <RightTopUser />
+                <SelectLang className='universallayout-top-selectlang' />
+                <Settings />
+              </Flex>
+            </>
+          ) : (
+            <>
+              <Link to='/' className='logo-url' style={{ width: 200, color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}>
+                <Flex align='center' gap={8}>
+                  <img alt='' src={logo} width='30' />
+                  <h3 className='logo-title' style={{ display: 'inline-block' }}>Monto-Acl</h3>
+                </Flex>
               </Link>
-            </div>
-            <div className='universallayout-top-menu'>
-              <SiderMenu
-                userRoles={userRoles}
-                menuData={menuData}
-                routeItem={routeItem}
-                theme={globalConfig.theme}
-                mode='horizontal'
-              />
-            </div>
-            <div className='universallayout-top-menu-right'>
-              <Suspense fallback={<>...</>}>
-                <RightTopMessage />
-              </Suspense>
-              <RightTopUser />
-              <SelectLang className='universallayout-top-selectlang' />
-              <Settings />
-            </div>
-          </div>
-        )}
-        {globalConfig.tabNavEnable && <RightTabNav routeItem={routeItem} jsonMenuData={jsonMenuData} />}
-      </div>
+              <Flex flex={1}>
+                {globalConfig.tabNavEnable ? (
+                  <LeftSider
+                    collapsed={globalConfig.collapsed}
+                    userRoles={userRoles}
+                    menuData={menuData}
+                    routeItem={routeItem}
+                    theme={globalConfig.theme}
+                    leftSiderFixed={globalConfig.leftSiderFixed}
+                    mode='horizontal'
+                  />
+                ) : null}
+              </Flex>
+              <Flex gap={12} className='universallayout-top-menu-right' style={{ color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}>
+                <Suspense fallback={<>...</>}>
+                  <RightTopMessage />
+                </Suspense>
+                <RightTopUser />
+                <SelectLang className='universallayout-top-selectlang cursor' />
+                <Settings />
+              </Flex>
+            </>
+          )}
+        </Flex>
+        {/* {globalConfig.tabNavEnable && <RightTabNav routeItem={routeItem} jsonMenuData={jsonMenuData} />} */}
+      </Flex>
     </div>
   );
 });

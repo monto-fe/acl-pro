@@ -13,7 +13,6 @@ import { observer } from 'mobx-react-lite';
 export default memo(observer(() => {
   const storeContext = (useContext(BasicContext) as any).storeContext;
   const { globalConfig } = storeContext;
-
   // 模板主题
   const setTheme = (theme: Theme) => {
     storeContext.updateGlobalConfig({ ...globalConfig, theme });
@@ -66,6 +65,19 @@ export default memo(observer(() => {
               }}
             >
               {globalConfig.theme === 'light' && (
+                <span className={style['choose-icon']}>
+                  <IconSvg name='tick' />
+                </span>
+              )}
+            </div>
+            <div
+              className={classnames(style['setting-radio-item'], style['style-all-dark'])}
+              title='all-dark'
+              onClick={() => {
+                setTheme('all-dark');
+              }}
+            >
+              {globalConfig.theme === 'all-dark' && (
                 <span className={style['choose-icon']}>
                   <IconSvg name='tick' />
                 </span>

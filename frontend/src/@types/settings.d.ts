@@ -3,7 +3,7 @@
  * @author duheng1992
  */
 
-export type Theme = 'dark' | 'light';
+export type Theme = 'dark' | 'light' | 'all-dark';
 
 export type NavMode = 'inline' | 'horizontal';
 

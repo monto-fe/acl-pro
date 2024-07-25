@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dropdown, Menu } from 'antd';
+import { Dropdown } from 'antd';
 
 import { useI18n } from '@/store/i18n';
 
@@ -45,10 +45,10 @@ export default memo(observer(() => {
         onClick: onMenuClick
       }}
     >
-      <a className='universallayout-top-usermenu ant-dropdown-link' onClick={(e) => e.preventDefault()}>
+      <div className='universallayout-top-usermenu ant-dropdown-link cursor' onClick={(e) => e.preventDefault()}>
         <span className='username'>{user.name}</span>
         <IconSvg name='arrow-down' />
-      </a>
+      </div>
     </Dropdown>
   );
 }));
