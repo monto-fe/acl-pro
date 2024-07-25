@@ -137,11 +137,9 @@ class RoleService {
 		and t_user_role.user IN (?)`, { replacements: [user], type: DB.sequelize.QueryTypes.SELECT })
 		return result;
 	}
-	// 通过角色名称查询userId
+	// 通过角色名称查询user
 	public async findUserByRoleName(roleName: string) {
-		const result: any = await DB.sequelize.query(`SELECT
-		t_user_role.user FROM t_user_role JOIN t_role WHERE
-		t_user_role.role_id = t_role.id AND t_role.name LIKE ?`, { replacements: [`%${roleName}%`], type: DB.sequelize.QueryTypes.SELECT })
+		const result: any = await DB.sequelize.query(`SELECT t_user_role.user FROM t_user_role JOIN t_role ON t_user_role.role_id = t_role.id WHERE t_role.name LIKE :roleName`, { replacements: { roleName: `%${roleName}%` }, type: DB.sequelize.QueryTypes.SELECT })
 		return result;
 	}
 }

@@ -92,6 +92,7 @@ class UsersController {
   public getUserList = async (req: Request, res: Response) => {
     const { id, user, userName, roleName, current, pageSize } = req.query as any;
     const query:UserListReq = {
+      user: [],
       ...pageCompute(current, pageSize)
     }
     if(id){
@@ -99,18 +100,30 @@ class UsersController {
     }
     if(user){
       query.user = [user];
+    }else{
+      query.user = [];
     }
+    
     try{
       // 如果roleName存在，则查询user，number[]
+      let roleUserList: string[] = [];
+      let userNameList: string[] = [];
       if(roleName){
         const userListLike = await this.RoleService.findUserByRoleName(roleName)
         const users = userListLike.length > 0 ? userListLike.map((item:any) => item.user) : [];
         query.user = users.concat(query.user)
+        roleUserList = users;
       }
       if(userName){
         const userListLike = await this.UserService.findUserByUserName(userName)
         const users = userListLike.length > 0 ? userListLike.map((item:any) => item.user) : [];
         query.user = users.concat(query.user)
+        userNameList = users;
+      }
+      // 如果roleName和userName都存在，就取两次查询出来的交集，否则就没有数据
+      if(roleName && userName){
+        const intersection: string[] = roleUserList.filter((item:string) => userNameList.includes(item))
+        query.user = intersection.concat(query.user ? query.user : []);
       }
       // 如果name存在，则查询对应的user，User[]
       // 合并user,进行查询
@@ -121,7 +134,8 @@ class UsersController {
         const userList = data.map((user:any) => {
           return user.dataValues.user;
         })
-        const roleList = await this.RoleService.findRoleByUser(userList);
+        const uniqueArray:any = [...new Set(userList)];
+        const roleList = await this.RoleService.findRoleByUser(uniqueArray);
         data.forEach((user:any) => {
           user.dataValues.role = roleList.filter((role:any) => {
             return role.user === user.dataValues.user
