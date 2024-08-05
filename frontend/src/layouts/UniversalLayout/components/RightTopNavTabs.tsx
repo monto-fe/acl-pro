@@ -64,18 +64,20 @@ export default memo(observer((props: RightTopNavTabsProps) => {
   };
 
   useEffect(() => {
-    setActiveKey(currentRouter.path);
+    if (currentRouter) {
+      setActiveKey(currentRouter.path);
 
-    if (!items.length) {
-      storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [{ label: t(currentRouter.meta?.title || ''), key: currentRouter.path, closable: false }] });
-      return;
-    }
-    if (items.find(item => item.key === currentRouter.path)) {
-      return;
-    }
+      if (!items.length) {
+        storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [{ label: t(currentRouter.meta?.title || ''), key: currentRouter.path, closable: false }] });
+        return;
+      }
+      if (items.find(item => item.key === currentRouter.path)) {
+        return;
+      }
 
-    // 新增一个，并点亮
-    storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [...globalConfig.headTabNavList, { label: t(currentRouter.meta?.title || ''), key: currentRouter.path }] });
+      // 新增一个，并点亮
+      storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [...globalConfig.headTabNavList, { label: t(currentRouter.meta?.title || ''), key: currentRouter.path }] });
+    }
   }, [currentRouter]);
 
   return (
