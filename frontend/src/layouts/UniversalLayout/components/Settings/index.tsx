@@ -1,8 +1,7 @@
 import { memo, useContext } from 'react';
 import { Popover, Divider, Switch } from 'antd';
+import { CheckOutlined, SettingOutlined } from '@ant-design/icons';
 import classnames from 'classnames';
-
-import IconSvg from '@/components/IconSvg';
 
 import { Theme, NavMode } from '@/@types/settings';
 
@@ -53,7 +52,7 @@ export default memo(observer(() => {
             >
               {globalConfig.theme === 'dark' && (
                 <span className={style['choose-icon']}>
-                  <IconSvg name='tick' />
+                  <CheckOutlined />
                 </span>
               )}
             </div>
@@ -66,7 +65,7 @@ export default memo(observer(() => {
             >
               {globalConfig.theme === 'light' && (
                 <span className={style['choose-icon']}>
-                  <IconSvg name='tick' />
+                  <CheckOutlined />
                 </span>
               )}
             </div>
@@ -79,7 +78,7 @@ export default memo(observer(() => {
             >
               {globalConfig.theme === 'all-dark' && (
                 <span className={style['choose-icon']}>
-                  <IconSvg name='tick' />
+                  <CheckOutlined />
                 </span>
               )}
             </div>
@@ -98,7 +97,7 @@ export default memo(observer(() => {
             >
               {globalConfig.navMode === 'inline' && (
                 <span className={style['choose-icon']}>
-                  <IconSvg name='tick' />
+                  <CheckOutlined />
                 </span>
               )}
             </div>
@@ -111,7 +110,7 @@ export default memo(observer(() => {
             >
               {globalConfig.navMode === 'horizontal' && (
                 <span className={style['choose-icon']}>
-                  <IconSvg name='tick' />
+                  <CheckOutlined />
                 </span>
               )}
             </div>
@@ -159,8 +158,8 @@ export default memo(observer(() => {
       trigger='hover'
       placement='bottomRight'
     >
-      <span className='universallayout-top-settings'>
-        <IconSvg name='theme' />
+      <span className='universallayout-top-settings cursor'>
+        <SettingOutlined />
       </span>
     </Popover>
   );

@@ -33,16 +33,16 @@ const ArticleHitCard: React.FC = () => {
   const getList = async (current: number) => {
     setLoading(true);
     try {
-      const response: ResponseData<{ list: TableListItem[]; total: number }> = await articleHitQueryList({
+      const response: ResponseData<TableListItem[]> = await articleHitQueryList({
         per: pagination.pageSize,
         page: current,
       });
       const { data } = response;
-      setList(data?.list || []);
+      setList(data || []);
       setPagination({
         ...initPagination,
         current,
-        total: data?.total || 0,
+        total: response?.total || 0,
       });
     } catch (error: any) {
       console.log(error);

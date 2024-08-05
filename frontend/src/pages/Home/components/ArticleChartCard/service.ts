@@ -1,8 +1,12 @@
-import request from '@/utils/request';
+// import request from '@/utils/request';
 
 export async function dailynewArticles(): Promise<any> {
-  return request({
-    url: '/home/articles/dailynew',
-    method: 'get',
-  });
+  return {
+    data: {
+      total: 1200,
+      num: 99,
+      week: 4,
+      day: 30,
+    }
+  };
 }

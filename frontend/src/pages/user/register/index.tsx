@@ -1,10 +1,9 @@
 import { memo, useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Form, Input, message } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 import { useI18n } from '@/store/i18n';
-
-import IconSvg from '@/components/IconSvg';
 
 import { RegisterParamsType } from './data.d';
 import { accountReg } from './service';
@@ -18,7 +17,7 @@ export default memo(() => {
   const context = useContext(BasicContext) as any;
   const { i18nLocale } = context.storeContext;
   const t = useI18n(i18nLocale);
-  
+
   const [loginStatus, setLoginStatus] = useState<string>('');
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
   // 注册
@@ -55,7 +54,7 @@ export default memo(() => {
             },
           ]}
         >
-          <Input placeholder={t('page.user.register.form-item-username')} prefix={<IconSvg name='user' />} />
+          <Input placeholder={t('page.user.register.form-item-username')} prefix={<UserOutlined />} />
         </Form.Item>
         <Form.Item
           label=''
@@ -69,7 +68,7 @@ export default memo(() => {
         >
           <Input.Password
             placeholder={t('page.user.register.form-item-password')}
-            prefix={<IconSvg name='pwd' />}
+            prefix={<LockOutlined />}
             autoComplete=''
           />
         </Form.Item>
@@ -94,7 +93,7 @@ export default memo(() => {
         >
           <Input.Password
             placeholder={t('page.user.register.form-item-confirmpassword')}
-            prefix={<IconSvg name='pwd' />}
+            prefix={<LockOutlined />}
             autoComplete=''
           />
         </Form.Item>

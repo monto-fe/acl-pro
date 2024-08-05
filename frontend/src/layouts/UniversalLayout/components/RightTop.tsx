@@ -6,7 +6,8 @@ import classnames from 'classnames';
 import BreadCrumbs from '@/components/BreadCrumbs';
 import SelectLang from '@/components/SelectLang';
 
-import logo from '@/assets/images/logo.png';
+import logoDark from '@/assets/images/logo-dark.svg';
+import logoWhite from '@/assets/images/logo-white.svg';
 import RightTopUser from './RightTopUser';
 import RightTopMessage from './RightTopMessage';
 
@@ -20,19 +21,18 @@ import LeftSider from './LeftSider';
 
 export interface RightTopProps {
   menuData: IRouter[];
-  jsonMenuData: IPathKeyRouter;
+  jsonMenuData?: IPathKeyRouter;
   routeItem: IRouter;
   userRoles?: IRoleInfo[];
   breadCrumbs?: BreadcrumbType[];
 }
 
-export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadCrumbs = [] }: RightTopProps) => {
+export default memo(({ menuData, routeItem, userRoles = [], breadCrumbs = [] }: RightTopProps) => {
   const storeContext = (useContext(BasicContext) as any).storeContext;
   const { globalConfig } = storeContext;
   const {
     token: { colorTextLightSolid, colorTextBase },
   } = theme.useToken();
-
   return (
     <div
       id='universallayout-right-top'
@@ -50,7 +50,7 @@ export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadC
                 <BreadCrumbs className='breadcrumb' list={breadCrumbs} />
               </div>
               <Flex gap={12} className='universallayout-top-menu-right'>
-                <Suspense fallback={<>...</>}>
+                <Suspense fallback={<>loading...</>}>
                   <RightTopMessage />
                 </Suspense>
                 <RightTopUser />
@@ -62,8 +62,7 @@ export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadC
             <>
               <Link to='/' className='logo-url' style={{ width: 200, color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}>
                 <Flex align='center' gap={8}>
-                  <img alt='' src={logo} width='30' />
-                  <h3 className='logo-title' style={{ display: 'inline-block' }}>Monto-Acl</h3>
+                  <img alt='' src={globalConfig.theme === 'light' ? logoDark : logoWhite} width='130' />
                 </Flex>
               </Link>
               <Flex flex={1}>
@@ -80,11 +79,11 @@ export default memo(({ menuData, jsonMenuData, routeItem, userRoles = [], breadC
                 ) : null}
               </Flex>
               <Flex gap={12} className='universallayout-top-menu-right' style={{ color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}>
-                <Suspense fallback={<>...</>}>
+                <Suspense fallback={<>loading...</>}>
                   <RightTopMessage />
                 </Suspense>
                 <RightTopUser />
-                <SelectLang className='universallayout-top-selectlang cursor' />
+                <SelectLang className='universallayout-top-selectlang' />
                 <Settings />
               </Flex>
             </>

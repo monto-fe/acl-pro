@@ -1,11 +1,12 @@
-import { memo, useContext } from 'react';
+import { memo, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Flex, Menu, theme as antdTheme } from 'antd';
 import { ItemType } from 'antd/lib/menu/interface';
 import { MenuTheme } from 'antd/lib';
 import classnames from 'classnames';
 
-import logo from '@/assets/images/logo.png';
+import logoDark from '@/assets/images/logo-dark.svg';
+import logoWhite from '@/assets/images/logo-white.svg';
 
 import { IRouter } from '@/@types/router';
 import { IRoleInfo } from '@/@types/permission';
@@ -103,31 +104,58 @@ export default memo(
     leftSiderFixed = true,
   }: LeftSiderProps) => {
     const context = useContext(BasicContext) as any;
-    const { i18nLocale, user, globalConfig } = context.storeContext;
+    const storeContext = context.storeContext;
+    const { i18nLocale, globalConfig } = storeContext;
+
     const t = useI18n(i18nLocale);
     const {
       token: { colorTextLightSolid, colorTextBase },
     } = antdTheme.useToken();
+
+    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+    const [openKeys, setOpenKeys] = useState<string[]>([]);
+
+    const onOpenChange = (opens: string[]) => {
+      setOpenKeys(opens);
+    }
+
+    useEffect(() => {
+      if (routeItem) {
+        setSelectedKeys([routeItem.path]);
+        if (routeItem.meta?.parentPath && mode === 'inline') {
+          openKeys.push(routeItem.meta?.parentPath[0]);
+          setOpenKeys(openKeys);
+        }
+      }
+    }, [routeItem]);
 
     return <div id='universallayout-left' className={classnames({ narrow: collapsed, fixed: leftSiderFixed })}>
       <div className='universallayout-left-sider'>
         {mode === 'inline' ? (
           <Flex align='center' justify='center' style={{ height: 64 }}>
             <Link to='/' style={{ color: theme === 'light' ? colorTextBase : colorTextLightSolid }}>
-              {collapsed ? <img alt='' src={logo} width='30' /> : <h3 className='logo-title'>Monto-Acl</h3>}
+              {collapsed ? 'M' : <img alt='' src={theme === 'light' ? logoDark : logoWhite} height='100' style={{ marginTop: '12px' }} />}
             </Link>
           </Flex>
         ) : null}
         <div className='universallayout-left-menu'>
-          <Menu
-            theme={theme === 'light' ? 'light' : 'dark'}
-            mode={mode}
-            inlineCollapsed={collapsed}
-            // selectedKeys={selectedKeys}
-            // openKeys={openKeys}
-            // onOpenChange={setOpenKeys}
-            items={createMenuItems(t, userRoles, menuData)}
-          />
+          {mode === 'inline' ? (
+            <Menu
+              theme={theme === 'light' ? 'light' : 'dark'}
+              mode={mode}
+              selectedKeys={selectedKeys}
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              items={createMenuItems(t, userRoles, menuData)}
+            />
+          ) : (
+            <Menu
+              theme={theme === 'light' ? 'light' : 'dark'}
+              mode={mode}
+              selectedKeys={selectedKeys}
+              items={createMenuItems(t, userRoles, menuData)}
+            />
+          )}
         </div>
       </div>
     </div>

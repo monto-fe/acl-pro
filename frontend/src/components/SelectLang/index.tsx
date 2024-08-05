@@ -1,9 +1,8 @@
 import { memo, useCallback, useContext, useMemo } from 'react';
 import { Dropdown } from 'antd';
+import { TranslationOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react-lite';
 import { setLocale } from '@/utils/i18n';
-
-import IconSvg from '@/components/IconSvg';
 
 import { ItemType } from 'antd/lib/menu/interface';
 import { I18nKey } from '@/@types/i18n.d';
@@ -51,8 +50,8 @@ export default memo(observer(({ className }: SelectLangProps) => {
   );
   return (
     <Dropdown className={className} menu={{ items: menuItems, onClick: onMenuClick }}>
-      <span>
-        <IconSvg name='language-outline' />
+      <span className="cursor">
+        <TranslationOutlined />
       </span>
     </Dropdown>
   );

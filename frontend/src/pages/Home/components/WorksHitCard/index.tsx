@@ -23,7 +23,7 @@ const WorksHitCard: React.FC = () => {
   const context = useContext(BasicContext) as any;
   const { i18nLocale } = context.storeContext;
   const t = useI18n(i18nLocale);
-  
+
   const [loading, setLoading] = useState<boolean>(false);
   const [list, setList] = useState<TableListItem[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>({
@@ -33,16 +33,16 @@ const WorksHitCard: React.FC = () => {
   const getList = async (current: number) => {
     setLoading(true);
     try {
-      const response: ResponseData<{ list: TableListItem[]; total: number }> = await worksHitQueryList({
+      const response: ResponseData<TableListItem[]> = await worksHitQueryList({
         per: pagination.pageSize,
         page: current,
       });
       const { data } = response;
-      setList(data?.list || []);
+      setList(data || []);
       setPagination({
         ...initPagination,
         current,
-        total: data?.total || 0,
+        total: response?.total || 0,
       });
     } catch (error: any) {
       console.log(error);

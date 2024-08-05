@@ -1,11 +1,10 @@
 import { memo, useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Form, Input, message } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react-lite';
 
 import { useI18n } from '@/store/i18n';
-
-import IconSvg from '@/components/IconSvg';
 
 import { setToken } from '@/utils/localToken';
 import { ResponseData } from '@/utils/request';
@@ -56,7 +55,7 @@ export default memo(observer(() => {
             },
           ]}
         >
-          <Input placeholder={t('page.user.login.form-item-username')} prefix={<IconSvg name='user' />} />
+          <Input placeholder={t('page.user.login.form-item-username')} prefix={<UserOutlined />} size='large' />
         </Form.Item>
         <Form.Item
           label=''
@@ -70,13 +69,13 @@ export default memo(observer(() => {
         >
           <Input.Password
             placeholder={t('page.user.login.form-item-password')}
-            prefix={<IconSvg name='pwd' />}
-            autoComplete=''
+            size='large'
+            prefix={<LockOutlined />}
           />
         </Form.Item>
 
         <Form.Item>
-          <Button type='primary' className={style.submit} htmlType='submit' loading={false}>
+          <Button type='primary' className={style.submit} htmlType='submit' size='large' loading={false}>
             {t('page.user.login.form.btn-submit')}
           </Button>
           {/* <div className={style['text-align-right']}>

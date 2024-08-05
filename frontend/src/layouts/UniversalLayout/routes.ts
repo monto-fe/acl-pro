@@ -8,8 +8,6 @@ import { lazy } from 'react';
 import {
   HomeOutlined,
   DashboardOutlined,
-  BarChartOutlined,
-  UnorderedListOutlined,
   InsuranceOutlined,
   UserOutlined,
   TeamOutlined,
@@ -35,94 +33,23 @@ const universalLayoutRotes: IRouter[] = [
         },
         component: lazy(() => import('@/pages/Home')),
       },
-      {
-        path: 'custombreadcrumbs',
-        meta: {
-          icon: DashboardOutlined,
-          title: 'universal-layout.menu.home.custom-breadcrumbs',
-          breadcrumb: [
-            {
-              title: 'universal-layout.menu.home.custom-breadcrumbs',
-              path: '/home/custombreadcrumbs',
-            },
-            {
-              title: 'universal-layout.menu.home',
-              path: '/home',
-            },
-            {
-              title: 'universal-layout.menu.home.custom-breadcrumbs.montoacl.cc',
-              path: 'http://montoacl.cc',
-            },
-          ],
-          tabNavCloseBefore: (close: () => void): void => {
-            // eslint-disable-next-line no-alert
-            if (window.confirm('确认关闭吗')) {
-              close();
-            }
-          },
-        },
-        component: lazy(() => import('@/pages/CustomBreadcrumbs')),
-      },
-      {
-        path: 'http://admin-antd-react.montoacl.cc/',
-        meta: {
-          icon: DashboardOutlined,
-          title: 'universal-layout.menu.home.docs',
-          selectLeftMenu: '/home',
-        },
-      },
     ],
   },
   {
-    path: '/component',
-    redirect: '/component/icon/svg',
+    path: 'https://chromewebstore.google.com/detail/%E5%A4%9A%E5%BD%A9%E4%B9%A6%E7%AD%BE/ilcmekmgeldhckdembghkiohkdffihpe?hl=zh-CN&utm_source=ext_sidebar',
     meta: {
-      icon: BarChartOutlined,
-      title: 'universal-layout.menu.component',
+      icon: DashboardOutlined,
+      title: 'universal-layout.menu.home.bookmark',
+      selectLeftMenu: '/home',
     },
-    children: [
-      {
-        path: 'icon',
-        redirect: '/component/icon/svg',
-        meta: {
-          icon: BarChartOutlined,
-          title: 'universal-layout.menu.component.icon',
-        },
-        children: [
-          {
-            path: 'svg',
-            meta: {
-              title: 'universal-layout.menu.component.icon.svg',
-            },
-            component: lazy(() => import('@/pages/component/icon/svg')),
-          },
-        ],
-      },
-      {
-        path: 'editor',
-        redirect: '/component/editor/tuieditor',
-        meta: {
-          icon: BarChartOutlined,
-          title: 'universal-layout.menu.component.editor',
-        },
-        children: [
-          {
-            path: 'tuieditor',
-            meta: {
-              title: 'universal-layout.menu.component.editor.tui-editor',
-            },
-            component: lazy(() => import('@/pages/component/editor/TuiEditor')),
-          },
-          {
-            path: 'ckeditor',
-            meta: {
-              title: 'universal-layout.menu.component.editor.ckeditor',
-            },
-            component: lazy(() => import('@/pages/component/editor/ckeditor')),
-          },
-        ],
-      },
-    ],
+  },
+  {
+    path: 'https://chromewebstore.google.com/detail/%E6%97%B6%E9%97%B4%E6%88%B3%E8%BD%AC%E6%8D%A2-%E6%97%B6%E5%8C%BA%E6%97%B6%E9%92%9F/pjcapgdifnhgkkojoggfdlijpelpohcf?hl=zh-CN&utm_source=ext_sidebar',
+    meta: {
+      icon: DashboardOutlined,
+      title: 'universal-layout.menu.home.timestamp',
+      selectLeftMenu: '/home',
+    },
   },
   {
     path: '/acl',

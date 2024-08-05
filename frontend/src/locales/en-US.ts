@@ -11,6 +11,8 @@ export default {
   'universal-layout.menu.home.custom-breadcrumbs': 'Custom bread crumbs',
   'universal-layout.menu.home.custom-breadcrumbs.montoacl.cc': 'montoacl.cc',
   'universal-layout.menu.home.docs': 'Using document',
+  'universal-layout.menu.home.bookmark': 'Colorful Bookmark',
+  'universal-layout.menu.home.timestamp': 'Timesync',
 
   'universal-layout.menu.component': 'Component',
   'universal-layout.menu.component.icon': 'Icon',
@@ -43,9 +45,9 @@ export default {
   'user-layout.menu.login': 'Login',
   'user-layout.menu.register': 'Register',
 
-  'page.user.login.form-item-username': 'username: admin or test or user',
+  'page.user.login.form-item-username': 'username: admin',
   'page.user.login.form-item-username.required': 'Please input your username',
-  'page.user.login.form-item-password': 'Password',
+  'page.user.login.form-item-password': 'Password: 12345678',
   'page.user.login.form-item-password.required': 'Please input your password',
   'page.user.login.form.title': 'Account Login',
   'page.user.login.form.btn-submit': 'Sign in',

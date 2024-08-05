@@ -11,6 +11,8 @@ export default {
   'universal-layout.menu.home.custom-breadcrumbs': '自定义面包屑',
   'universal-layout.menu.home.custom-breadcrumbs.montoacl.cc': 'montoacl.cc',
   'universal-layout.menu.home.docs': '使用文档',
+  'universal-layout.menu.home.bookmark': '多彩书签',
+  'universal-layout.menu.home.timestamp': '时间戳转换',
 
   'universal-layout.menu.component': '组件',
   'universal-layout.menu.component.icon': '图标',
@@ -43,9 +45,9 @@ export default {
   'user-layout.menu.login': '登录',
   'user-layout.menu.register': '注册',
 
-  'page.user.login.form-item-username': '用户名: admin or test or user',
+  'page.user.login.form-item-username': '用户名: admin',
   'page.user.login.form-item-username.required': '请输入用户名',
-  'page.user.login.form-item-password': '密码',
+  'page.user.login.form-item-password': '密码: 12345678',
   'page.user.login.form-item-password.required': '请输入密码',
   'page.user.login.form.title': '账户登录',
   'page.user.login.form.btn-submit': '登录',

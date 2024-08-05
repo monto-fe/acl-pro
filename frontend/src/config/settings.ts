@@ -5,7 +5,7 @@
 import { SettingsType } from '@/@types/settings.d';
 
 const settings: SettingsType = {
-  siteTitle: 'MONTO-ACL-REACT',
+  siteTitle: 'Monto-Acl',
 
   siteTokenKey: 'monto_acl_react_token',
   ajaxHeadersTokenKey: 'jwt_token',

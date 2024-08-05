@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Spin, Card, Divider, Row, Col, Tag } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
 import { useI18n } from '@/store/i18n';
-
-import IconSvg from '@/components/IconSvg';
 
 import styles from '../../index.module.less';
 import { ArticleChartDataType } from './data';
@@ -59,11 +58,12 @@ const ArticleChartCard: React.FC = () => {
               {t('page.home.text-daycompare')} {Math.abs(visitData.day)}%
               {visitData.day > 0 ? (
                 <span className={styles.colored4014}>
-                  <IconSvg name='arrow-down' style={{ transform: 'rotate(180deg)' }} />
+                  <DownOutlined style={{ transform: 'rotate(180deg)' }} />
                 </span>
               ) : (
                 <span className={styles.color19be6b}>
-                  <IconSvg name='arrow-down' />
+                  <DownOutlined />
+
                 </span>
               )}
             </span>
@@ -71,11 +71,11 @@ const ArticleChartCard: React.FC = () => {
               {t('page.home.text-weekcompare')} {Math.abs(visitData.week)}%
               {visitData.week > 0 ? (
                 <span className={styles.colored4014}>
-                  <IconSvg name='arrow-down' style={{ transform: 'rotate(180deg)' }} />
+                  <DownOutlined style={{ transform: 'rotate(180deg)' }} />
                 </span>
               ) : (
                 <span className={styles.color19be6b}>
-                  <IconSvg name='arrow-down' />
+                  <DownOutlined />
                 </span>
               )}
             </span>

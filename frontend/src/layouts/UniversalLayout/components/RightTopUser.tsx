@@ -1,14 +1,14 @@
 import { memo, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { observer } from 'mobx-react-lite';
 
 import { useI18n } from '@/store/i18n';
 
 import { removeToken } from '@/utils/localToken';
 
-import IconSvg from '@/components/IconSvg';
 import { BasicContext } from '@/store/context';
-import { observer } from 'mobx-react-lite';
 
 export default memo(observer(() => {
   const context = useContext(BasicContext) as any;
@@ -47,7 +47,7 @@ export default memo(observer(() => {
     >
       <div className='universallayout-top-usermenu ant-dropdown-link cursor' onClick={(e) => e.preventDefault()}>
         <span className='username'>{user.name}</span>
-        <IconSvg name='arrow-down' />
+        <DownOutlined />
       </div>
     </Dropdown>
   );
