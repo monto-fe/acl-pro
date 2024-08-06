@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Button, Flex, Layout, theme } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { observer } from 'mobx-react-lite';
+import classnames from 'classnames';
 
 import { BasicContext } from '@/store/context';
 import { useI18n } from '@/store/i18n';
@@ -70,7 +71,7 @@ export default memo(observer(({ children }: UniversalLayoutProps) => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      {globalConfig.navMode === 'inline' && globalConfig.tabNavEnable ? (
+      {globalConfig.navMode === 'inline' ? (
         <Sider collapsible trigger={null} collapsed={globalConfig.collapsed} theme={globalConfig.theme}>
           <LeftSider
             collapsed={globalConfig.collapsed}
@@ -78,12 +79,15 @@ export default memo(observer(({ children }: UniversalLayoutProps) => {
             menuData={routerPathKeyRouter.router}
             routeItem={routeItem}
             theme={globalConfig.theme}
-            leftSiderFixed={globalConfig.leftSiderFixed}
           />
         </Sider>
       ) : null}
       <Layout id='universallayout-right-main'>
-        <Header style={{ padding: 0, background: getHeaderStyle }}>
+        <Header style={{ padding: 0, background: getHeaderStyle }} className={classnames({
+          fixed: globalConfig.headFixed,
+          collapsed: globalConfig.collapsed,
+          horizontal: globalConfig.navMode === 'horizontal',
+        })}>
           <Flex style={{ height: 64, width: '100%' }}>
             {globalConfig.navMode === 'inline' ? (
               <Button
@@ -111,9 +115,15 @@ export default memo(observer(({ children }: UniversalLayoutProps) => {
             padding: 24,
             borderRadius: borderRadiusLG,
           }}
+          className={classnames({
+            headerfixed: globalConfig.headFixed,
+            horizontal: globalConfig.navMode === 'horizontal',
+          })}
         >
           <Permission role={routeItem?.meta?.roles}>
-            <RightTopNavTabs currentRouter={routeItem} />
+            {globalConfig.tabNavEnable ? (
+              <RightTopNavTabs currentRouter={routeItem} />
+            ) : null}
             {children}
           </Permission>
         </Content>

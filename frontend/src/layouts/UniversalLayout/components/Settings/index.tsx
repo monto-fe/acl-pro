@@ -32,10 +32,6 @@ export default memo(observer(() => {
     storeContext.updateGlobalConfig({ ...globalConfig, tabNavEnable: !globalConfig.tabNavEnable });
   };
 
-  // 固定左侧
-  const onChangeLeftSiderFixed = () => {
-    storeContext.updateGlobalConfig({ ...globalConfig, leftSiderFixed: !globalConfig.leftSiderFixed });
-  };
   return (
     <Popover
       content={
@@ -138,17 +134,6 @@ export default memo(observer(() => {
                   unCheckedChildren='关闭'
                   checked={globalConfig.tabNavEnable}
                   onChange={onChangeTabNavEnable}
-                />
-              </span>
-            </div>
-            <div className={style['setting-list-item']}>
-              <span>固定侧边</span>
-              <span className={style['setting-list-item-action']}>
-                <Switch
-                  checkedChildren='开启'
-                  unCheckedChildren='关闭'
-                  checked={globalConfig.leftSiderFixed}
-                  onChange={onChangeLeftSiderFixed}
                 />
               </span>
             </div>

@@ -1,7 +1,6 @@
 import { memo, Suspense, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Flex, theme } from 'antd';
-import classnames from 'classnames';
 
 import BreadCrumbs from '@/components/BreadCrumbs';
 import SelectLang from '@/components/SelectLang';
@@ -37,10 +36,6 @@ export default memo(({ menuData, routeItem, userRoles = [], breadCrumbs = [] }: 
     <div
       id='universallayout-right-top'
       style={{ flex: 1 }}
-      className={classnames({
-        fixed: globalConfig.headFixed,
-        navModeHorizontal: globalConfig.navMode === 'horizontal',
-      })}
     >
       <Flex className='universallayout-right-top-header' style={{ height: '100%' }}>
         <Flex className='universallayout-right-top-top' align='center' justify="space-between" style={{ width: '100%', padding: '0 24px' }}>
@@ -66,17 +61,14 @@ export default memo(({ menuData, routeItem, userRoles = [], breadCrumbs = [] }: 
                 </Flex>
               </Link>
               <Flex flex={1}>
-                {globalConfig.tabNavEnable ? (
-                  <LeftSider
-                    collapsed={globalConfig.collapsed}
-                    userRoles={userRoles}
-                    menuData={menuData}
-                    routeItem={routeItem}
-                    theme={globalConfig.theme}
-                    leftSiderFixed={globalConfig.leftSiderFixed}
-                    mode='horizontal'
-                  />
-                ) : null}
+                <LeftSider
+                  collapsed={globalConfig.collapsed}
+                  userRoles={userRoles}
+                  menuData={menuData}
+                  routeItem={routeItem}
+                  theme={globalConfig.theme}
+                  mode='horizontal'
+                />
               </Flex>
               <Flex gap={12} className='universallayout-top-menu-right' style={{ color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}>
                 <Suspense fallback={<>loading...</>}>
@@ -89,7 +81,6 @@ export default memo(({ menuData, routeItem, userRoles = [], breadCrumbs = [] }: 
             </>
           )}
         </Flex>
-        {/* {globalConfig.tabNavEnable && <RightTabNav routeItem={routeItem} jsonMenuData={jsonMenuData} />} */}
       </Flex>
     </div>
   );

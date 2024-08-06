@@ -11,8 +11,6 @@ export interface StateType {
   headFixed: boolean;
   // 模板主题
   theme: Theme;
-  // 左侧侧边固定开启
-  leftSiderFixed: boolean;
 
   /* 以下是针对 UniversalLayout 扩展字段 */
   // tab菜单开启
@@ -27,7 +25,6 @@ export const initialGlobalState: StateType = {
   collapsed: false,
   headFixed: settings.headFixed,
   theme: settings.theme,
-  leftSiderFixed: settings.leftSiderFixed,
   tabNavEnable: settings.tabNavEnable,
   headTabNavList: [],
   navMode: settings.navMode,

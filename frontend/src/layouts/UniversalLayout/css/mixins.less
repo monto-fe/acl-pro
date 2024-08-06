@@ -1,13 +1,24 @@
-.layout-menu() {
-  &.ant-menu-horizontal {
-    line-height: 48px;
+header {
+
+  &.fixed {
+    position: fixed;
+    top: 0;
+    width: calc(100% - @leftSideBarWidth);
+    height: @headerHeight;
+    z-index: 999;
+
+    &.collapsed {
+      width: calc(100% - @leftSideBarCollapseWidth);
+    }
+
+    &.horizontal {
+      width: 100%;
+    }
   }
 }
 
-.light-menu() {
-  --universallayout-menu-bg-color: #FFF;
-  --universallayout-submenu-bg-color: #fafafa;
-  --universallayout-menu-color: rgba(0, 0, 0, .85);
-  --universallayout-menu-higlight-bg-color: #e6f7ff;
-  --universallayout-menu-highlight-color: @primary-color;
+main {
+  &.headerfixed {
+    margin-top: @headerHeight;
+  }
 }

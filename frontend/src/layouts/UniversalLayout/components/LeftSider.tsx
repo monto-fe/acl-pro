@@ -22,7 +22,6 @@ export interface LeftSiderProps {
   userRoles?: IRoleInfo[];
   collapsed?: boolean;
   theme?: MenuTheme;
-  leftSiderFixed?: boolean;
   mode?: 'inline' | 'horizontal';
 }
 
@@ -101,7 +100,6 @@ export default memo(
     collapsed = false,
     theme = 'dark',
     mode = 'inline',
-    leftSiderFixed = true,
   }: LeftSiderProps) => {
     const context = useContext(BasicContext) as any;
     const storeContext = context.storeContext;
@@ -129,7 +127,7 @@ export default memo(
       }
     }, [routeItem]);
 
-    return <div id='universallayout-left' className={classnames({ narrow: collapsed, fixed: leftSiderFixed })}>
+    return <div id='universallayout-left'>
       <div className='universallayout-left-sider'>
         {mode === 'inline' ? (
           <Flex align='center' justify='center' style={{ height: 64 }}>

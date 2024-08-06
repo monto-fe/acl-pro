@@ -39,19 +39,9 @@ export interface SettingsType {
   theme: Theme;
 
   /**
-   * Layout 左侧侧边固定开启
-   */
-  leftSiderFixed: boolean;
-
-  /**
    * UniversalLayout tab菜单开启
    */
   tabNavEnable: boolean;
-
-  /**
-   * UniversalLayout tab菜单首页锁定的path
-   */
-  tabNavHomePath: string;
 
   /**
    * UniversalLayout 菜单导航模式
