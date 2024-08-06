@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Card, Table } from 'antd';
 import { ColumnsType, TablePaginationConfig } from 'antd/lib/table';
+import { observer } from 'mobx-react-lite';
 
 import { useI18n } from '@/store/i18n';
 
@@ -20,7 +21,7 @@ const initPagination = {
   showSizeChanger: false,
 };
 
-const HotSearchCard: React.FC = () => {
+function HotSearchCard() {
   const context = useContext(BasicContext) as any;
   const { i18nLocale } = context.storeContext;
   const t = useI18n(i18nLocale);
@@ -89,4 +90,4 @@ const HotSearchCard: React.FC = () => {
   );
 };
 
-export default HotSearchCard;
+export default observer(HotSearchCard);

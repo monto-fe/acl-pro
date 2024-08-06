@@ -168,7 +168,7 @@ export const hasPermissionRoles = (userRoles: IRoleInfo[], roles?: string | stri
   }
 
   if (typeof roles === 'string') {
-    return userRoles.findIndex(role => role.role.includes(roles)) > -1;
+    return userRoles.findIndex(role => role.role === roles) > -1;
   }
 
   if (roles instanceof Array && roles.length === 0) {
@@ -176,7 +176,7 @@ export const hasPermissionRoles = (userRoles: IRoleInfo[], roles?: string | stri
   }
 
   if (roles instanceof Array && roles.length > 0) {
-    return roles.some((role) => userRoles.findIndex(currentRole => currentRole.role.includes(role)) > -1);
+    return roles.some((role) => userRoles.findIndex(currentRole => currentRole.role === role) > -1);
   }
 
   return false;

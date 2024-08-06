@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Flex, Menu, theme as antdTheme } from 'antd';
 import { ItemType } from 'antd/lib/menu/interface';
 import { MenuTheme } from 'antd/lib';
-import classnames from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import logoDark from '@/assets/images/logo-dark.svg';
 import logoWhite from '@/assets/images/logo-white.svg';
@@ -92,7 +92,7 @@ const createMenuItems = (
   return items;
 };
 
-export default memo(
+export default memo(observer(
   ({
     menuData,
     routeItem,
@@ -103,7 +103,7 @@ export default memo(
   }: LeftSiderProps) => {
     const context = useContext(BasicContext) as any;
     const storeContext = context.storeContext;
-    const { i18nLocale, globalConfig } = storeContext;
+    const { i18nLocale } = storeContext;
 
     const t = useI18n(i18nLocale);
     const {
@@ -120,19 +120,22 @@ export default memo(
     useEffect(() => {
       if (routeItem) {
         setSelectedKeys([routeItem.path]);
-        if (routeItem.meta?.parentPath && mode === 'inline') {
-          openKeys.push(routeItem.meta?.parentPath[0]);
-          setOpenKeys(openKeys);
+        if (collapsed) {
+          setOpenKeys([]);
+        } else {
+          if (routeItem.meta?.parentPath && mode === 'inline') {
+            setOpenKeys([routeItem.meta?.parentPath[0]]);
+          }
         }
       }
-    }, [routeItem]);
+    }, [routeItem, collapsed, mode]);
 
     return <div id='universallayout-left'>
       <div className='universallayout-left-sider'>
         {mode === 'inline' ? (
           <Flex align='center' justify='center' style={{ height: 64 }}>
             <Link to='/' style={{ color: theme === 'light' ? colorTextBase : colorTextLightSolid }}>
-              {collapsed ? 'M' : <img alt='' src={theme === 'light' ? logoDark : logoWhite} height='100' style={{ marginTop: '12px' }} />}
+              {collapsed ? 'MA' : <img alt='' src={theme === 'light' ? logoDark : logoWhite} height='100' style={{ marginTop: '12px' }} />}
             </Link>
           </Flex>
         ) : null}
@@ -158,4 +161,4 @@ export default memo(
       </div>
     </div>
   }
-);
+));

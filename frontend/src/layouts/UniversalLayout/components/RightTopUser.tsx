@@ -19,7 +19,6 @@ export default memo(observer(() => {
   const onMenuClick = useCallback(
     ({ key }: { key: string }) => {
       if (key === 'logout') {
-
         removeToken();
         navigate('/user/login', {
           replace: true,
@@ -31,6 +30,7 @@ export default memo(observer(() => {
   return (
     <Dropdown
       trigger={['hover']}
+      arrow
       menu={{
         items: [
           {

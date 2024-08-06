@@ -11,7 +11,8 @@ import {
   InsuranceOutlined,
   UserOutlined,
   TeamOutlined,
-  KeyOutlined
+  KeyOutlined,
+  ToolOutlined
 } from '@ant-design/icons';
 
 import { IRouter } from '@/@types/router.d';
@@ -38,7 +39,7 @@ const universalLayoutRotes: IRouter[] = [
   {
     path: 'https://chromewebstore.google.com/detail/%E5%A4%9A%E5%BD%A9%E4%B9%A6%E7%AD%BE/ilcmekmgeldhckdembghkiohkdffihpe?hl=zh-CN&utm_source=ext_sidebar',
     meta: {
-      icon: DashboardOutlined,
+      icon: ToolOutlined,
       title: 'universal-layout.menu.home.bookmark',
       selectLeftMenu: '/home',
     },
@@ -46,7 +47,7 @@ const universalLayoutRotes: IRouter[] = [
   {
     path: 'https://chromewebstore.google.com/detail/%E6%97%B6%E9%97%B4%E6%88%B3%E8%BD%AC%E6%8D%A2-%E6%97%B6%E5%8C%BA%E6%97%B6%E9%92%9F/pjcapgdifnhgkkojoggfdlijpelpohcf?hl=zh-CN&utm_source=ext_sidebar',
     meta: {
-      icon: DashboardOutlined,
+      icon: ToolOutlined,
       title: 'universal-layout.menu.home.timestamp',
       selectLeftMenu: '/home',
     },
@@ -57,7 +58,7 @@ const universalLayoutRotes: IRouter[] = [
     meta: {
       icon: InsuranceOutlined,
       title: 'universal-layout.menu.roles',
-      roles: ['admin'],
+      // roles: ['admin'],
     },
     children: [
       {

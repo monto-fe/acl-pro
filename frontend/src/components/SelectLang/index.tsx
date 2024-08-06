@@ -49,7 +49,7 @@ export default memo(observer(({ className }: SelectLangProps) => {
     [i18nLocale, updateI18n],
   );
   return (
-    <Dropdown className={className} menu={{ items: menuItems, onClick: onMenuClick }}>
+    <Dropdown className={className} menu={{ items: menuItems, onClick: onMenuClick }} arrow>
       <span className="cursor">
         <TranslationOutlined />
       </span>

@@ -52,8 +52,10 @@ export default memo(observer((props: RightTopNavTabsProps) => {
     }
     storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: newPanes });
 
-    setActiveKey(newActiveKey);
-
+    if (newActiveKey) {
+      setActiveKey(newActiveKey);
+      navigate(newActiveKey);
+    }
   };
 
   const onEdit = (
@@ -68,7 +70,7 @@ export default memo(observer((props: RightTopNavTabsProps) => {
       setActiveKey(currentRouter.path);
 
       if (!items.length) {
-        storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [{ label: t(currentRouter.meta?.title || ''), key: currentRouter.path, closable: false }] });
+        storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [{ label: currentRouter.meta?.title || '', key: currentRouter.path }] });
         return;
       }
       if (items.find(item => item.key === currentRouter.path)) {
@@ -76,18 +78,23 @@ export default memo(observer((props: RightTopNavTabsProps) => {
       }
 
       // 新增一个，并点亮
-      storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [...globalConfig.headTabNavList, { label: t(currentRouter.meta?.title || ''), key: currentRouter.path }] });
+      storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [...items, { label: currentRouter.meta?.title || '', key: currentRouter.path }] });
     }
   }, [currentRouter]);
 
   return (
     <Tabs
       size="small"
-      type="editable-card"
+      type={items.length > 1 ? 'editable-card' : 'card'}
       onChange={onChange}
       activeKey={activeKey}
       onEdit={onEdit}
-      items={items}
+      items={items.map(item => {
+        return {
+          label: t(item.label),
+          key: item.key
+        }
+      })}
       hideAdd
     />
   );

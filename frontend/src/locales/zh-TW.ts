@@ -1,6 +1,6 @@
 export default {
-  'app.empty': 'empty',
-  'app.global.menu.notfound': 'Not Found',
+  'app.empty': '空空如也',
+  'app.global.menu.notfound': '沒有數據',
   'app.global.form.validatefields.catch': '驗證不通過，請檢查輸入',
 
   'universal-layout.topmenu.userinfo': '個人信息',
@@ -8,34 +8,9 @@ export default {
 
   'universal-layout.menu.home': '首頁',
   'universal-layout.menu.home.workplace': '工作臺',
-  'universal-layout.menu.home.custom-breadcrumbs': '自定義面包屑',
   'universal-layout.menu.home.custom-breadcrumbs.montoacl.cc': 'montoacl.cc',
-  'universal-layout.menu.home.docs': '使用文檔',
   'universal-layout.menu.home.bookmark': '多彩书签',
   'universal-layout.menu.home.timestamp': '时间戳转换',
-
-  'universal-layout.menu.component': '組件',
-  'universal-layout.menu.component.icon': '圖標',
-  'universal-layout.menu.component.icon.svg': 'IconSvg',
-  'universal-layout.menu.component.icon.font': 'IconFont',
-  'universal-layout.menu.component.editor': '編輯器',
-  'universal-layout.menu.component.editor.tui-editor': 'tui-editor',
-  'universal-layout.menu.component.editor.ckeditor': 'CKEditor',
-
-  'universal-layout.menu.pages': '頁面示例',
-  'universal-layout.menu.pages.list': '列表頁面',
-  'universal-layout.menu.pages.list.basic': '標淮列表',
-  'universal-layout.menu.pages.list.table': '表格列表',
-  'universal-layout.menu.pages.list.highly-adaptive-table': '高度自適應表格',
-  'universal-layout.menu.pages.list.search': '搜索列表',
-  'universal-layout.menu.pages.list.search.table': '查詢表格',
-  'universal-layout.menu.pages.form': '表單頁面',
-  'universal-layout.menu.pages.form.basic': '基礎表單',
-  'universal-layout.menu.pages.form.complex': '高級表單',
-  'universal-layout.menu.pages.detail': '詳情頁面',
-  'universal-layout.menu.pages.detail.basic': '基礎詳情',
-  'universal-layout.menu.pages.detail.module': '模塊詳情',
-  'universal-layout.menu.pages.detail.table': '表格詳情',
 
   'universal-layout.menu.roles': '權限驗證',
   'universal-layout.menu.roles.user': '用戶列表',
@@ -66,8 +41,6 @@ export default {
   'page.user.register.form.btn-jump': '已有賬戶？現在登錄！',
   'page.user.register.form.register-success': '註冊成功，請登錄！',
 
-  'page.custom-breadcrumbs.msg': '請看上方面包屑。',
-
   'page.home.text-day': '日',
   'page.home.text-week': '周',
   'page.home.text-month': '月',
@@ -79,22 +52,18 @@ export default {
   'page.home.workschartcard.card-title': '作品',
   'page.home.topicschartcard.card-title': '專題',
   'page.home.linkschartcard.card-title': '左鄰右舍',
-
   'page.home.hotsearchcard.card-title': '熱門搜索',
   'page.home.hotsearchcard.card.table-column-number': '序號',
   'page.home.hotsearchcard.card.table-column-name': '關鍵詞',
   'page.home.hotsearchcard.card.table-column-hit': '次數',
-
   'page.home.hottagscard.card-title': '熱門標簽',
   'page.home.hottagscard.card.table-column-number': '序號',
   'page.home.hottagscard.card.table-column-name': '標簽',
   'page.home.hottagscard.card.table-column-hit': '次數',
-
   'page.home.articlehitcard.card-title': '隨筆瀏覽量排行',
   'page.home.articlehitcard.card.table-column-number': '序號',
   'page.home.articlehitcard.card.table-column-title': '標題',
   'page.home.articlehitcard.card.table-column-hit': '瀏覽量',
-
   'page.home.workshitcard.card-title': '作品瀏覽量排行',
   'page.home.workshitcard.card.table-column-number': '序號',
   'page.home.workshitcard.card.table-column-title': '標題',

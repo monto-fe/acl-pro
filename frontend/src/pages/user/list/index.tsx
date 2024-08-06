@@ -20,6 +20,8 @@ import CreateForm from './components/CreateForm';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
 import CommonTable from '@/pages/component/table';
 import { ITable } from '@/pages/component/table/data';
+import Permission from '@/components/Permission';
+import Preview from './components/Preview';
 
 function App() {
   const tableRef = useRef<ITable<TableListItem>>();
@@ -62,7 +64,11 @@ function App() {
   // 新增&编辑
   const [createSubmitLoading, setCreateSubmitLoading] = useState<boolean>(false);
   const [createFormVisible, setCreateFormVisible] = useState<boolean>(false);
-  const [updateData, setUpdateData] = useState<Partial<TableQueryParam>>({});
+  const [updateData, setUpdateData] = useState<Partial<TableListItem>>({});
+
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+  const [previewData, setPreviewData] = useState<Partial<TableListItem>>({});
+
   const handleCreate = () => {
     setUpdateData({});
     setCreateFormVisible(true);
@@ -83,7 +89,7 @@ function App() {
     });
   };
 
-  const handleUpdate = (record: TableQueryParam) => {
+  const handleUpdate = (record: TableListItem) => {
     setUpdateData({
       ...record,
       password: '●●●●●●●●',
@@ -91,6 +97,15 @@ function App() {
     });
     setCreateFormVisible(true);
   };
+
+  const handlePreview = (record: TableListItem) => {
+    setPreviewData({
+      ...record,
+      password: '●●●●●●●●',
+      role_ids: (record.role || []).map(role => role.id)
+    });
+    setPreviewVisible(true);
+  }
 
   const columns: ColumnsType<TableListItem> = [
     {
@@ -178,24 +193,28 @@ function App() {
       key: 'action',
       fixed: 'right',
       render: (text, record: TableListItem) => (
-        <Space size='small'>
-          <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
-            编辑
-          </Button>
-          <Popconfirm
-            open={deleteOpen === record.id}
-            title='Delete the task'
-            description='Are you sure to delete this task?'
-            onConfirm={() => deleteConfirm(record.id, record.user)}
-            onCancel={deleteCancel}
-            okText='Yes'
-            cancelText='No'
-          >
-            <Button danger className='btn-group-cell' onClick={() => handleDelete(record.id)} size='small' type='link'>
-              删除
+        <Permission role="admin" noNode={<Button className='btn-group-cell' size='small' type='link' onClick={() => handlePreview(record)}>
+          查看
+        </Button>}>
+          <Space size='small'>
+            <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
+              编辑
             </Button>
-          </Popconfirm>
-        </Space>
+            <Popconfirm
+              open={deleteOpen === record.id}
+              title='Delete the task'
+              description='Are you sure to delete this task?'
+              onConfirm={() => deleteConfirm(record.id, record.user)}
+              onCancel={deleteCancel}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button danger className='btn-group-cell' onClick={() => handleDelete(record.id)} size='small' type='link'>
+                删除
+              </Button>
+            </Popconfirm>
+          </Space>
+        </Permission>
       ),
     },
   ];
@@ -222,9 +241,11 @@ function App() {
         columns={columns}
         queryList={queryList}
         title={
-          <Button type='primary' onClick={handleCreate}>
-            新增用户
-          </Button>
+          <Permission role="admin" noNode={null}>
+            <Button type='primary' onClick={handleCreate}>
+              新增用户
+            </Button>
+          </Permission>
         }
         filterFormItems={formItems}
         useTools
@@ -237,6 +258,12 @@ function App() {
         roleList={roleList}
         onSubmit={createSubmit}
         onSubmitLoading={createSubmitLoading}
+      />
+      <Preview
+        visible={previewVisible}
+        setVisible={setPreviewVisible}
+        data={previewData}
+        roleList={roleList}
       />
     </div>
   );

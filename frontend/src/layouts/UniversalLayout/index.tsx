@@ -124,6 +124,7 @@ export default memo(observer(({ children }: UniversalLayoutProps) => {
             {globalConfig.tabNavEnable ? (
               <RightTopNavTabs currentRouter={routeItem} />
             ) : null}
+            {/* 路由的插槽 */}
             {children}
           </Permission>
         </Content>

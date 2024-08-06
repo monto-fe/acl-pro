@@ -1,6 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Card, Table } from 'antd';
 import { ColumnsType, TablePaginationConfig } from 'antd/lib/table';
+import { observer } from 'mobx-react-lite';
+
 import { useI18n } from '@/store/i18n';
 
 import { TableListItem } from './data.d';
@@ -20,7 +22,7 @@ const initPagination = {
   showSizeChanger: false,
 };
 
-const ArticleHitCard: React.FC = () => {
+function ArticleHitCard() {
   const context = useContext(BasicContext) as any;
   const { i18nLocale } = context.storeContext;
   const t = useI18n(i18nLocale);
@@ -88,4 +90,4 @@ const ArticleHitCard: React.FC = () => {
   );
 };
 
-export default ArticleHitCard;
+export default observer(ArticleHitCard);

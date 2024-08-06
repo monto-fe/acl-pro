@@ -1,6 +1,7 @@
 import React, { useRef, useState, useMemo, useContext } from 'react';
 import { Spin, Card, Tag, Divider, Row, Col } from 'antd';
 import useEcharts, { EChartsOption } from '@/hooks/useEcharts';
+import { observer } from 'mobx-react-lite';
 
 import { useI18n } from '@/store/i18n';
 
@@ -41,7 +42,7 @@ const linksChartOption: EChartsOption = {
   ],
 };
 
-const WorksChartCard: React.FC = () => {
+function WorksChartCard() {
   const context = useContext(BasicContext) as any;
   const { i18nLocale } = context.storeContext;
   const t = useI18n(i18nLocale);
@@ -114,4 +115,4 @@ const WorksChartCard: React.FC = () => {
   );
 };
 
-export default WorksChartCard;
+export default observer(WorksChartCard);

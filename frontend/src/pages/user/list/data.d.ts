@@ -25,6 +25,8 @@ export interface TableListItem {
   role: RoleTableListItem[];
   roleName?: string;
   email: 'string';
+  password?: string;
+  role_ids?: number[];
   create_time: number;
   update_time: number;
 }

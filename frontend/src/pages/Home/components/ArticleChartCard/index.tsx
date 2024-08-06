@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Spin, Card, Divider, Row, Col, Tag } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import { observer } from 'mobx-react-lite';
 
 import { useI18n } from '@/store/i18n';
 
@@ -10,7 +11,7 @@ import { ResponseData } from '@/utils/request';
 import { dailynewArticles } from './service';
 import { BasicContext } from '@/store/context';
 
-const ArticleChartCard: React.FC = () => {
+function ArticleChartCard() {
   const context = useContext(BasicContext) as any;
   const { i18nLocale } = context.storeContext;
   const t = useI18n(i18nLocale);
@@ -93,4 +94,4 @@ const ArticleChartCard: React.FC = () => {
   );
 };
 
-export default ArticleChartCard;
+export default observer(ArticleChartCard);
