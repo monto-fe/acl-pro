@@ -127,7 +127,7 @@ export default memo(observer(() => {
               </span>
             </div>
             <div className={style['setting-list-item']}>
-              <span>TabNav</span>
+              <span>NavTabs</span>
               <span className={style['setting-list-item-action']}>
                 <Switch
                   checkedChildren='开启'

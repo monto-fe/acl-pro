@@ -122,7 +122,7 @@ export default memo(observer(({ children }: UniversalLayoutProps) => {
         >
           <Permission role={routeItem?.meta?.roles}>
             {globalConfig.tabNavEnable ? (
-              <RightTopNavTabs currentRouter={routeItem} />
+              <RightTopNavTabs currentRouter={routeItem} breadCrumbs={breadCrumbs} />
             ) : null}
             {/* 路由的插槽 */}
             {children}

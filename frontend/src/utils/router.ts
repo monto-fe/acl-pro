@@ -220,12 +220,12 @@ export const getBreadcrumbRoutes = (pathname: string, jsonRoutesData: IPathKeyRo
     const parentPath = route.meta?.parentPath || [];
     const routes = getPathsTheRoutes(parentPath, jsonRoutesData);
     const bread: BreadcrumbType[] = [];
-
     for (let index = 0; index < routes.length; index++) {
       const element = routes[index];
       bread.push({
         title: element.meta?.title || '',
         path: element.path,
+        redirect: element.redirect
       });
     }
 
@@ -236,6 +236,7 @@ export const getBreadcrumbRoutes = (pathname: string, jsonRoutesData: IPathKeyRo
     bread.push({
       title: route.meta?.title || '',
       path: route.path,
+      redirect: route.redirect
     });
 
     return bread;

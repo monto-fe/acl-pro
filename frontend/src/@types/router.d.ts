@@ -19,6 +19,7 @@ export interface BreadcrumbType {
   title: string;
   // 路由地址或外链
   path: string;
+  redirect?: string;
 }
 
 /**

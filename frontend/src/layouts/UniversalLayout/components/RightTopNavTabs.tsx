@@ -2,7 +2,7 @@ import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import { Tabs } from 'antd';
 import { BasicContext } from '@/store/context';
 import { observer } from 'mobx-react-lite';
-import { IRouter } from '@/@types/router';
+import { BreadcrumbType, IRouter } from '@/@types/router';
 import { useI18n } from '@/store/i18n';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,10 +16,11 @@ interface RightTopNavTabsItem {
 
 interface RightTopNavTabsProps {
   currentRouter: IRouter;
+  breadCrumbs: BreadcrumbType[];
 }
 
 export default memo(observer((props: RightTopNavTabsProps) => {
-  const { currentRouter } = props;
+  const { currentRouter, breadCrumbs } = props;
   const navigate = useNavigate();
 
   const storeContext = (useContext(BasicContext) as any).storeContext;
@@ -65,10 +66,11 @@ export default memo(observer((props: RightTopNavTabsProps) => {
     remove(targetKey);
   };
 
-  useEffect(() => {
-    if (currentRouter) {
-      setActiveKey(currentRouter.path);
+  const isValidMenu = () => !currentRouter.redirect;
 
+  useEffect(() => {
+    if (currentRouter && isValidMenu()) {
+      setActiveKey(currentRouter.path);
       if (!items.length) {
         storeContext.updateGlobalConfig({ ...globalConfig, headTabNavList: [{ label: currentRouter.meta?.title || '', key: currentRouter.path }] });
         return;
