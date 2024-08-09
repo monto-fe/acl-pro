@@ -45,5 +45,3 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
             sh /data/uacl/frontend/deploy.sh ${{ env.TIMESTAMP }}
-            
-    

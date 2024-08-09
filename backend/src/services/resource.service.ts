@@ -45,14 +45,33 @@ class ResourceService {
 	 * 获取项目组及其子项目组信息
 	*/
 	public async findWithAllChildren(Data: any): Promise<any> {
-		const { namespace, limit, offset } = Data;
+		const { namespace, resource, name, limit, offset } = Data;
+		let query:any = {
+			namespace
+		}
+		if (resource) {
+			query.resource = resource
+		}
+		if (name) {
+			query.name = name;
+		}
 		const result: any = await this.Resource.findAndCountAll({ 
-			where: {
-				namespace,
-			},
+			where: query,
 			limit,
 			offset,
 			order: [['id', 'DESC']]
+		 })
+		return result;
+	}
+
+	/*
+		查询所有的资源，通过resourceId
+	*/
+	public async findAllById(id: number): Promise<any> {
+		const result: any = await this.Resource.findOne({ 
+			where: {
+				id
+			}
 		 })
 		return result;
 	}
@@ -69,6 +88,21 @@ class ResourceService {
 		})
 		return result;
 	}
+
+	/*
+		查询是否重复插入资源，通过namespace和name，判断唯一
+	*/
+	public async findByNamespaceAndName(Data: any): Promise<any> {
+		const { namespace, name } = Data;
+		const result: any = await this.Resource.findOne({
+			where: {
+				namespace,
+				name
+			}
+		})
+		return result;
+	}
+
 }
 
 export default ResourceService;

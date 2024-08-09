@@ -12,6 +12,14 @@ export interface RolePermission {
 export interface RolePermissionReq {
   namespace: string;
   role_id: number;
+  resource_ids: number[];
+  describe: string;
+  operator: string;
+}
+
+export interface RoleSinglePermissionReq {
+  namespace: string;
+  role_id: number;
   resource_id: number;
   describe: string;
   operator: string;

@@ -56,3 +56,5 @@ export const QuestionResourceMap = {
     Public: 'Public',
     Private: 'Private'
 }
+
+export const ResourceCategory = ["API", "Menu", "Action", "Other"];

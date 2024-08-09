@@ -21,7 +21,7 @@ paths:
             required:
               - namespace
               - role_id
-              - resource_id
+              - resource_ids
             properties:
               namespace:
                 description: 项目组标识
@@ -29,9 +29,11 @@ paths:
               role_id:
                 description: 角色 ID
                 type: number
-              resource_id:
-                description: 资源 ID
-                type: number
+              resource_ids:
+                description: 资源 ID 集合
+                type: array
+                items: 
+                  type: number
               describe:
                 description: 描述
                 type: string

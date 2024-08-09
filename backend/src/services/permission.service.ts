@@ -1,7 +1,6 @@
 import { Op } from 'sequelize'
 import DB from '../databases';
-import { RolePermissionReq, UserRoleReq } from '../interfaces/permission.interface'
-import sequelize from 'sequelize';
+import { RoleSinglePermissionReq, UserRoleReq } from '../interfaces/permission.interface'
 
 class PermissionService {
 	public RolePermission = DB.RolePermission;
@@ -23,8 +22,19 @@ class PermissionService {
 		});
 		return { rows, count };
 	}
+
+	public async getRoleResourceIds(Data: any): Promise<any> {
+		const { namespace, role_id } = Data;
+		const result = await this.RolePermission.findAll({
+			where: {  
+				namespace,
+				role_id: role_id
+			}
+		});
+		return result;
+	}
 	
-	public async assetRolePermission(Data: RolePermissionReq): Promise<any> {
+	public async assetRolePermission(Data: RoleSinglePermissionReq): Promise<any> {
 		const { namespace, role_id, resource_id, operator, describe } = Data;
 		const createTaskData: any = await this.RolePermission.create({ 
 			namespace, 
@@ -34,6 +44,24 @@ class PermissionService {
 			describe 
 		});
 		return createTaskData;
+	}
+
+	// 批量给角色添加权限
+	public async assertBulkRolePermission(Data: any): Promise<any> {
+		const { namespace, role_id, resource_ids, describe, operator, create_time, update_time } = Data;
+		const rolePermissionList = resource_ids.map((resource_id: number) => {
+			return {
+				namespace, 
+				role_id, 
+				resource_id, 
+				describe,
+				operator,
+				create_time,
+				update_time
+			}
+		})
+		const result: any = await this.RolePermission.bulkCreate(rolePermissionList)
+		return result;
 	}
 
 	// 批量存入用户角色权限

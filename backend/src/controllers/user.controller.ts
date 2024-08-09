@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import md5 from 'md5';
 // import dayjs from 'dayjs';
-import nodeSendEmail from 'node-send-email'
+// import nodeSendEmail from 'node-send-email'
 import { User, UserListReq, UserReq } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
 import RoleService from '../services/role.service';
-import { 
-  TokenExpired, 
-} from '../utils/util'
+// import { 
+  // TokenExpired, 
+// } from '../utils/util'
 import { ResponseMap, HttpCodeSuccess } from '../utils/const'
 import { pageCompute } from '../utils/pageCompute';
 // import { getCodeHtml, registerEmailInfo } from '../utils/registerEmail';
@@ -23,7 +23,7 @@ const {
   // AuthCodeError 
 } = ResponseMap
 
-const { sendEmail } = nodeSendEmail as any
+// const { sendEmail } = nodeSendEmail as any
 class UsersController {
   public UserService = new UserService();
   public RoleService = new RoleService();

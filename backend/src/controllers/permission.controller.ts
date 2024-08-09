@@ -54,20 +54,38 @@ class PermissionController {
   // 角色分配权限
   public assetRolePermission = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query: RolePermissionReq = req.body;
+      const { namespace, role_id, resource_ids, describe }: RolePermissionReq = req.body;
       const remoteUser = req.headers['remoteUser']
-      const params  = query as any;
       
-      if (!params) {
+      if (!namespace || !role_id || !resource_ids || !describe) {
         res.status(HttpCodeSuccess).json({ ...ParamsError });
         return;
       }
-
-			const createData: any = await this.PermissionService.assetRolePermission(
-				{
-          ...params,
-          operator: remoteUser
-        }
+      const params: any = {
+        namespace,
+        role_id,
+        describe,
+        create_time: getUnixTimestamp(),
+        update_time: getUnixTimestamp(),
+        operator: remoteUser
+      }
+      if(!resource_ids || !resource_ids.length){
+        res.status(HttpCodeSuccess).json({ ...ParamsError });
+        return
+      }
+      
+      // 检查当前角色是否已经有了该权限，根据角色id查询当前role_permission是否有resource_id
+      const result = await this.PermissionService.getRoleResourceIds({ namespace, role_id })
+      const resource_id_list = result.map((item:any) => {
+        return item.dataValues.resource_id
+      })
+      
+      // 数组取差值，对比resource_ids和resource_id_list的值，取出resource_ids中值不属于resource_id_list的值组成的数组
+      params.resource_ids = resource_ids.filter((item: any) => {
+        return !resource_id_list.includes(item)
+      })
+			const createData: any = await this.PermissionService.assertBulkRolePermission(
+				params
 			);
       res.status(HttpCodeSuccess).json({ 
         ...Success, 

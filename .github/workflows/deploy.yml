@@ -32,4 +32,13 @@ jobs:
       # 推送 Docker 镜像到 Docker Hub
       - name: Push the Docker image
         run: docker push ${{ secrets.DOCKER_REGISTRY }}/uacl/api:${{ env.TIMESTAMP }}
-    
+      
+      # 在远程服务器执行脚本
+      - name: Run remote script
+        uses: appleboy/ssh-action@v0.1.5
+        with: 
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USERNAME }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          script: |
+            sh /data/uacl/api/deploy.sh ${{ env.TIMESTAMP }}

@@ -21,6 +21,18 @@ paths:
           schema:
             type: string
         - in: query
+          name: resource
+          description: 资源
+          default: ""
+          schema:
+            type: string
+        - in: query
+          name: name
+          description: 名称
+          default: ""
+          schema:
+            type: string
+        - in: query
           name: current
           description: 页码
           default: 1
@@ -54,8 +66,8 @@ paths:
             required:
               - namespace
               - resource
+              - category
               - name
-              - properties
             properties:
               namespace:
                 description: 所属项目组
@@ -66,9 +78,13 @@ paths:
               category:
                 description: 资源分类
                 type: string
+                enum:
+                  - "API"
+                  - "Menu"
+                  - "Action"
+                  - "Other"
               properties:
                 description: 资源属性
-                default: ""
                 type: string 
               name:
                 description: 资源名
@@ -110,6 +126,11 @@ paths:
               category:
                 description: 资源分类
                 type: string
+                enum:
+                  - "API"
+                  - "Menu"
+                  - "Action"
+                  - "Other"
               resource:
                 description: 资源标识
                 type: string
@@ -124,9 +145,35 @@ paths:
                 type: string
       responses:
         200:
-          description: "OK"
+          description: "更新资源成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ret_code:
+                    type: number
+                    example: 0
+                  message:
+                    type: string
+                    example: ""
+                  data:
+                    type: array
+                    example: []
+
         500:
           description: "Server Error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
     delete:
       tags: 
       - Resource
