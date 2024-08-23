@@ -154,10 +154,14 @@ class RoleService {
 			namespace
 		}
 		if (role) {
-			params.role = role;
+			params.role = {
+				[Op.like]: `%${role}%`
+			};
 		}
 		if (name) {
-			params.name = name;
+			params.name = {
+				[Op.like]: `%${name}%`
+			}
 		}
 		// 如果resource存在，则根据resource和namespace获取资源id列表
 		const resource_ids = resource ? await this.Resource.findAll({

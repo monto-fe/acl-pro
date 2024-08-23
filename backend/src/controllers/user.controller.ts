@@ -125,6 +125,10 @@ class UsersController {
         const intersection: string[] = roleUserList.filter((item:string) => userNameList.includes(item))
         query.user = intersection.concat(query.user ? query.user : []);
       }
+      if(query.user && query.user.length === 0 && !query.id){
+        res.status(HttpCodeSuccess).json({...Success, count: 0, data: []}); 
+        return
+      }
       // 如果name存在，则查询对应的user，User[]
       // 合并user,进行查询
       const result = await this.UserService.getUserList(query)

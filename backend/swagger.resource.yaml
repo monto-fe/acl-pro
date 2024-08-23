@@ -33,6 +33,12 @@ paths:
           schema:
             type: string
         - in: query
+          name: category
+          description: 类别
+          default: "多个category用英文逗号隔开: API,Menu,Action,Other"
+          schema:
+            type: string
+        - in: query
           name: current
           description: 页码
           default: 1

@@ -12,7 +12,7 @@ class ResourceController {
   public getResources = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: any = req.query;
-      const { namespace, resource, name, current, pageSize } = query;
+      const { namespace, resource, name, category, current, pageSize } = query;
       if (!namespace) {
         res.status(HttpCodeSuccess).json(ParamsError);
         return;
@@ -24,6 +24,7 @@ class ResourceController {
           namespace,
           resource,
           name,
+          category,
           offset,
           limit
         }
@@ -117,19 +118,19 @@ class ResourceController {
 
       // 校验name是否已存在
       if(name){
-        const ResourceResult = await this.ResourceService.findByNamespaceAndName({
-          namespace,
-          name
-        })
-        if(ResourceResult){
-          res.status(HttpCodeSuccess).json({ 
-            ...ParamsError,
-            message: '要更新的资源已存在'
-          });
-          return
-        }else{
+        // const ResourceResult = await this.ResourceService.findByNamespaceAndName({
+        //   namespace,
+        //   name
+        // })
+        // if(ResourceResult){
+        //   res.status(HttpCodeSuccess).json({ 
+        //     ...ParamsError,
+        //     message: '要新增的资源已存在，无需重复添加'
+        //   });
+        //   return
+        // }else{
           body.name = name;
-        }
+        // }
       }
       
       if(!ResourceCategory.includes(category)){

@@ -5,7 +5,7 @@ import { ResponseMap, HttpCodeSuccess } from '../utils/const';
 import { pageCompute } from '../utils/pageCompute';
 import ResourceService from '../services/resource.service';
 
-const { Success, ParamsError, SystemEmptyError } = ResponseMap
+const { Success, ParamsError } = ResponseMap
 
 class RoleController {
   public RoleService = new RoleService();
@@ -36,7 +36,11 @@ class RoleController {
       // 聚合资源id
       const resourceIds = rows.map((item: any) => item.dataValues.resources).flat();
       if(resourceIds.length === 0){
-        res.status(HttpCodeSuccess).json(SystemEmptyError);
+        res.status(HttpCodeSuccess).json({ 
+          ...Success, 
+          data: [],
+          total: 0 
+        });
         return 
       }
       // 根据resource资源列表

@@ -45,15 +45,25 @@ class ResourceService {
 	 * 获取项目组及其子项目组信息
 	*/
 	public async findWithAllChildren(Data: any): Promise<any> {
-		const { namespace, resource, name, limit, offset } = Data;
+		const { namespace, resource, name, category, limit, offset } = Data;
 		let query:any = {
 			namespace
 		}
+		if (category) {
+			const categoryArr = category.split(',');
+			query.category = {
+				[Op.in]: categoryArr
+			}
+		}
 		if (resource) {
-			query.resource = resource
+			query.resource = {
+				[Op.like]: `%${resource}%`
+			}
 		}
 		if (name) {
-			query.name = name;
+			query.name = {
+				[Op.like]: `%${name}%`
+			}
 		}
 		const result: any = await this.Resource.findAndCountAll({ 
 			where: query,
