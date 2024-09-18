@@ -44,4 +44,5 @@ jobs:
           username: ${{ secrets.REMOTE_USERNAME }}
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
-            sh /data/uacl/frontend/deploy.sh ${{ env.TIMESTAMP }}
+            sh /data/uacl/update_env.sh FRONTEDTAG ${{ env.TIMESTAMP }} && docker compose restart
+            
