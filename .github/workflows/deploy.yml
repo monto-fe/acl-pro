@@ -41,4 +41,8 @@ jobs:
           username: ${{ secrets.REMOTE_USERNAME }}
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
-            sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }} && docker compose restart
+            sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }} 
+
+            cd /data/uacl 
+            
+            docker compose restart
