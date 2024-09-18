@@ -26,20 +26,20 @@
         DB_DATABASE: "",
         BUCKET_NAME: "interview-1256907486",
         BUCKET_REGION: "ap-shanghai",
-        SECRET_ID: "AKIDujS7tafTdbOzQjwSAD9uVwOhokgYdk5J",
+        SECRET_ID: "",
         SECRET_KEY: "EJCuRtCf1FI9oKe4PdjomvtgGe7Ukrpb"
       },
       env_production: {
         PORT: 9000,
         NODE_ENV: 'production',
-        DB_HOST: "81.68.188.127",
+        DB_HOST: "150.158.119.41",
         DB_PORT: 3306,
         DB_USER: "root",
-        DB_PASSWORD: "pwHW9h1bjnhQIbKK",
+        DB_PASSWORD: "mysql123456",
         DB_DATABASE: "uacl",
         BUCKET_NAME: "interview-1256907486",
         BUCKET_REGION: "ap-shanghai",
-        SECRET_ID: "AKIDujS7tafTdbOzQjwSAD9uVwOhokgYdk5J",
+        SECRET_ID: "",
         SECRET_KEY: "EJCuRtCf1FI9oKe4PdjomvtgGe7Ukrpb"
       }
     }
