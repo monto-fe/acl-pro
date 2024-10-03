@@ -1,0 +1,1909 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "接口文档",
+    "version": "1.0.0",
+    "description": "swagger使用文档：https://swagger.io/docs/specification/basic-structure/"
+  },
+  "paths": {
+    "servers": {
+      "0": {
+        "url": "http://localhost:9000/",
+        "description": "开发环境API url"
+      }
+    },
+    "/v1/permission/assertRolePermission": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "给角色分配资源权限",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "role_id",
+                "resource_ids"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "角色 ID",
+                  "type": "number"
+                },
+                "resource_ids": {
+                  "description": "资源 ID 集合",
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "describe": {
+                  "description": "描述",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/assertUserRole": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "给用户分配角色",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "user"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "用户标识",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "角色 ID",
+                  "type": "number"
+                },
+                "role_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "description": "角色IDs"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/cancelRolePermission": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "取消角色已分配的资源权限",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "role_id"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "角色 ID",
+                  "type": "number"
+                },
+                "resource_id": {
+                  "description": "资源 ID",
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/cancelUserRole": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "取消分配给用户的角色",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "user"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "用户标识",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "角色 ID",
+                  "type": "number"
+                },
+                "role_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "description": "角色IDs"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/getRolePermissions": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "获取角色分配资源权限",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "role_id"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "角色 ID",
+                  "type": "number"
+                },
+                "current": {
+                  "description": "页码",
+                  "type": "number",
+                  "default": 1
+                },
+                "pageSize": {
+                  "description": "每页条数",
+                  "type": "number",
+                  "default": 10
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/getSelfPermissions": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "获取用户自身的所有权限",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "资源分类",
+                  "type": "string",
+                  "default": "menu"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/getUserRoles": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "【不可用】获取用户和角色关系的接口",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "用户标识",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "角色ID",
+                  "type": "number"
+                },
+                "role_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "description": "角色IDs"
+                },
+                "userId": {
+                  "description": "用户Id",
+                  "type": "number"
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "description": "用户Ids"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/updateRolePermissions": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "【不可用】批量更新角色操作权限",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "role_id",
+                "permissions"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                },
+                "role_id": {
+                  "description": "角色 ID",
+                  "type": "number"
+                },
+                "permissions": {
+                  "description": "权限配置信息",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "resource_id"
+                    ],
+                    "properties": {
+                      "resource_id": {
+                        "description": "资源 ID",
+                        "type": "number"
+                      },
+                      "describe": {
+                        "description": "描述",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/permission/checkPermission": {
+      "post": {
+        "tags": [
+          "Permission"
+        ],
+        "summary": "【不可用】用户权限检测",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "user",
+                "resource"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "项目组标识",
+                  "type": "string"
+                },
+                "user": {
+                  "description": "用户标识",
+                  "type": "string"
+                },
+                "resource": {
+                  "description": "资源标识",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "schemes": {
+      "0": "https",
+      "1": "http"
+    },
+    "/v1/project": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "项目组",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "namespace",
+            "description": "项目组名称",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "current",
+            "description": "页码",
+            "default": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "每页条数",
+            "default": 10,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "创建项目",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "name"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                },
+                "parent": {
+                  "description": "父级项目组",
+                  "type": "string",
+                  "default": ""
+                },
+                "name": {
+                  "description": "项目组名称",
+                  "type": "string"
+                },
+                "describe": {
+                  "description": "项目组描述",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "更新项目组",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "description": "项目组ID",
+                  "type": "number"
+                },
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "项目组名称",
+                  "type": "string"
+                },
+                "describe": {
+                  "description": "项目组描述",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "删除项目组",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "description": "待删除项目组ID",
+                  "type": "number"
+                },
+                "namespace": {
+                  "description": "待删除项目组",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/resource": {
+      "get": {
+        "tags": [
+          "Resource"
+        ],
+        "summary": "资源",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "namespace",
+            "description": "项目组名称",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resource",
+            "description": "资源",
+            "default": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "description": "名称",
+            "default": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "description": "类别",
+            "default": "多个category用英文逗号隔开: API,Menu,Action,Other",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "current",
+            "description": "页码",
+            "default": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "每页条数",
+            "default": 10,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Resource"
+        ],
+        "summary": "添加资源",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "resource",
+                "category",
+                "name"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                },
+                "resource": {
+                  "description": "资源标识",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "资源分类",
+                  "type": "string",
+                  "enum": [
+                    "API",
+                    "Menu",
+                    "Action",
+                    "Other"
+                  ]
+                },
+                "properties": {
+                  "description": "资源属性",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "资源名",
+                  "type": "string"
+                },
+                "describe": {
+                  "description": "描述",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Resource"
+        ],
+        "summary": "更新资源",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "namespace"
+              ],
+              "properties": {
+                "id": {
+                  "description": "资源ID",
+                  "type": "number"
+                },
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                },
+                "category": {
+                  "description": "资源分类",
+                  "type": "string",
+                  "enum": [
+                    "API",
+                    "Menu",
+                    "Action",
+                    "Other"
+                  ]
+                },
+                "resource": {
+                  "description": "资源标识",
+                  "type": "string"
+                },
+                "properties": {
+                  "description": "资源属性",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "资源名",
+                  "type": "string"
+                },
+                "describe": {
+                  "description": "描述",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "更新资源成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ret_code": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Resource"
+        ],
+        "summary": "删除资源",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "namespace"
+              ],
+              "properties": {
+                "id": {
+                  "description": "资源ID",
+                  "type": "number"
+                },
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/role": {
+      "get": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "获取角色列表",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "namespace",
+            "description": "项目组名称",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "description": "指定角色",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resource",
+            "description": "资源",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "CreateUser,CreateRole"
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "description": "角色名称",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "current",
+            "description": "页码",
+            "default": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "每页条数",
+            "default": 10,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "创建角色并赋予其操作",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "role",
+                "name"
+              ],
+              "properties": {
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                },
+                "role": {
+                  "description": "角色标识",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "角色名",
+                  "type": "string"
+                },
+                "describe": {
+                  "description": "描述",
+                  "type": "string"
+                },
+                "permissions": {
+                  "description": "角色权限",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "resource_id": {
+                        "type": "number",
+                        "description": "资源标识符"
+                      },
+                      "describe": {
+                        "type": "string",
+                        "description": "权限描述"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "更新角色信息",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "namespace",
+                "role",
+                "permissions"
+              ],
+              "properties": {
+                "id": {
+                  "description": "角色ID",
+                  "type": "number"
+                },
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                },
+                "role": {
+                  "description": "待更新角色",
+                  "type": "string"
+                },
+                "permissions": {
+                  "description": "角色权限",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "resource_id": {
+                        "type": "number",
+                        "description": "资源标识符"
+                      },
+                      "describe": {
+                        "type": "string",
+                        "description": "权限描述"
+                      }
+                    }
+                  }
+                },
+                "name": {
+                  "description": "角色名",
+                  "type": "string"
+                },
+                "describe": {
+                  "description": "描述",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "删除角色",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "namespace"
+              ],
+              "properties": {
+                "id": {
+                  "description": "待删除角色ID",
+                  "type": "number"
+                },
+                "namespace": {
+                  "description": "所属项目组",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "获取用户列表",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "namespace",
+            "description": "项目名称",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "description": "用户ID",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "user",
+            "description": "用户名",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "roleName",
+            "description": "支持角色名称查询用户",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "default": ""
+          },
+          {
+            "in": "query",
+            "name": "userName",
+            "description": "支持用户名称查询用户",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "default": ""
+          },
+          {
+            "in": "query",
+            "name": "current",
+            "description": "页码",
+            "default": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "每页条数",
+            "default": 10,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "description": "用户ID"
+                          },
+                          "userName": {
+                            "type": "string",
+                            "description": "用户名"
+                          },
+                          "roleName": {
+                            "type": "string",
+                            "description": "角色名称"
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "用户的电子邮件"
+                          }
+                        }
+                      }
+                    },
+                    "current": {
+                      "type": "number",
+                      "description": "当前页码"
+                    },
+                    "pageSize": {
+                      "type": "number",
+                      "description": "每页条数"
+                    },
+                    "total": {
+                      "type": "number",
+                      "description": "总记录数"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "新增用户",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "user",
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "namespace": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                },
+                "job": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string",
+                  "default": "12345678"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "phone_number": {
+                  "type": "string"
+                },
+                "role_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "更新用户信息",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "namespace"
+              ],
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "namespace": {
+                  "type": "string",
+                  "comments": "必选，不可更改"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "phone_number": {
+                  "type": "string"
+                },
+                "job": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "role_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "删除用户",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "namespace",
+                "id",
+                "user"
+              ],
+              "properties": {
+                "namespace": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "number"
+                },
+                "user": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/userInfo": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "获取用户信息",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "登陆",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "user",
+                "namespace",
+                "password"
+              ],
+              "properties": {
+                "namespace": {
+                  "type": "string",
+                  "comments": "项目组名称"
+                },
+                "user": {
+                  "type": "string",
+                  "comments": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "comments": "密码"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/register": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "【不可用】注册",
+        "description": "create a user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "password",
+                "email",
+                "authCode"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "authCode": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "jobId": {
+                  "type": "number"
+                },
+                "job": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/email/code": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "【不可用】注册发送邮件验证码",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "codeType"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "codeType": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/reset/password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "【不可用】重置用户密码",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "jwt_token",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "email",
+                "authCode",
+                "password"
+              ],
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "authCode": {
+                  "type": "number"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": [
+    {
+      "name": "Project",
+      "description": "项目组"
+    },
+    {
+      "name": "Resource",
+      "description": "权限资源管理"
+    },
+    {
+      "name": "Role",
+      "description": "角色管理"
+    },
+    {
+      "name": "Permission",
+      "description": "权限"
+    },
+    {
+      "name": "User",
+      "description": "登录注册"
+    }
+  ]
+}

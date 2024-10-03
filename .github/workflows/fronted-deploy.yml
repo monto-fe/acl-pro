@@ -48,4 +48,4 @@ jobs:
 
             cd /data/uacl 
             
-            docker compose restart
+            docker compose restart 2>/dev/null

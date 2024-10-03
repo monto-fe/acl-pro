@@ -5,7 +5,8 @@ import cors from 'cors';
 // import passport from 'passport';
 // import pkg from 'passport-local';
 // import pkgJwt from 'passport-jwt';
-
+import path from 'path';
+import fs from 'fs';
 import DB from './databases';
 // import UserController from './controllers/user.controller';
 import { authenticateJwt } from './middlewares/auth';
@@ -57,28 +58,25 @@ class App {
 	private initializeSwagger() {
 		const options = {
 			swaggerDefinition: {
+				openapi: '3.0.0',
 				info: {
 					title: '接口文档',
 					version: '1.0.0',
 					description:
 						'swagger使用文档：https://swagger.io/docs/specification/basic-structure/',
-				},
-				servers: [
-					{
-						url: 'http://localhost:3000/',
-						description: 'Development server',
-					},
-					{
-						url: 'http://localhost:4000/',
-						description: 'Development server',
-					},
-				],
+				}
 			},
 			apis: ['swagger*.yaml'],
 		};
 
 		const specs = swaggerJSDoc(options);
+		// 将 Swagger JSON 对象写入文件
+		fs.writeFileSync('./swagger-output.json', JSON.stringify(specs, null, 2), 'utf-8');
 		this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+		this.app.get('/swagger.json', (req, res) => {
+			res.setHeader('Content-Type', 'application/json');
+			res.send(specs);
+		  });
 	}
 	public listen() {
 		this.app.listen(this.port, () => {

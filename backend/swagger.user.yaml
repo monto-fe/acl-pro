@@ -61,6 +61,37 @@ paths:
       responses:
         200:
           description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          description: 用户ID
+                        userName:
+                          type: string
+                          description: 用户名
+                        roleName:
+                          type: string
+                          description: 角色名称
+                        email:
+                          type: string
+                          description: 用户的电子邮件
+                  current:
+                    type: number
+                    description: 当前页码
+                  pageSize:
+                    type: number
+                    description: 每页条数
+                  total:
+                    type: number
+                    description: 总记录数
         500:
           description: "Server Error"
     post:
