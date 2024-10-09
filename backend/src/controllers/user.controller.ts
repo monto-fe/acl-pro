@@ -31,7 +31,6 @@ class UsersController {
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user, password, namespace } = req.body as any;
-      console.log("登录信息：", user);
       const findData: User | null = await this.UserService.findUserByUsername({user, namespace});
       if (!findData || findData.password !== md5(password)) {
         res.status(HttpCodeSuccess).json({ ...UserError });

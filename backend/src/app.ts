@@ -44,8 +44,9 @@ class App {
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(authenticateJwt);
 		// this.app.all('*', function(req, res, next) {
-		//   res.setHeader("Content-Type", "application/json;charset=utf-8");
-		//   next();
+		  // console.log("req", req.body)
+		  // res.setHeader("Content-Type", "application/json;charset=utf-8");
+		  // next();
 		// });
 	}
 
@@ -64,9 +65,13 @@ class App {
 					version: '1.0.0',
 					description:
 						'swagger使用文档：https://swagger.io/docs/specification/basic-structure/',
-				}
+				},
+				servers: [{
+					url: 'http://localhost:9000',
+					description: '本地环境'
+				}]
 			},
-			apis: ['swagger*.yaml'],
+			apis: ['./swagger/*.yaml'],
 		};
 
 		const specs = swaggerJSDoc(options);
@@ -74,9 +79,9 @@ class App {
 		fs.writeFileSync('./swagger-output.json', JSON.stringify(specs, null, 2), 'utf-8');
 		this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 		this.app.get('/swagger.json', (req, res) => {
-			res.setHeader('Content-Type', 'application/json');
+		res.setHeader('Content-Type', 'application/json');
 			res.send(specs);
-		  });
+		});
 	}
 	public listen() {
 		this.app.listen(this.port, () => {
