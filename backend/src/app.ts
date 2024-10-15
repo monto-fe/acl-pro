@@ -67,7 +67,7 @@ class App {
 						'swagger使用文档：https://swagger.io/docs/specification/basic-structure/',
 				},
 				servers: [{
-					url: `${DB_HOST}:${PORT}`,
+					url: `http://${DB_HOST}:${PORT}`,
 					description: '本地环境'
 				}]
 			},
