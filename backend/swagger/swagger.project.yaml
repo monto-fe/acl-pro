@@ -121,6 +121,7 @@ paths:
                     description: "返回消息"
         500:
           description: "Server Error"
+
 schemes:
  - https
  - http

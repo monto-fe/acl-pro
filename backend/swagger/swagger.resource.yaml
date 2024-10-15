@@ -196,7 +196,3 @@ paths:
           description: "OK"
         '500':
           description: "Server Error"
-
-servers:
-  - url: https://api.example.com
-  - url: http://api.example.com
