@@ -10,7 +10,7 @@ import fs from 'fs';
 import DB from './databases';
 // import UserController from './controllers/user.controller';
 import { authenticateJwt } from './middlewares/auth';
-import { PORT, DB_HOST } from './config';
+import { PORT, DOMAIN } from './config';
 import { Routes } from './interfaces/routes.interface';
  
 const corsOptions = {
@@ -67,7 +67,7 @@ class App {
 						'swagger使用文档：https://swagger.io/docs/specification/basic-structure/',
 				},
 				servers: [{
-					url: `http://${DB_HOST}:${PORT}`,
+					url: DOMAIN,
 					description: '本地环境'
 				}]
 			},

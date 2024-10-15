@@ -19,6 +19,7 @@
       env_test: {
         PORT: 7001,
         NODE_ENV: 'test',
+        DOMAIN: 'http://lobalhost:9000',
         DB_HOST: "",
         DB_PORT: 3306,
         DB_USER: "",
@@ -32,6 +33,7 @@
       env_production: {
         PORT: 9000,
         NODE_ENV: 'production',
+        DOMAIN: 'http://150.158.119.41:9000',
         DB_HOST: "150.158.119.41",
         DB_PORT: 3306,
         DB_USER: "root",

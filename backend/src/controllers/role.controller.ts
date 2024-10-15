@@ -5,7 +5,7 @@ import { ResponseMap, HttpCodeSuccess } from '../utils/const';
 import { pageCompute } from '../utils/pageCompute';
 import ResourceService from '../services/resource.service';
 
-const { Success, ParamsError } = ResponseMap
+const { Success, ParamsError, RoleExisted } = ResponseMap
 
 class RoleController {
   public RoleService = new RoleService();
@@ -38,7 +38,7 @@ class RoleController {
       if(resourceIds.length === 0){
         res.status(HttpCodeSuccess).json({ 
           ...Success, 
-          data: [],
+          data: rows || [],
           total: 0 
         });
         return 
@@ -64,24 +64,32 @@ class RoleController {
   public createRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: RoleReq = req.body;
-      const remoteUser = req.headers['remoteUser']
-      const params  = query as any;
+      const remoteUser = req.headers['remoteUser'] as string;
+      const params  = query as RoleReq;
+      const { namespace, role, name } = params;
       
-      if (!params) {
+      if (!params || !namespace || !role) {
         res.status(HttpCodeSuccess).json(ParamsError);
         return;
       }
 
-			const createData: any = await this.RoleService.create(
-				{
-          ...params,
-          operator: remoteUser
-        }
-			);
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: createData
-      });
+      // 查询当前roleName是否存在
+      const checkRole = await this.RoleService.findRoleByRoleName({namespace, roleName: role, name})
+      if(checkRole){
+        res.status(HttpCodeSuccess).json(RoleExisted);
+        return;
+      }else{
+        const createData: any = await this.RoleService.create(
+          {
+            ...params,
+            operator: remoteUser
+          }
+        );
+        res.status(HttpCodeSuccess).json({ 
+          ...Success, 
+          data: createData
+        });
+      }
 		} catch (error) {
 			next(error);
 		}
@@ -156,6 +164,7 @@ class RoleController {
 			next(error);
 		}
   }
+  
 }
 
 export default RoleController;

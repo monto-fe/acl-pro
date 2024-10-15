@@ -43,6 +43,10 @@ export const ResponseMap = {
         ret_code: 10010,
         message: '未查询到数据'
     },
+    RoleExisted: {
+        ret_code: 10011,
+        message: '角色Role或Name不能在相同的namespace下重复'
+    }
 }
 
 export const [HttpCodeSuccess, HttpCodeNotFound] = [200, 400]

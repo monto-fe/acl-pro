@@ -1,3 +1,4 @@
+import Sequelize from 'sequelize';
 import { Op } from 'sequelize';
 import DB from '../databases';
 import { RoleReq, Role, UpdateRoleReq } from '../interfaces/role.interface';
@@ -224,6 +225,16 @@ class RoleService {
 	// 通过角色名称查询user
 	public async findUserByRoleName(roleName: string) {
 		const result: any = await DB.sequelize.query(`SELECT t_user_role.user FROM t_user_role JOIN t_role ON t_user_role.role_id = t_role.id WHERE t_role.name LIKE :roleName`, { replacements: { roleName: `%${roleName}%` }, type: DB.sequelize.QueryTypes.SELECT })
+		return result;
+	}
+	// 查询当前角色是否已存在
+	public async findRoleByRoleName({namespace, roleName, name}:{namespace: string, roleName: string, name: string}) {
+		const result: any = await this.Role.findOne({
+			where: Sequelize.or(
+				{ namespace, role: roleName },
+				{ namespace, name }
+			)
+		})
 		return result;
 	}
 }
