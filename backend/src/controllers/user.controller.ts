@@ -1,29 +1,21 @@
 import { NextFunction, Request, Response } from 'express';
+import OpenAI from "openai";
 import md5 from 'md5';
-// import dayjs from 'dayjs';
-// import nodeSendEmail from 'node-send-email'
+
 import { User, UserListReq, UserReq } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
 import RoleService from '../services/role.service';
-// import { 
-  // TokenExpired, 
-// } from '../utils/util'
-import { ResponseMap, HttpCodeSuccess } from '../utils/const'
+import { ResponseMap, HttpCodeSuccess } from '../utils/const';
+import { Administrator } from '../utils';
 import { pageCompute } from '../utils/pageCompute';
-// import { getCodeHtml, registerEmailInfo } from '../utils/registerEmail';
 
 const { 
-  // UserExist, 
   Success, 
   SystemError, 
   UserError, 
-  // ParamsError, 
-  // EmailError,
   LoginError,
-  // AuthCodeError 
 } = ResponseMap
 
-// const { sendEmail } = nodeSendEmail as any
 class UsersController {
   public UserService = new UserService();
   public RoleService = new RoleService();
@@ -90,19 +82,15 @@ class UsersController {
 
   // getUserList
   public getUserList = async (req: Request, res: Response) => {
-    const { id, user, userName, roleName, current, pageSize } = req.query as any;
-    const query:UserListReq = {
-      user: [],
-      ...pageCompute(current, pageSize)
-    }
-    if(id){
-      query.id = Number(id);
-    }
-    if(user){
-      query.user = [user];
-    }else{
-      query.user = [];
-    }
+    const { id, user, userName, roleName, current, pageSize, namespace } = req.query as any;
+    const query: UserListReq = {
+      namespace,
+      user: user ? [user] : [],
+      ...pageCompute(current, pageSize),
+      ...(id && { id: Number(id) })
+    };
+
+    console.log('getUserList:', query)
     
     try{
       // 如果roleName存在，则查询user，number[]
@@ -125,10 +113,10 @@ class UsersController {
         const intersection: string[] = roleUserList.filter((item:string) => userNameList.includes(item))
         query.user = intersection.concat(query.user ? query.user : []);
       }
-      if(query.user && query.user.length === 0 && !query.id){
-        res.status(HttpCodeSuccess).json({...Success, count: 0, data: []}); 
-        return
-      }
+      // if(query.user && query.user.length === 0 && !query.id){
+      //   res.status(HttpCodeSuccess).json({...Success, count: 0, data: []}); 
+      //   return
+      // }
       // 如果name存在，则查询对应的user，User[]
       // 合并user,进行查询
       const result = await this.UserService.getUserList(query)
@@ -227,8 +215,18 @@ class UsersController {
   // deleteUser
   public deleteUser = async (req: Request, res: Response) => {
     const { namespace, id, user } = req.body;
+    // params check
+    if(!namespace || !id || !user){
+      res.status(HttpCodeSuccess).json({...SystemError, message: 'params is required!'});
+      return
+    }
+    // Super Admin not allow to delete
+    if(user === Administrator){
+      res.status(HttpCodeSuccess).json({...SystemError, message: 'Super Admin not allow to delete'});
+      return
+    }
     try{
-      const result = await this.UserService.deleteUser({namespace, id, user})
+      const result = await this.UserService.deleteUser({ namespace, id, user })
       if(result){
         res.status(HttpCodeSuccess).json({...Success, data: result});
       }else{

@@ -192,21 +192,23 @@ paths:
           schema:
             type: string
           required: true
-        - in: body
-          name: requestBody
-          schema:
-            type: object
-            required:
-              - namespace
-              - id
-              - user
-            properties:
-              namespace:
-                type: string
-              id:
-                type: number
-              user:
-                type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - namespace
+                - user
+                - name
+              properties:
+                namespace:
+                  type: string
+                id:
+                  type: number
+                user:
+                  type: string
       responses:
         200:
           description: "OK"
@@ -321,101 +323,6 @@ paths:
                     description: "返回信息"
                     example: "ok"    
                     
-        500:
-          description: "Server Error"
-  /v1/register:
-    post:
-      tags:
-      - User
-      summary: "【不可用】注册"
-      description: "create a user"
-      parameters:
-        - in: body
-          name: requestBody
-          schema:
-            type: object
-            required:
-              - username
-              - password
-              - email
-              - authCode
-            properties:
-              username:
-                type: string
-              password:
-                type: string
-              authCode:
-                type: string
-              email:
-                type: string
-              phone:
-                type: string
-              jobId: 
-                type: number
-              job:
-                type: string
-      responses:
-        200:
-          description: "OK"
-        500:
-          description: "Server Error"
-        default:
-          description: "Server Error"
-  /v1/email/code:
-    post:
-      tags: 
-      - User
-      summary: "【不可用】注册发送邮件验证码"
-      parameters:
-        - in: body
-          name: requestBody
-          schema:
-            type: object
-            required:
-              - email
-              - codeType
-            properties:
-              email:
-                type: string
-              codeType:
-                type: number
-      responses:
-        200:
-          description: "OK"
-        500:
-          description: "Server Error"
-  /v1/reset/password:
-    post:
-      tags: 
-      - User
-      summary: "【不可用】重置用户密码"
-      parameters:
-        - in: header
-          name: jwt_token
-          schema:
-            type: string
-          required: true
-        - in: body
-          name: requestBody
-          schema:
-            type: object
-            required:
-              - id
-              - email
-              - authCode
-              - password
-            properties:
-              id:
-                type: number
-              email:
-                type: string
-              authCode:
-                type: number
-              password:
-                type: string
-      responses:
-        200:
-          description: "OK"
         500:
           description: "Server Error"
 schemes:
