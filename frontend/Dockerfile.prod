@@ -1,20 +1,30 @@
 # Common build stage
 FROM node:18-alpine as common-build-stage
 
-COPY ./fronted ./app
+COPY ./frontend ./app
 
 WORKDIR /app
 
-# RUN npm i -g pm2 --registry=https://registry.npm.taobao.org
-RUN npm i -g pm2
-RUN pnpm install
+RUN npm i -g vite && npm i -g pnpm
+
+RUN pnpm install && pnpm build
+
+RUN ls -al
 
 # RUN npm cache clean --force && npm install pm2 -g && npm install
 
 # RUN npm prune --production
 
+# EXPOSE 3000
+
+FROM nginx:1.19.1 as production-build-stage
+
+COPY ./frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=common-build-stage /app/dist /usr/share/nginx/html
+
 EXPOSE 80
 
-FROM common-build-stage as production-build-stage
+CMD ["nginx", "-g", "daemon off;"]
 
-CMD ["pnpm", "deploy:prod", "&&", "sleep", "infinity"]
+# CMD ["pnpm", "deploy:prod", "&&", "sleep", "infinity"]

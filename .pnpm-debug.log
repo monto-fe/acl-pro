@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+    "err": {
+      "name": "pnpm",
+      "message": "No package.json (or package.yaml, or package.json5) was found in \"/Users/user/Documents/js学习心得/acl-pro\".",
+      "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+      "stack": "pnpm: No package.json (or package.yaml, or package.json5) was found in \"/Users/user/Documents/js学习心得/acl-pro\".\n    at readProjectManifest (/Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:41090:13)\n    at async Object.readProjectManifestOnly (/Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:41094:28)\n    at async readProjectManifestOnly (/Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:41313:24)\n    at async Object.handler (/Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:129722:24)\n    at async /Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:133914:20\n    at async run (/Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:133889:34)\n    at async runPnpm (/Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:134100:5)\n    at async /Users/user/.npm-global/lib/node_modules/pnpm/dist/pnpm.cjs:134092:7"
+    }
+  }
+}
