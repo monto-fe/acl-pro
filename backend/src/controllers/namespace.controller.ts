@@ -37,7 +37,7 @@ class NamespaceController {
   public createProject = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: NamespaceReq = req.body;
-      const remoteUser = req.headers['remoteUser']
+      const remoteUser = req.headers['remoteUser'] as string;
       const { namespace, parent, name, describe } = query;
       
       if (!namespace || !name ) {
@@ -92,12 +92,8 @@ class NamespaceController {
 
   public deleteProject = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body: {id: number } = req.body;
-      const { id } = body;
-    
-      const result: any = await this.NamespaceService.deleteSelf({
-				id
-      });
+      const { id } = req.body as any;
+      const result: any = await this.NamespaceService.deleteSelf({ id });
       if(result){
         return ResponseHandler.success(res);
       }else{

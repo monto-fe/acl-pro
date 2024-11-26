@@ -996,49 +996,55 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "in": "body",
-            "name": "requestBody",
-            "schema": {
-              "type": "object",
-              "required": [
-                "id",
-                "namespace"
-              ],
-              "properties": {
-                "id": {
-                  "type": "number"
-                },
-                "namespace": {
-                  "type": "string",
-                  "comments": "必选，不可更改"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "phone_number": {
-                  "type": "string"
-                },
-                "job": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                },
-                "role_ids": {
-                  "type": "array",
-                  "items": {
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "namespace"
+                ],
+                "properties": {
+                  "id": {
                     "type": "number"
+                  },
+                  "namespace": {
+                    "type": "string",
+                    "comments": "必选，不可更改"
+                  },
+                  "user": {
+                    "type": "string;"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "phone_number": {
+                    "type": "string"
+                  },
+                  "job": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "role_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
                   }
                 }
               }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK"

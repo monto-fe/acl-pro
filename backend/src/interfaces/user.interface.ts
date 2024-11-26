@@ -61,6 +61,7 @@ export interface Token {
 export interface UserListReq extends PageModel {
     id?: number;
     user?: string[];
+    namespace?: string;
     name?: string;
     roleName?: string;
 }
@@ -89,4 +90,25 @@ export interface UpdateUserReq {
     email?: string;
     role_ids: number[];
     operator: string;
+}
+
+export interface UserListQuery {
+    id: number;
+    user: string;
+    userName: string;
+    roleName: string;
+    current: number;
+    pageSize: number;
+    namespace: string;
+}
+
+export interface UserRole {
+    id: number;
+    namespace: string;
+    user: string;
+    name: string;
+    job: string;
+    phone_number: string;
+    email: string;
+    role_id: number;
 }

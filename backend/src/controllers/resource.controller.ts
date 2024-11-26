@@ -12,14 +12,13 @@ class ResourceController {
 
   public getResources = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query: any = req.query;
-      const { namespace, resource, name, category, current, pageSize } = query;
+      const { namespace, resource, name, category, current, pageSize } = req.query as any;
       if (!namespace) {
         return ResponseHandler.error(res, ParamsError);
       }
       const { offset, limit } = pageCompute(current, pageSize);
 
-      const getData: any = await this.ResourceService.findWithAllChildren(
+      const { rows, count }: any = await this.ResourceService.findWithAllChildren(
 				{
           namespace,
           resource,
@@ -29,7 +28,6 @@ class ResourceController {
           limit
         }
 			);
-      const { rows, count } = getData;
       return ResponseHandler.success(res, {
         data: rows || [],
         total: count
@@ -98,24 +96,10 @@ class ResourceController {
       if(!currentResource){
         return ResponseHandler.error(res, ParamsError, 'resource is not exist');
       }
-
       // 校验name是否已存在
       if(name){
-        // const ResourceResult = await this.ResourceService.findByNamespaceAndName({
-        //   namespace,
-        //   name
-        // })
-        // if(ResourceResult){
-        //   res.status(HttpCodeSuccess).json({ 
-        //     ...ParamsError,
-        //     message: '要新增的资源已存在，无需重复添加'
-        //   });
-        //   return
-        // }else{
-          body.name = name;
-        // }
+        body.name = name;
       }
-      
       if(!ResourceCategory.includes(category)){
         return ResponseHandler.error(res, ParamsError);
       }else{
