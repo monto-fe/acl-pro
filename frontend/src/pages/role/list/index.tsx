@@ -144,6 +144,27 @@ function App() {
     },
   ];
 
+  const formItems = [
+    {
+      label: '角色名',
+      name: 'name',
+      type: 'Input',
+      span: 8
+    },
+    {
+      label: '角色',
+      name: 'role',
+      type: 'Input',
+      span: 8
+    },
+    {
+      label: '资源',
+      name: 'resource',
+      type: 'Input',
+      span: 8
+    },
+  ];
+
   return (
     <div className='layout-main-conent'>
       <CommonTable
@@ -156,8 +177,7 @@ function App() {
           </Button>
         }
         useTools
-        fuzzySearchKey='role'
-        fuzzySearchPlaceholder="输入角色搜索"
+        filterFormItems={formItems}
         scroll={{ x: 1200 }}
       />
 

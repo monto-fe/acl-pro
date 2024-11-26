@@ -42,9 +42,7 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
             sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }}
-            
-            TIMESTAMP=${{ env.TIMESTAMP }}
 
-            cd /data/uacl 
+            cd /data/uacl
             
             docker compose restart
