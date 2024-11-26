@@ -1,14 +1,11 @@
 import md5 from 'md5';
 import { Op } from 'sequelize';
+
 import DB from '../databases';
 import { HttpException } from '../exceptions/HttpException';
-import { User, UserResponse, UpdateUserReq, UserReq } from '../interfaces/user.interface';
+import { User, UserResponse, UpdateUserReq, UserReq, LoginParams } from '../interfaces/user.interface';
 import { getUnixTimestamp, DefaultPassword } from '../utils';
-import { 
-  generateSignToken, 
-  TokenSecretKey, 
-  TokenExpired
-} from '../utils/util'
+import { generateSignToken, TokenSecretKey, TokenExpired } from '../utils/util'
 
 class UserService {
   public User = DB.Users;
@@ -44,7 +41,7 @@ class UserService {
     }
   }
 
-  public async findUserByUsername({user, namespace}:{user: string, namespace: string}): Promise<User | null> {
+  public async findUserByUsername({user, namespace}:LoginParams): Promise<User | null> {
     const findUser: User | null = await this.User.findOne({
       where: { user, namespace },
       raw: true
@@ -66,7 +63,7 @@ class UserService {
     return user !== null
   }
 
-  public async login(Data: any): Promise<any> {
+  public async login(Data: LoginParams): Promise<any> {
     const { id, user, namespace } = Data;
     // TODO: 先检查当前的有效期是否过期，如果不过期则取最新的值
     const jwtToken = generateSignToken({id, user, namespace, create_time: this.now }, TokenSecretKey, TokenExpired)
@@ -95,8 +92,16 @@ class UserService {
     return createUser;
   }
 
-  public async updateUser(Data: any, Id: number): Promise<any> {
-    const res: any = await this.User.update({...Data}, {where: {id: Id}})
+  public async updateUser(Data: UpdateUserReq): Promise<any> {
+    const { user, name, email, phone_number, job } = Data;
+    const { id } = Data;
+    const res: any = await this.User.update({
+      user, name, email, phone_number, job
+    }, {
+      where: {
+        id
+      }
+    })
     return res
   }
 

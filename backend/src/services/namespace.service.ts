@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+import { Op } from 'sequelize';
 import DB from '../databases';
 import { NamespaceReq, NamespaceParams, Namespace } from '../interfaces/namespace.interface';
 import { getUnixTimestamp } from '../utils';

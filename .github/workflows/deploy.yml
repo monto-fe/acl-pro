@@ -2,9 +2,9 @@ name: API CI
 
 on:
   push:
-    branches: [ "main", "feature/*" ]
+    branches: [ "main", "feature/*", "pre" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "pre" ]
 
 jobs:
   build:
@@ -42,19 +42,7 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
             sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }}
-            
-            TIMESTAMP=${{ env.TIMESTAMP }}
 
-            while ! grep -q "${TIMESTAMP}" /data/uacl/.env; do
-                echo "Waiting for update_env.sh to complete..."
-                sleep 2
-            done
-
-            cd /data/uacl 
-
-            if ! grep -q "${TIMESTAMP}" /data/uacl/.env; then
-                echo "Environment update failed, exiting..."
-                exit 1
-            fi
+            cd /data/uacl
             
             docker compose restart

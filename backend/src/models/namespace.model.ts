@@ -30,19 +30,19 @@ export default function (sequelize: Sequelize): typeof NamespaceModel {
       },
       parent: {
           type: new DataTypes.STRING(128),
-          allowNull: false,
+          allowNull: true,
           comment: '所属父项目组',
           defaultValue: '',
       },
       name: {
-          type: new DataTypes.STRING(256),
+          type: new DataTypes.STRING(128),
           allowNull: false,
           comment: '项目组中文名',
           defaultValue: '',
       },
       describe: {
           type: new DataTypes.STRING(128),
-          allowNull: false,
+          allowNull: true,
           comment: '描述',
           defaultValue: '',
       },

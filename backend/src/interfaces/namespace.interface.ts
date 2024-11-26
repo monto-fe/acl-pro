@@ -1,5 +1,5 @@
 import { PageModel } from './common.interface';
-// 命名空间
+// namespace
 export interface Namespace {
     id: number;
     namespace: string;

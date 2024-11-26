@@ -14,7 +14,7 @@ services:
 
   # 后端服务
   backend:
-    build: ./backend                  # 假设后端Dockerfile在当前目录的backend文件夹下
+    build: ./backend  # 假设后端Dockerfile在当前目录的backend文件夹下
     depends_on:
       - mysql
     environment:
