@@ -29,6 +29,18 @@ export interface UserResponse {
     count: number;
 }
 
+export interface UserLogin {
+    namespace: string;
+    user: string;
+    password: string;
+}
+
+export interface LoginParams {
+    id?: number;
+    user: string, 
+    namespace: string
+}
+
 export interface UserQuery {
     id: number;
     username: string;

@@ -1,39 +1,35 @@
 export const ResponseMap = {
     Success: {
         ret_code: 0,
-        message: '成功'
+        message: 'success'
     },
     UserExist: {
         ret_code: 10000,
-        message: '用户名已存在'
+        message: 'username already exist'
     },
     SystemError: {
         ret_code: 10001,
-        message: '系统异常'
+        message: 'system error'
     },
     UserError: {
         ret_code: 10002,
-        message: '用户名或密码错误'
+        message: 'username or password error'
     },
     ParamsError: {
         ret_code: 10003,
-        message: '参数错误'
+        message: 'params error'
     },
     EmailError: {
         ret_code: 10004,
-        message: '邮箱已被使用'
+        message: 'email already exist'
     },
     LoginError: {
         ret_code: 10005,
-        message: '用户未登录'
+        message: 'user not login'
     },
     AuthCodeError: {
         ret_code: 10006,
-        message: '验证码错误'
-    },
-    CategoryExisted: {
-        ret_code: 10008,
-        message: '该问题类型已存在'
+        message: 'Incorrect verification code.'
     },
     TokenExpired: {
         ret_code: 10009,

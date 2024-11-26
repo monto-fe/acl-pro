@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Routes } from '../interfaces/routes.interface';
 
+import { Routes } from '../interfaces/routes.interface';
 import PermissionController from '../controllers/permission.controller';
 
 class Route implements Routes {
@@ -19,10 +19,6 @@ class Route implements Routes {
     
     this.router.post('/permission/getRolePermissions', this.PermissionController.getRolePermissions)
     this.router.post('/permission/getSelfPermissions', this.PermissionController.getSelfPermissions)
-    // this.router.post('/permission/getUserRoles', this.PermissionController.getSelfPermissions)
-    // this.router.post('/permission/updateRolePermissions', this.PermissionController.getSelfPermissions)
-    // this.router.post('/permission/updateUserInfo', this.PermissionController.getSelfPermissions)
-    // this.router.post('/permission/checkPermission', this.PermissionController.checkPermission)
   }
 }
 

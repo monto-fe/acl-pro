@@ -155,38 +155,6 @@ class PermissionService {
 			}
 		})
 		return resources
-		// 连表查，先查用户角色，再查角色权限，根据角色权限返回所有的权限资源
-		// const query:any = {
-		// 	[`t_resource.namespace`]: namespace,
-		// 	[`t_user_role.namespace`]: namespace,
-		// 	[`t_user_role.user`]: user,
-		// 	[`t_user_role.status`]: 1,
-		// }
-		// if (category) {
-		// 	query[`t_resource.category`] = category
-		// }
-		
-		// const result = await DB.Resource.findAll({
-		// 	attributes: ['id', 'name', 'category', 'describe', 'resource', 'properties'],
-		// 	include: [
-		// 		{
-		// 			model: DB.RolePermission,
-		// 			as: 't_role_permission',
-		// 			attributes: ['id', 'role_id', 'resource_id', 'describe', 'operator'],
-		// 			include: [
-		// 				{
-		// 					model: DB.UserRole,
-		// 					as: 't_user_role',
-		// 				}
-		// 			]
-		// 		}
-		// 	],
-		// 	where: query,
-		// 	order: [
-		// 		['t_resource.category', 'asc'],
-		// 		['t_resource.id', 'asc']
-		// 	]
-		// })
 	}
 }
 

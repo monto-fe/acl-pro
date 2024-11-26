@@ -24,11 +24,7 @@
         DB_PORT: 3306,
         DB_USER: "",
         DB_PASSWORD: "",
-        DB_DATABASE: "",
-        BUCKET_NAME: "interview-1256907486",
-        BUCKET_REGION: "ap-shanghai",
-        SECRET_ID: "",
-        SECRET_KEY: "EJCuRtCf1FI9oKe4PdjomvtgGe7Ukrpb"
+        DB_DATABASE: ""
       },
       env_production: {
         PORT: 9000,
@@ -38,11 +34,7 @@
         DB_PORT: 3306,
         DB_USER: "root",
         DB_PASSWORD: "mysql123456",
-        DB_DATABASE: "uacl",
-        BUCKET_NAME: "interview-1256907486",
-        BUCKET_REGION: "ap-shanghai",
-        SECRET_ID: "",
-        SECRET_KEY: "EJCuRtCf1FI9oKe4PdjomvtgGe7Ukrpb"
+        DB_DATABASE: "uacl"
       }
     }
   ]

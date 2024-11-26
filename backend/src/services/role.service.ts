@@ -237,6 +237,15 @@ class RoleService {
 		})
 		return result;
 	}
+
+	// 通过id和namespace获取角色信息
+	public async findRoleById(Data: any): Promise<any> {
+		const { namespace, id } = Data;
+		const result: any = await this.Role.findOne({
+			where: { namespace, id }
+		})
+		return result;
+	}
 }
 
 export default RoleService;
