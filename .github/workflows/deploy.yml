@@ -41,8 +41,20 @@ jobs:
           username: ${{ secrets.REMOTE_USERNAME }}
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
-            sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }} 
+            sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }}
+            
+            TIMESTAMP=${{ env.TIMESTAMP }}
+
+            while ! grep -q "${TIMESTAMP}" /data/uacl/.env; do
+                echo "Waiting for update_env.sh to complete..."
+                sleep 2
+            done
 
             cd /data/uacl 
+
+            if ! grep -q "${TIMESTAMP}" /data/uacl/.env; then
+                echo "Environment update failed, exiting..."
+                exit 1
+            fi
             
             docker compose restart

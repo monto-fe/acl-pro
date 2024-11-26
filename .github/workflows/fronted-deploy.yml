@@ -2,7 +2,7 @@ name: fronted CI
 
 on:
   push:
-    branches: [ "feature/*" ]
+    branches: [ "feature/*", "pre" ]
   pull_request:
     branches: [ "feature/*" ]
 

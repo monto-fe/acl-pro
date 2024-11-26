@@ -61,14 +61,14 @@ class App {
 			swaggerDefinition: {
 				openapi: '3.0.0',
 				info: {
-					title: '接口文档',
+					title: 'api document',
 					version: '1.0.0',
 					description:
-						'swagger使用文档：https://swagger.io/docs/specification/basic-structure/',
+						'swagger guide：https://swagger.io/docs/specification/basic-structure/',
 				},
 				servers: [{
 					url: DOMAIN,
-					description: '本地环境'
+					description: 'local environment'
 				}]
 			},
 			apis: ['./swagger/*.yaml'],
