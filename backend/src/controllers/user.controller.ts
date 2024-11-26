@@ -82,6 +82,7 @@ class UsersController {
       // 合并user,进行查询
       const result = await this.UserService.getUserList(query)
       const { data, count } = result;
+
       if(count > 0){
         // 给每个user，查询对应角色
         const userList = data.map((user:any) => {
