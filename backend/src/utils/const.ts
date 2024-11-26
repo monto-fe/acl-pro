@@ -33,28 +33,18 @@ export const ResponseMap = {
     },
     TokenExpired: {
         ret_code: 10009,
-        message: '登录凭证已过期'
+        message: 'The login credentials have expired.'
     },
     SystemEmptyError: {
         ret_code: 10010,
-        message: '未查询到数据'
+        message: 'No data found.'
     },
     RoleExisted: {
         ret_code: 10011,
-        message: '角色Role或Name不能在相同的namespace下重复'
+        message: 'The role or name cannot be repeated in the same namespace.'
     }
 }
 
 export const [HttpCodeSuccess, HttpCodeNotFound] = [200, 400]
-
-export const SimulateTypeMap = {
-    Special: 1,
-    Custom: 2
-}
-
-export const QuestionResourceMap = {
-    Public: 'Public',
-    Private: 'Private'
-}
 
 export const ResourceCategory = ["API", "Menu", "Action", "Other"];

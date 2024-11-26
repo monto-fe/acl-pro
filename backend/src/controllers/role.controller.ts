@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
+
 import { RoleReq, UpdateRoleReq } from 'interfaces/role.interface';
 import RoleService from '../services/role.service';
 import { ResponseMap } from '../utils/const';
+import { Administrator } from '../utils/index';
 import { pageCompute } from '../utils/pageCompute';
 import ResourceService from '../services/resource.service';
 import ResponseHandler from '../utils/responseHandler';
@@ -55,9 +57,8 @@ class RoleController {
 
   public createRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query: RoleReq = req.body;
+      const params: RoleReq = req.body;
       const remoteUser = req.headers['remoteUser'] as string;
-      const params  = query as RoleReq;
       const { namespace, role, name } = params;
       
       if (!params || !namespace || !role) {
@@ -96,7 +97,7 @@ class RoleController {
       if(!role){
         return ResponseHandler.error(res, SystemEmptyError, 'Role not found');
       }
-      const replaceRole = role.dataValues.role === 'admin' ? 'admin' : newRole;
+      const replaceRole = role.dataValues.role === Administrator ? Administrator : newRole;
       const response: any = await this.RoleService.update({
         id,
         namespace,

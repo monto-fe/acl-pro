@@ -20,8 +20,7 @@ class PermissionController {
         role_id,
         ...pageCompute(current, pageSize)
       }
-      const getData: any = await this.PermissionService.getRolePermissions(params);
-      const { rows, count } = getData;
+      const { rows, count }: any = await this.PermissionService.getRolePermissions(params);
       return ResponseHandler.success(res, {
         data: rows || [],
         total: count
@@ -114,9 +113,7 @@ class PermissionController {
 
   public cancelRolePermission = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body: any = req.body;
-      const { namespace, role_id, resource_id } = body;
-    
+      const { namespace, role_id, resource_id } = req.body;
       const response: any = await this.PermissionService.cancelRolePermissionReq({
 				namespace, role_id, resource_id
       });
@@ -128,15 +125,13 @@ class PermissionController {
 
   public cancelUserRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body: any = req.body;
-      const { namespace, user, role_id, role_ids=[] } = body;
+      const { namespace, user, role_id, role_ids=[] } = req.body;
       // TODO: 在controller校验参数，service不处理参数
       const result: any = await this.PermissionService.cancelUserRole({
 				namespace, user, role_id, role_ids
       });
       if (result) {
         return ResponseHandler.success(res);
-        // res.status(HttpCodeSuccess).json({...Success});
       }else{
         return ResponseHandler.error(res, Error);
       }

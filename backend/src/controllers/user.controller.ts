@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import md5 from 'md5';
 
-import { User, UserListReq, UserReq, UserLogin } from '../interfaces/user.interface';
+import { User, UserListReq, UserReq, UserLogin, UserListQuery } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
 import RoleService from '../services/role.service';
 import { ResponseMap } from '../utils/const';
@@ -49,7 +49,7 @@ class UsersController {
 
   // getUserList
   public getUserList = async (req: Request, res: Response) => {
-    const { id, user, userName, roleName, current, pageSize, namespace } = req.query as any;
+    const { id, user, userName, roleName, current, pageSize, namespace } = req.query as unknown as UserListQuery;
     const query: UserListReq = {
       namespace,
       user: user ? [user] : [],
@@ -96,7 +96,7 @@ class UsersController {
           });
         })
       }
-      return ResponseHandler.success(res, {data, count});
+      return ResponseHandler.success(res, { data, count });
     }catch(err:any){
       return ResponseHandler.error(res, err);
     }
@@ -106,9 +106,8 @@ class UsersController {
   public createInnerUser = async (req: Request, res: Response) => {
     const { namespace, user, name, job, password, email, phone_number, role_ids }: UserReq = req.body;
     const remoteUser = req.headers['remoteUser'] as string
-    // TODO: 统一检验namespace是否存在于库里
-    if(!namespace){
-      return ResponseHandler.error(res, SystemError, 'Namespace is required!');
+    if(!namespace || !user){
+      return ResponseHandler.error(res, SystemError, 'Namespace and user is required!');
     }
     // 1、检查新增用户是否已存在
     try{
@@ -117,8 +116,11 @@ class UsersController {
         return ResponseHandler.error(res, SystemError, 'User already exist!');
       }
       // 2、判断新增用户是否选择角色，如果选择角色
+      if(!name||!password){
+        return ResponseHandler.error(res, SystemError, 'Name and password is required!');
+      }
       const result = await this.UserService.createInnerUser({
-        namespace, user, name, job, password, email, phone_number, role_ids, operator: remoteUser
+        namespace, user, name, job, password: md5(password), email, phone_number, role_ids, operator: remoteUser
       })
       return ResponseHandler.success(res, result);
     }catch(err:any){
@@ -127,9 +129,8 @@ class UsersController {
   }
 
   public updateInnerUser = async (req: Request, res: Response) => {
-    const { namespace, id=0, name, job, password, email, phone_number, role_ids }: UserReq = req.body;
+    const { namespace, id=0, name, job, user, password, email, phone_number, role_ids }: UserReq = req.body;
     const operator = req.headers['remoteUser'] as string
-    // TODO:校验参数,邮件、手机号
     if(!namespace || id === 0){
       return ResponseHandler.error(res, SystemError, 'Namespace and id is required!');
     }
@@ -162,6 +163,7 @@ class UsersController {
     if(Array.isArray(role_ids) && role_ids.length > 0){
       updateInfo.role_ids = role_ids
     }
+
     try{
       const result = await this.UserService.updateInnerUser(updateInfo)
       return ResponseHandler.success(res, result);
