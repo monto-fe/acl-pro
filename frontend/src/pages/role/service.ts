@@ -44,13 +44,13 @@ export async function removeData(id: number): Promise<any> {
   });
 }
 
-export async function assertRolePermission(id: number, permissions: Permission[]): Promise<any> {
+export async function assertRolePermission(role_id: number, resource_ids: Permission[]): Promise<any> {
   return request({
-    url: `/role/permission`,
+    url: `/permission/assertRolePermission`,
     method: 'post',
     data: {
-      id,
-      permissions
+      role_id,
+      resource_ids: resource_ids.map((p) => p.resource_id)
     },
   });
 }

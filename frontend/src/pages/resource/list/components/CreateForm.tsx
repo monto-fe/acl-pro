@@ -4,6 +4,7 @@ import { Form } from 'antd';
 
 import { TableListItem } from '../../data.d';
 import FormModal from '@/pages/component/form/FormModal';
+import { resourceCategories } from '../../const';
 
 interface ICreateFormProps {
   visible: boolean;
@@ -33,10 +34,16 @@ function CreateForm(props: ICreateFormProps) {
       type: "Input"
     },
     {
-      label: "资源属性",
-      name: "properties",
+      label: "资源分类",
+      name: "category",
       required: true,
-      type: "Input"
+      type: "Select",
+      options: resourceCategories.map((item: string) => {
+        return {
+          label: item,
+          value: item
+        }
+      })
     },
     {
       label: "描述",

@@ -144,10 +144,10 @@ function App() {
                   }
                   trigger='hover'
                 >
-                  {record.role[0].name + '...'}
+                  {record.role[0]?.name + '...'}
                 </Popover>
               ) : (
-                record.role[0].name
+                record.role[0]?.name
               )}
             </span>
           ) : (
