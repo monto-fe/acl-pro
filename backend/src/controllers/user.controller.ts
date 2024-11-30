@@ -30,7 +30,7 @@ class UsersController {
       if (!jwtToken) {
         return ResponseHandler.error(res, LoginError);
       }
-      return ResponseHandler.success(res, { jwtToken, user });
+      return ResponseHandler.success(res, { jwt_token: jwtToken, user });
     } catch (error) {
       next(error);
     }
