@@ -165,9 +165,9 @@ request.interceptors.response.use(
  *             { cType: true }  Mandatory Settings Content-Type:application/json;charset=UTF-8
  * ......
  */
-export default function ajax<T = any, R = AxiosResponse<T>>(
+export default async function ajax<T = any, R = AxiosResponse<T>>(
   config: AxiosRequestConfig & { cType?: boolean },
-): AxiosPromise<R> {
+): Promise<AxiosResponse<R, any>> {
   return request(config)
     .then((response: AxiosResponse) => response.data)
     .catch((error) => errorHandler(error));

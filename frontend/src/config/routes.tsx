@@ -79,7 +79,7 @@ export default memo(() => {
     );
   }
 
-  // 默认 BlankLayout
+  // 默认 BlankLayout (目前只有 404 页面)
   return (
     <BlankLayout>
       <SuspenseLazy>{routesElement}</SuspenseLazy>
