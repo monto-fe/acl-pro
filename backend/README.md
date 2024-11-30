@@ -14,7 +14,6 @@ md5 需要增加复杂度
 - [x] 需要鉴权的接口，过一下鉴权
 - Permission相关的接口调试通过
 
-- 接口文档除了标明的不可用，其他都可以了
 - 接口参数统一小写、下划线格式返回
 - 登录完成后，请求头传递参数jwt_token，作为登录凭证
 - 如何将service中的错误返回给controller，不要返回成功
@@ -26,10 +25,14 @@ md5 需要增加复杂度
 没有生效
 ```
 hooks: {
-          beforeCreate: (user) => {
-              const now = dayjs().unix()
-              user.create_time = now
-              user.update_time = now
-          }
-      }
+    beforeCreate: (user) => {
+        const now = dayjs().unix()
+        user.create_time = now
+        user.update_time = now
+    }
+}
 ```
+
+- 管理员账号不允许删除
+- 删除多余的用户
+- 一键部署

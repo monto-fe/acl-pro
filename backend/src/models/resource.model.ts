@@ -29,44 +29,37 @@ export default function (sequelize: Sequelize): typeof ResourceModel {
         allowNull: false,
         comment: '所属项目组',
         defaultValue: '',
-        // collate: 'utf8_bin',
       },
       category: {
           type: new DataTypes.STRING(128),
           allowNull: false,
           comment: '资源分类',
-          // collate: 'utf8_bin',
           defaultValue: '',
       },
       resource: {
           type: new DataTypes.STRING(128),
-          // collate: 'utf8_bin',
           allowNull: false,
           comment: '资源标识',
           defaultValue: '',
       },
       properties: {
-          type: new DataTypes.TEXT,
-          // collate: 'utf8_bin',
-          allowNull: false,
+          type: new DataTypes.STRING(255),
+          allowNull: true,
           comment: '资源属性 (JSON Schema)',
       },
       name: {
           type: new DataTypes.STRING(128),
-          // collate: 'utf8_bin',
           allowNull: false,
           comment: '资源标识',
           defaultValue: '',
       },
       describe: {
           type: new DataTypes.TEXT,
-          // collate: 'utf8_bin',
-          allowNull: false,
+          allowNull: true,
           comment: '描述',
       },
       operator: {
           type: new DataTypes.STRING(128),
-          // collate: 'utf8_bin',
           allowNull: false,
           comment: '创建人',
           defaultValue: '',
@@ -89,11 +82,11 @@ export default function (sequelize: Sequelize): typeof ResourceModel {
       sequelize,
       timestamps: false,
       indexes: [
-          {
-              name: 'name',
-              fields: ['name'],
-              unique: true,
-          }
+        {
+          name: 'unique_namespace_name',
+          fields: ['namespace', 'name'],
+          unique: true,
+        }
       ]
     },
   );

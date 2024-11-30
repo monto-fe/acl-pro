@@ -2,9 +2,9 @@ name: fronted CI
 
 on:
   push:
-    branches: [ "feature/*" ]
+    branches: [ "feature/*", "pre" ]
   pull_request:
-    branches: [ "feature/*" ]
+    branches: [ "feature/*", "pre" ]
 
 jobs:
   build:
@@ -44,6 +44,8 @@ jobs:
           username: ${{ secrets.REMOTE_USERNAME }}
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
-            sh /data/uacl/frontend/deploy.sh ${{ env.TIMESTAMP }}
+            sh /data/uacl/update_env.sh FRONTEDTAG ${{ env.TIMESTAMP }} 
+
+            cd /data/uacl 
             
-    
+            docker compose restart 2>/dev/null

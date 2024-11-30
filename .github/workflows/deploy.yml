@@ -2,9 +2,9 @@ name: API CI
 
 on:
   push:
-    branches: [ "main", "feature/*" ]
+    branches: [ "main", "feature/*", "pre" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "pre" ]
 
 jobs:
   build:
@@ -32,4 +32,17 @@ jobs:
       # 推送 Docker 镜像到 Docker Hub
       - name: Push the Docker image
         run: docker push ${{ secrets.DOCKER_REGISTRY }}/uacl/api:${{ env.TIMESTAMP }}
-    
+      
+      # 在远程服务器执行脚本
+      - name: Run remote script
+        uses: appleboy/ssh-action@v0.1.5
+        with: 
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USERNAME }}
+          password: ${{ secrets.REMOTE_PASSWORD }}
+          script: |
+            sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }}
+
+            cd /data/uacl
+            
+            docker compose restart

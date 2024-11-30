@@ -1,6 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import { Role } from '../interfaces/role.interface';
-// import { RolePermissionModel } from './rolePermission.model';
 
 export type RoleCreationAttributes = Optional<Role, 'id'>;
 
@@ -15,11 +14,6 @@ export class RoleModel extends Model<Role, RoleCreationAttributes> implements Ro
     public readonly update_time: number;
 }
 
-// RoleModel.hasMany(RolePermissionModel, {
-    // foreignKey: 'role_id',
-    // as: 'role_permission'
-// });
-
 export default function (sequelize: Sequelize): typeof RoleModel {
     RoleModel.init(
     {
@@ -29,31 +23,31 @@ export default function (sequelize: Sequelize): typeof RoleModel {
           primaryKey: true,
       },
       namespace: {
-          type: new DataTypes.STRING(512),
+          type: new DataTypes.STRING(128),
           allowNull: false,
           comment: '所属项目组',
           defaultValue: '',
       },
       role: {
-          type: new DataTypes.STRING(512),
+          type: new DataTypes.STRING(255),
           allowNull: false,
           comment: '角色标识',
           defaultValue: '',
       },
       name: {
-          type: new DataTypes.STRING(512),
+          type: new DataTypes.STRING(255),
           allowNull: false,
           comment: '角色中文名',
           defaultValue: '',
       },
       describe: {
-          type: new DataTypes.STRING(512),
-          allowNull: false,
+          type: new DataTypes.STRING(255),
+          allowNull: true,
           comment: '描述',
           defaultValue: '',
       },
       operator: {
-          type: new DataTypes.STRING(512),
+          type: new DataTypes.STRING(128),
           allowNull: false,
           comment: '创建人',
           defaultValue: '',
@@ -74,23 +68,7 @@ export default function (sequelize: Sequelize): typeof RoleModel {
     {
       sequelize,
       tableName: 't_role',
-      timestamps: false,
-    //   indexes: [
-    //       {
-    //           name: 'unique-namespace_name',
-    //           fields: ['namespace', 'name'],
-    //           unique: true,
-    //       },
-    //       {
-    //           name: 'unique-namespace_role',
-    //           fields: ['namespace', 'role'],
-    //           unique: true,
-    //       },
-    //       {
-    //           name: 'unique-namespace_id',
-    //           fields: ['namespace', 'id'],
-    //       }
-    //   ]
+      timestamps: false
     },
   );
 
