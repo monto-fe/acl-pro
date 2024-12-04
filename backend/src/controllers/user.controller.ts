@@ -42,7 +42,7 @@ class UsersController {
       const userId = req.headers['userId'] as string;
       const { userInfo, roleList }: any = await this.UserService.findUserAndRoleById({id: Number(userId)});
       const { id, namespace, user, name, job, phone_number, email } = userInfo;
-      return ResponseHandler.success(res, {id, namespace, user, name, job, phone_number, email, roleList})
+      return ResponseHandler.success(res, { id, namespace, user, name, job, phone_number, email, roleList });
     } catch (error) {
       next(error);
     }

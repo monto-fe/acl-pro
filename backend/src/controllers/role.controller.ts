@@ -49,7 +49,7 @@ class RoleController {
       rows.forEach((item: any) => {
         delete item.dataValues.resources
       });
-      return ResponseHandler.success(res, rows||[]);
+      return ResponseHandler.success(res, { data: rows||[], total: count } );
 		} catch (error) {
 			next(error);
 		}
