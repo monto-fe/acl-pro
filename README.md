@@ -105,11 +105,14 @@ Use the `BLANK_README.md` to get started.
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [![Antd][Antd]][Next-url]
-* [![React][React.js]][React-url]
-* [![Express][express.js]][Vue-url]
-* [![Docker][docker]][Angular-url]
-* [![Mysql][Mysql]][Node-url]
+## Built With
+
+- ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+- ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
+- ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+- ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+- ![Ant Design](https://img.shields.io/badge/Ant%20Design-0170FE?style=for-the-badge&logo=ant-design&logoColor=white)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
