@@ -32,7 +32,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/monto-fe/acl-pro/tree/main">
-    <img src="images/logo-dark.svg" alt="Logo" width="80" height="80">
+    <img src="images/acl-logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">ACL-PRO</h3>
