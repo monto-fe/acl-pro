@@ -8,11 +8,12 @@ import { SorterResult } from 'antd/lib/table/interface';
 import Filters from './Filter';
 import { ITable, PaginationConfig } from './data.d';
 import { ResponseData } from '@/utils/request';
+import { AnyObject } from 'antd/lib/_util/type';
 
 export const defaultCurrent = 1;
 export const defaultPageSize = 10;
 
-function CommonTable<T>(props: ITable<T>, ref: Ref<unknown> | undefined) {
+function CommonTable<T extends AnyObject>(props: ITable<T>, ref: Ref<unknown> | undefined) {
   const {
     queryList,
     columns,
@@ -87,7 +88,7 @@ function CommonTable<T>(props: ITable<T>, ref: Ref<unknown> | undefined) {
 
     queryList(params).then((response: ResponseData<T[]>) => {
       if (response) {
-        setList(response.data || []);
+        setList(Array.isArray(response.data.data) ? response.data.data : []);
         setPagination({
           ...pagination,
           current,

@@ -1,20 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import OpenAI from "openai";
 import md5 from 'md5';
 
-import { User, UserListReq, UserReq } from '../interfaces/user.interface';
+import { User, UserListReq, UserReq, UserLogin, UserListQuery } from '../interfaces/user.interface';
 import UserService from '../services/user.service';
 import RoleService from '../services/role.service';
-import { ResponseMap, HttpCodeSuccess } from '../utils/const';
+import { ResponseMap } from '../utils/const';
+import ResponseHandler from '../utils/responseHandler';
 import { Administrator } from '../utils';
 import { pageCompute } from '../utils/pageCompute';
 
-const { 
-  Success, 
-  SystemError, 
-  UserError, 
-  LoginError,
-} = ResponseMap
+const { SystemError, UserError, LoginError,} = ResponseMap
 
 class UsersController {
   public UserService = new UserService();
@@ -22,29 +17,21 @@ class UsersController {
   
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { user, password, namespace } = req.body as any;
-      console.log('login:', user, password, namespace)
+      const { user, password, namespace } : UserLogin = req.body;
+      console.log('login:', user, namespace, password)
       const findData: User | null = await this.UserService.findUserByUsername({user, namespace});
+      console.log('login:', findData)
       if (!findData || findData.password !== md5(password)) {
-        res.status(HttpCodeSuccess).json({ ...UserError });
-        return;
+        return ResponseHandler.error(res, UserError);
       }
       // 密码校验，并写入token
       const { jwtToken } = await this.UserService.login({
         id: findData.id, user, namespace
       })
       if (!jwtToken) {
-        res.status(HttpCodeSuccess).json({ ...LoginError });
-        return;
+        return ResponseHandler.error(res, LoginError);
       }
-      res.status(HttpCodeSuccess).json({ 
-        ...Success,
-        data: {
-          jwt_token: jwtToken,
-          user
-        } 
-      });
-      return
+      return ResponseHandler.success(res, { jwt_token: jwtToken, user });
     } catch (error) {
       next(error);
     }
@@ -54,35 +41,16 @@ class UsersController {
     try {
       const userId = req.headers['userId'] as string;
       const { userInfo, roleList }: any = await this.UserService.findUserAndRoleById({id: Number(userId)});
-      const { id, namespace, user, name, job, phone_number, email } = userInfo
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: {
-          id, namespace, user, name, job, phone_number, email, roleList
-        }
-      });
-      return;
+      const { id, namespace, user, name, job, phone_number, email } = userInfo;
+      return ResponseHandler.success(res, { id, namespace, user, name, job, phone_number, email, roleList });
     } catch (error) {
       next(error);
     }
   };
 
-  // 更新用户
-  public updateUser = async (req: Request, res: Response) => {
-    const { id, username, email, phone, status, job } = req.body;
-    try{
-      const jobList = await this.UserService.updateUser({
-        username, email, phone, status, job
-      }, id)
-      res.status(HttpCodeSuccess).json({...Success, data: jobList});
-    }catch(err:any){
-      res.status(HttpCodeSuccess).json({...SystemError, message: err.message});
-    }
-  }
-
   // getUserList
   public getUserList = async (req: Request, res: Response) => {
-    const { id, user, userName, roleName, current, pageSize, namespace } = req.query as any;
+    const { id, user, userName, roleName, current, pageSize, namespace } = req.query as unknown as UserListQuery;
     const query: UserListReq = {
       namespace,
       user: user ? [user] : [],
@@ -90,8 +58,6 @@ class UsersController {
       ...(id && { id: Number(id) })
     };
 
-    console.log('getUserList:', query)
-    
     try{
       // 如果roleName存在，则查询user，number[]
       let roleUserList: string[] = [];
@@ -113,14 +79,11 @@ class UsersController {
         const intersection: string[] = roleUserList.filter((item:string) => userNameList.includes(item))
         query.user = intersection.concat(query.user ? query.user : []);
       }
-      // if(query.user && query.user.length === 0 && !query.id){
-      //   res.status(HttpCodeSuccess).json({...Success, count: 0, data: []}); 
-      //   return
-      // }
       // 如果name存在，则查询对应的user，User[]
       // 合并user,进行查询
       const result = await this.UserService.getUserList(query)
       const { data, count } = result;
+
       if(count > 0){
         // 给每个user，查询对应角色
         const userList = data.map((user:any) => {
@@ -134,9 +97,9 @@ class UsersController {
           });
         })
       }
-      res.status(HttpCodeSuccess).json({...Success, count, data});
+      return ResponseHandler.success(res, { data, count });
     }catch(err:any){
-      res.status(HttpCodeSuccess).json({...SystemError, message: err.message});
+      return ResponseHandler.error(res, err);
     }
   }
  
@@ -144,45 +107,41 @@ class UsersController {
   public createInnerUser = async (req: Request, res: Response) => {
     const { namespace, user, name, job, password, email, phone_number, role_ids }: UserReq = req.body;
     const remoteUser = req.headers['remoteUser'] as string
-    // TODO: 统一检验namespace是否存在于库里
-    if(!namespace){
-      res.status(HttpCodeSuccess).json({...SystemError, message: 'Namespace is required!'});
-      return
+    if(!namespace || !user){
+      return ResponseHandler.error(res, SystemError, 'Namespace and user is required!');
     }
     // 1、检查新增用户是否已存在
     try{
       const checkUser = await this.UserService.checkUsernameExists(namespace, user)
       if(checkUser){
-        res.status(HttpCodeSuccess).json({...SystemError, message: 'User already exist!'});
-        return
+        return ResponseHandler.error(res, SystemError, 'User already exist!');
       }
       // 2、判断新增用户是否选择角色，如果选择角色
+      if(!name||!password){
+        return ResponseHandler.error(res, SystemError, 'Name and password is required!');
+      }
       const result = await this.UserService.createInnerUser({
-        namespace, user, name, job, password, email, phone_number, role_ids, operator: remoteUser
+        namespace, user, name, job, password: md5(password), email, phone_number, role_ids, operator: remoteUser
       })
-      res.status(HttpCodeSuccess).json({...Success, data: result});
+      return ResponseHandler.success(res, result);
     }catch(err:any){
-      res.status(HttpCodeSuccess).json({...SystemError, message: err.message});
+      return ResponseHandler.error(res, err);
     }
   }
 
   public updateInnerUser = async (req: Request, res: Response) => {
-    const { namespace, id=0, name, job, password, email, phone_number, role_ids }: UserReq = req.body;
+    const { namespace, id=0, name, job, user, password, email, phone_number, role_ids }: UserReq = req.body;
     const operator = req.headers['remoteUser'] as string
-    // TODO:校验参数,邮件、手机号
     if(!namespace || id === 0){
-      res.status(HttpCodeSuccess).json({...SystemError, message: 'Namespace and id is required!'});
-      return
+      return ResponseHandler.error(res, SystemError, 'Namespace and id is required!');
     }
     // 查询当前用户信息
     const userInfo:any = await this.UserService.findUserById({ id })
     if(!userInfo){
-      res.status(HttpCodeSuccess).json({...SystemError, message: 'User not found!'});
-      return
+      return ResponseHandler.error(res, SystemError, 'User not found!');
     }
     if(userInfo.namespace !== namespace){
-      res.status(HttpCodeSuccess).json({...SystemError, message: 'Namespace is not match!'});
-      return
+      return ResponseHandler.error(res, SystemError, 'Namespace is not match!');
     }
     const updateInfo:any = {
       namespace, id, user: userInfo.user, operator
@@ -205,11 +164,12 @@ class UsersController {
     if(Array.isArray(role_ids) && role_ids.length > 0){
       updateInfo.role_ids = role_ids
     }
+
     try{
       const result = await this.UserService.updateInnerUser(updateInfo)
-      res.status(HttpCodeSuccess).json({...Success, data: result});
+      return ResponseHandler.success(res, result);
     }catch(err:any){
-      res.status(HttpCodeSuccess).json({...SystemError, message: err.message});
+      return ResponseHandler.error(res, err);
     }
   }
   // deleteUser
@@ -217,23 +177,21 @@ class UsersController {
     const { namespace, id, user } = req.body;
     // params check
     if(!namespace || !id || !user){
-      res.status(HttpCodeSuccess).json({...SystemError, message: 'params is required!'});
-      return
+      return ResponseHandler.error(res, SystemError, 'params is required!');
     }
     // Super Admin not allow to delete
     if(user === Administrator){
-      res.status(HttpCodeSuccess).json({...SystemError, message: 'Super Admin not allow to delete'});
-      return
+      return ResponseHandler.error(res, SystemError, 'Super Admin not allow to delete');
     }
     try{
       const result = await this.UserService.deleteUser({ namespace, id, user })
       if(result){
-        res.status(HttpCodeSuccess).json({...Success, data: result});
+        return ResponseHandler.success(res, result);
       }else{
-        res.status(HttpCodeSuccess).json({...SystemError, message: 'please check your params'});
+        return ResponseHandler.error(res, SystemError, 'please check your params');
       }
     }catch(err:any){
-      res.status(HttpCodeSuccess).json({...SystemError, message: err.message});
+      return ResponseHandler.error(res, err);
     }
   }
 }

@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
+
 import { RolePermissionReq, UserRoleReq } from '../interfaces/permission.interface';
 import PermissionService from '../services/permission.service';
-import { ResponseMap, HttpCodeSuccess } from '../utils/const';
+import { ResponseMap } from '../utils/const';
 import { getUnixTimestamp } from '../utils';
 import { pageCompute } from '../utils/pageCompute';
-import { totalmem } from 'os';
+import ResponseHandler from '../utils/responseHandler';
 
-const { Success, ParamsError } = ResponseMap
+const { ParamsError } = ResponseMap
 
 class PermissionController {
   public PermissionService = new PermissionService();
-
 
   public getRolePermissions = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -20,12 +20,10 @@ class PermissionController {
         role_id,
         ...pageCompute(current, pageSize)
       }
-      const getData: any = await this.PermissionService.getRolePermissions(params);
-      const { rows, count } = getData;
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
+      const { rows, count }: any = await this.PermissionService.getRolePermissions(params);
+      return ResponseHandler.success(res, {
         data: rows || [],
-        total: count 
+        total: count
       });
 		} catch (error) {
 			next(error);
@@ -42,10 +40,7 @@ class PermissionController {
         category
       }
       const result: any = await this.PermissionService.getSelfPermissions(params);
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: result
-      });
+      return ResponseHandler.success(res, result);
     }catch(error) {
       next(error);
     }
@@ -58,8 +53,7 @@ class PermissionController {
       const remoteUser = req.headers['remoteUser']
       
       if (!namespace || !role_id || !resource_ids || !describe) {
-        res.status(HttpCodeSuccess).json({ ...ParamsError });
-        return;
+        return ResponseHandler.error(res, ParamsError);
       }
       const params: any = {
         namespace,
@@ -70,8 +64,7 @@ class PermissionController {
         operator: remoteUser
       }
       if(!resource_ids || !resource_ids.length){
-        res.status(HttpCodeSuccess).json({ ...ParamsError });
-        return
+        return ResponseHandler.error(res, ParamsError);
       }
       
       // 检查当前角色是否已经有了该权限，根据角色id查询当前role_permission是否有resource_id
@@ -87,10 +80,7 @@ class PermissionController {
 			const createData: any = await this.PermissionService.assertBulkRolePermission(
 				params
 			);
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: createData
-      });
+      return ResponseHandler.success(res, createData);
 		} catch (error) {
 			next(error);
 		}
@@ -115,11 +105,7 @@ class PermissionController {
           describe
       }
       const response: any = await this.PermissionService.AssertUserRole(params)
-      
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: response
-      });
+      return ResponseHandler.success(res, response); 
 		} catch (error) {
 			next(error);
 		}
@@ -127,16 +113,11 @@ class PermissionController {
 
   public cancelRolePermission = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body: any = req.body;
-      const { namespace, role_id, resource_id } = body;
-    
+      const { namespace, role_id, resource_id } = req.body;
       const response: any = await this.PermissionService.cancelRolePermissionReq({
 				namespace, role_id, resource_id
       });
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: response
-      });
+      return ResponseHandler.success(res, response);
 		}catch  (error) {
 			next(error);
 		}
@@ -144,38 +125,20 @@ class PermissionController {
 
   public cancelUserRole = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body: any = req.body;
-      const { namespace, user, role_id, role_ids=[] } = body;
+      const { namespace, user, role_id, role_ids=[] } = req.body;
       // TODO: 在controller校验参数，service不处理参数
       const result: any = await this.PermissionService.cancelUserRole({
 				namespace, user, role_id, role_ids
       });
       if (result) {
-        res.status(HttpCodeSuccess).json({...Success});
+        return ResponseHandler.success(res);
       }else{
-        res.status(HttpCodeSuccess).json({...Error});
+        return ResponseHandler.error(res, Error);
       }
 		} catch (error) {
 			next(error);
 		}
   }
-
-  // public checkPermission = async (req: Request, res: Response, next: NextFunction) => {
-  //   try {
-  //     const body: any = req.body;
-  //     const { namespace, user, resource } = body;
-  //     const result: any = await this.PermissionService.checkPermission({
-	// 			namespace, user, resource
-  //     });
-  //     if (result) {
-  //       res.status(HttpCodeSuccess).json({...Success});
-  //     }else{
-  //       res.status(HttpCodeSuccess).json({...Error});
-  //     }
-	// 	} catch (error) {
-	// 		next(error);
-	// 	}
-  // }
 }
 
 export default PermissionController;

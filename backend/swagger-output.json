@@ -1,14 +1,14 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "接口文档",
+    "title": "api document",
     "version": "1.0.0",
-    "description": "swagger使用文档：https://swagger.io/docs/specification/basic-structure/"
+    "description": "swagger guide：https://swagger.io/docs/specification/basic-structure/"
   },
   "servers": [
     {
       "url": "http://localhost:9000",
-      "description": "本地环境"
+      "description": "local environment"
     }
   ],
   "paths": {
@@ -996,49 +996,52 @@
               "type": "string"
             },
             "required": true
-          },
-          {
-            "in": "body",
-            "name": "requestBody",
-            "schema": {
-              "type": "object",
-              "required": [
-                "id",
-                "namespace"
-              ],
-              "properties": {
-                "id": {
-                  "type": "number"
-                },
-                "namespace": {
-                  "type": "string",
-                  "comments": "必选，不可更改"
-                },
-                "password": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "phone_number": {
-                  "type": "string"
-                },
-                "job": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                },
-                "role_ids": {
-                  "type": "array",
-                  "items": {
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "namespace"
+                ],
+                "properties": {
+                  "id": {
                     "type": "number"
+                  },
+                  "namespace": {
+                    "type": "string",
+                    "comments": "必选，不可更改"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "phone_number": {
+                    "type": "string"
+                  },
+                  "job": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "role_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
                   }
                 }
               }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1315,7 +1318,6 @@
           "type": "string"
         },
         "description": "资源",
-        "default": "CreateUser,CreateRole",
         "required": false
       },
       "NameQuery": {

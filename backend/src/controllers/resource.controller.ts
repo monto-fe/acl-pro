@@ -1,25 +1,24 @@
 import { NextFunction, Request, Response } from 'express';
 import { ResourceReq, Resource } from '../interfaces/resource.interface';
 import ResourceService from '../services/resource.service';
-import { ResponseMap, HttpCodeSuccess, ResourceCategory } from '../utils/const';
+import { ResponseMap, ResourceCategory } from '../utils/const';
 import { pageCompute } from '../utils/pageCompute';
+import ResponseHandler from '../utils/responseHandler';
 
-const { Success, ParamsError } = ResponseMap
+const { ParamsError } = ResponseMap
 
 class ResourceController {
   public ResourceService = new ResourceService();
 
   public getResources = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query: any = req.query;
-      const { namespace, resource, name, category, current, pageSize } = query;
+      const { namespace, resource, name, category, current, pageSize } = req.query as any;
       if (!namespace) {
-        res.status(HttpCodeSuccess).json(ParamsError);
-        return;
+        return ResponseHandler.error(res, ParamsError);
       }
       const { offset, limit } = pageCompute(current, pageSize);
 
-      const getData: any = await this.ResourceService.findWithAllChildren(
+      const { rows, count }: any = await this.ResourceService.findWithAllChildren(
 				{
           namespace,
           resource,
@@ -29,11 +28,9 @@ class ResourceController {
           limit
         }
 			);
-      const { rows, count } = getData;
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
+      return ResponseHandler.success(res, {
         data: rows || [],
-        total: count 
+        total: count
       });
 		} catch (error) {
 			next(error);
@@ -46,8 +43,7 @@ class ResourceController {
       const remoteUser = req.headers['remoteUser'] as string;
       // 参数校验
       if(!namespace || !resource || !name){
-        res.status(HttpCodeSuccess).json(ParamsError);
-        return;
+        return ResponseHandler.error(res, ParamsError);
       }
       const params: any = {
         namespace,
@@ -57,8 +53,7 @@ class ResourceController {
         operator: remoteUser
       }
       if(!ResourceCategory.includes(category)){
-        res.status(HttpCodeSuccess).json(ParamsError);
-        return;
+        return ResponseHandler.error(res, ParamsError);
       }else{
         params.category = category;
       }
@@ -71,24 +66,15 @@ class ResourceController {
         name
       })
       if(ResourceResult){
-        res.status(HttpCodeSuccess).json({ 
-          ...ParamsError,
-          message: '该资源已存在'
-        });
-        return
+        return ResponseHandler.error(res, ParamsError, 'resource is exist');
       }
       
 			const createData: any = await this.ResourceService.create(params);
       
       if(createData){
-        res.status(HttpCodeSuccess).json({ 
-          ...Success, 
-          data: createData
-        });
+        return ResponseHandler.success(res, createData);
       }else{
-        res.status(HttpCodeSuccess).json({ 
-          ...ParamsError
-        });
+        return ResponseHandler.error(res, ParamsError);
       }
 		} catch (error) {
 			next(error);
@@ -100,8 +86,7 @@ class ResourceController {
       const { id, namespace, category, resource, properties, name, describe }: Resource = req.body;
       // 先查询要更新的数据，判断是否存在
       if(!id || !namespace){
-        res.status(HttpCodeSuccess).json(ParamsError);
-        return;
+        return ResponseHandler.error(res, ParamsError);
       }
       const body: any = {
         id,
@@ -109,33 +94,14 @@ class ResourceController {
       }
       const currentResource = await this.ResourceService.findAllById(id)
       if(!currentResource){
-        res.status(HttpCodeSuccess).json({ 
-          ...ParamsError,
-          message: '该资源不存在'
-        });
-        return
+        return ResponseHandler.error(res, ParamsError, 'resource is not exist');
       }
-
       // 校验name是否已存在
       if(name){
-        // const ResourceResult = await this.ResourceService.findByNamespaceAndName({
-        //   namespace,
-        //   name
-        // })
-        // if(ResourceResult){
-        //   res.status(HttpCodeSuccess).json({ 
-        //     ...ParamsError,
-        //     message: '要新增的资源已存在，无需重复添加'
-        //   });
-        //   return
-        // }else{
-          body.name = name;
-        // }
+        body.name = name;
       }
-      
       if(!ResourceCategory.includes(category)){
-        res.status(HttpCodeSuccess).json(ParamsError);
-        return;
+        return ResponseHandler.error(res, ParamsError);
       }else{
         body.category = category;
       }
@@ -150,10 +116,7 @@ class ResourceController {
       }
 
       const response: number[] = await this.ResourceService.update(body)
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: response
-      });
+      return ResponseHandler.success(res, response);
 		} catch (error) {
 			next(error);
 		}
@@ -167,10 +130,7 @@ class ResourceController {
       const getData: any = await this.ResourceService.deleteSelf({
 				id
       });
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: getData
-      });
+      return ResponseHandler.success(res, getData);
 		} catch (error) {
 			next(error);
 		}

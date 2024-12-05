@@ -74,6 +74,7 @@ function App() {
       title: 'id',
       dataIndex: 'id',
       key: 'id',
+      width: 60
     },
     {
       title: '资源名',
@@ -90,6 +91,7 @@ function App() {
       dataIndex: 'category',
       key: 'category',
       onFilter: (value, record: any) => record.role_info.findIndex((item: any) => item.role === value) > -1,
+      width: 100
     },
     {
       title: '描述',
@@ -136,6 +138,21 @@ function App() {
     },
   ];
 
+  const formItems = [
+    {
+      label: '资源名	',
+      name: 'name',
+      type: 'Input',
+      span: 8
+    },
+    {
+      label: '资源',
+      name: 'resource',
+      type: 'Input',
+      span: 8
+    },
+  ];
+
   return (
     <div className='layout-main-conent'>
       <CommonTable
@@ -148,8 +165,7 @@ function App() {
           </Button>
         }
         useTools
-        fuzzySearchKey='resource'
-        fuzzySearchPlaceholder='输入资源搜索'
+        filterFormItems={formItems}
         scroll={{ x: 1200 }}
       />
 

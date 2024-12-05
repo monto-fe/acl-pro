@@ -2,14 +2,11 @@ import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
-// import passport from 'passport';
-// import pkg from 'passport-local';
-// import pkgJwt from 'passport-jwt';
-import path from 'path';
 import fs from 'fs';
+
 import DB from './databases';
-// import UserController from './controllers/user.controller';
 import { authenticateJwt } from './middlewares/auth';
+import errorHandler from './middlewares/errorHandler';
 import { PORT, DOMAIN } from './config';
 import { Routes } from './interfaces/routes.interface';
  
@@ -35,19 +32,12 @@ class App {
 	}
 
 	private initializeMiddlewares() {
-		// this.app.use(morgan(LOG_FORMAT, { stream }));
 		this.app.use(cors(corsOptions));
-		// this.app.use(hpp());
-		// this.app.use(helmet());
-		// this.app.use(compression());
+		
 		this.app.use(express.json({limit: '50mb'}));
 		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(authenticateJwt);
-		// this.app.all('*', function(req, res, next) {
-		  // console.log("req", req.body)
-		  // res.setHeader("Content-Type", "application/json;charset=utf-8");
-		  // next();
-		// });
+		this.app.use(errorHandler)
 	}
 
 	private initializeRoutes(routes: Routes[]) {
@@ -61,14 +51,14 @@ class App {
 			swaggerDefinition: {
 				openapi: '3.0.0',
 				info: {
-					title: '接口文档',
+					title: 'api document',
 					version: '1.0.0',
 					description:
-						'swagger使用文档：https://swagger.io/docs/specification/basic-structure/',
+						'swagger guide：https://swagger.io/docs/specification/basic-structure/',
 				},
 				servers: [{
 					url: DOMAIN,
-					description: '本地环境'
+					description: 'local environment'
 				}]
 			},
 			apis: ['./swagger/*.yaml'],

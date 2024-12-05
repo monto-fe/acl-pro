@@ -6,98 +6,68 @@ import axios, { AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { notification } from 'antd';
 import settings from '@/config/settings';
 import { getToken } from '@/utils/localToken';
+import { localeKey } from './i18n';
 
 export interface ResponseData<T = unknown> {
   ret_code: number;
-  data: T;
+  data: {
+    data: T;
+    [key: string]: any;
+  };
   message?: string;
   total?: number;
 }
 
 const customCodeMessage: { [key: number]: string } = {
-  10002: '当前用户登入信息已失效，请重新登入再操作', // 未登陆
+  0: '请求成功',
+  10000: '用户名已存在',
+  10001: '系统异常，请稍后重试',
+  10002: '用户名或密码错误',
+  10003: '请求参数错误',
+  10004: '邮箱已被使用',
+  10005: '该用户还未登陆',
+  10006: '验证码错误', // 注册时
+  10008: '未知错误',
+  10009: '登录失效，请重新登录',
 };
 
 const serverCodeMessage: { [key: number]: string } = {
-  200: '服务器成功返回请求的数据',
+  200: 'Request Successfully',
   400: 'Bad Request',
   401: 'Unauthorized',
   403: 'Forbidden',
   404: 'Not Found',
-  500: '服务器发生错误，请检查服务器(Internal Server Error)',
-  502: '网关错误(Bad Gateway)',
-  503: '服务不可用，服务器暂时过载或维护(Service Unavailable)',
-  504: '网关超时(Gateway Timeout)',
+  500: 'Internal Server Error',
+  502: 'Bad Gateway',
+  503: 'Service Unavailable',
+  504: 'Gateway Timeout',
 };
 
-/**
- * 异常处理程序
- * ResponseMap = {
-    Success: {
-        ret_code: 0,
-        message: '成功'
-    },
-    UserExist: {
-        ret_code: 10000,
-        message: '用户名已存在'
-    },
-    SystemError: {
-        ret_code: 10001,
-        message: '系统异常'
-    },
-    UserError: {
-        ret_code: 10002,
-        message: '用户名或密码错误'
-    },
-    ParamsError: {
-        ret_code: 10003,
-        message: '参数错误'
-    },
-    EmailError: {
-        ret_code: 10004,
-        message: '邮箱已被使用'
-    },
-    LoginError: {
-        ret_code: 10005,
-        message: '用户未登录'
-    },
-    AuthCodeError: {
-        ret_code: 10006,
-        message: '验证码错误'
-    },
-    CategoryExisted: {
-        ret_code: 10008,
-        message: '该问题类型已存在'
-    },
-    TokenExpired: {
-        ret_code: 10009,
-        message: '登录凭证已过期'
-    }
-  }
- */
+
 const errorHandler = (error: any) => {
   const { response, message } = error;
   if (message === 'CustomError') {
     // 自定义错误
     const { config, data } = response;
     const { url, baseURL } = config;
-    const { code, message } = data;
+    const { ret_code, message } = data;
     const reqUrl = url.split('?')[0].replace(baseURL, '');
     const noVerifyBool = settings.ajaxResponseNoVerifyUrl.includes(reqUrl);
     if (!noVerifyBool) {
       notification.error({
-        message: `提示`,
-        description: customCodeMessage[code] || message || 'Error',
+        message: `提示 (Tips)`,
+        description: customCodeMessage[ret_code] || message || 'Error',
       });
 
-      if (code === 10005 && code === 10009) {
+      console.log('当前code: ' + ret_code)
+      if (ret_code === 10005 && ret_code === 10009) {
         setTimeout(() => {
           window.location.href = '/user/login';
         }, 500);
       }
     }
   } else if (message === 'CancelToken') {
-    // 取消请求 Token
+    // TODO 取消请求 Token
     // eslint-disable-next-line no-console
     console.log(message);
   } else if (response && response.status) {
@@ -198,9 +168,9 @@ request.interceptors.response.use(
  *             { cType: true }  Mandatory Settings Content-Type:application/json;charset=UTF-8
  * ......
  */
-export default function ajax<T = any, R = AxiosResponse<T>>(
+export default async function ajax<T = any, R = AxiosResponse<T>>(
   config: AxiosRequestConfig & { cType?: boolean },
-): AxiosPromise<R> {
+): Promise<AxiosResponse<R, any>> {
   return request(config)
     .then((response: AxiosResponse) => response.data)
     .catch((error) => errorHandler(error));

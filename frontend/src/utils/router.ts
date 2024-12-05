@@ -156,7 +156,7 @@ export const formatRoutes = (routes: IRouter[], parentPath = '/', parentPaths: s
  */
 export const hasPermissionRoles = (userRoles: IRoleInfo[], roles?: string | string[]): boolean => {
   if (userRoles.length < 1) {
-    return false;
+    return true;
   }
 
   if (userRoles.find(role => role.role === 'admin')) {

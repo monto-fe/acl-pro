@@ -55,7 +55,7 @@ export default function (sequelize: Sequelize): typeof ResourceModel {
       },
       describe: {
           type: new DataTypes.TEXT,
-          allowNull: false,
+          allowNull: true,
           comment: '描述',
       },
       operator: {

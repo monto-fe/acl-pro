@@ -31,7 +31,6 @@ components:
       name: resource
       schema:
         type: string
-      default: "CreateUser,CreateRole"
       required: false
       description: 资源
     NameQuery:

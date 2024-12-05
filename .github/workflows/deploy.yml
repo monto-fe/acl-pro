@@ -2,9 +2,9 @@ name: API CI
 
 on:
   push:
-    branches: [ "main", "feature/*" ]
+    branches: [ "main", "feature/*", "pre" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "pre" ]
 
 jobs:
   build:
@@ -41,8 +41,8 @@ jobs:
           username: ${{ secrets.REMOTE_USERNAME }}
           password: ${{ secrets.REMOTE_PASSWORD }}
           script: |
-            sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }} 
+            sh /data/uacl/update_env.sh BACKENDTAG ${{ env.TIMESTAMP }}
 
-            cd /data/uacl 
+            cd /data/uacl
             
             docker compose restart

@@ -104,7 +104,6 @@ export default memo(observer(({ children }: UniversalLayoutProps) => {
             <RightTop
               userRoles={user.roleList}
               menuData={routerPathKeyRouter.router}
-              jsonMenuData={routerPathKeyRouter.pathKeyRouter}
               routeItem={routeItem}
               breadCrumbs={breadCrumbs}
             />
