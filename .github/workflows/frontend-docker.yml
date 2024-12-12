@@ -3,7 +3,7 @@ name: 构建docker推送docker hub
 on:
   push:
     branches:
-      - "deploy/api"
+      - "deploy/frontend"
     tags:
       - "*"
 
@@ -41,12 +41,12 @@ jobs:
         if: env.tag_name
         uses: docker/build-push-action@v4
         with:
-          context: ./backend/
-          file: ./backend/Dockerfile.prod
+          context: ./frontend/
+          file: ./frontend/Dockerfile.prod
           push: true
           tags: |
-            ${{ secrets.DOCKER_HUB_NAME }}/uacl:${{ env.tag_name }}
-            ${{ secrets.DOCKER_HUB_NAME }}/uacl:latest
+            ${{ secrets.DOCKER_HUB_NAME }}/uacl-frontend:${{ env.tag_name }}
+            ${{ secrets.DOCKER_HUB_NAME }}/uacl-frontend:latest
           platforms: linux/amd64,linux/arm64
 
       - name: Post Build Success
