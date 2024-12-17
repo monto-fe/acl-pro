@@ -3,7 +3,7 @@ import { Form } from 'antd';
 
 import { TableListItem, TableQueryParam } from '../data.d';
 import { TableListItem as RoleTableListItem } from '@/pages/role/data.d';
-import FormModal from '@/pages/component/form/FormModal';
+import FormModal from '@/pages/component/Form/FormModal';
 
 interface ICreateFormProps {
   visible: boolean;

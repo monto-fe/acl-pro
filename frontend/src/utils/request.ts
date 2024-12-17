@@ -10,7 +10,10 @@ import { localeKey } from './i18n';
 
 export interface ResponseData<T = unknown> {
   ret_code: number;
-  data: T;
+  data: {
+    data: T;
+    [key: string]: any;
+  };
   message?: string;
   total?: number;
 }

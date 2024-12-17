@@ -38,12 +38,12 @@ function HotTagsCard() {
         per: pagination.pageSize,
         page: current,
       });
-      const { data } = response;
+      const { data: { data, total } } = response;
       setList(data || []);
       setPagination({
         ...initPagination,
         current,
-        total: response?.total || 0,
+        total: total || 0,
       });
     } catch (error: any) {
       console.log(error);

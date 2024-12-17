@@ -14,8 +14,8 @@ import { TableQueryParam, TableListItem } from '../data.d';
 
 import CreateForm from './components/CreateForm';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
-import CommonTable from '@/pages/component/table';
-import { ITable } from '@/pages/component/table/data';
+import CommonTable from '@/pages/component/Table';
+import { ITable } from '@/pages/component/Table/data';
 import SourceConfigForm from './components/SourceConfigForm';
 
 function App() {

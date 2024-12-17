@@ -18,8 +18,9 @@ class UsersController {
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { user, password, namespace } : UserLogin = req.body;
-      console.log('login:', user, namespace)
+      console.log('login:', user, namespace, password)
       const findData: User | null = await this.UserService.findUserByUsername({user, namespace});
+      console.log('login:', findData)
       if (!findData || findData.password !== md5(password)) {
         return ResponseHandler.error(res, UserError);
       }
@@ -30,7 +31,7 @@ class UsersController {
       if (!jwtToken) {
         return ResponseHandler.error(res, LoginError);
       }
-      return ResponseHandler.success(res, { jwtToken, user });
+      return ResponseHandler.success(res, { jwt_token: jwtToken, user });
     } catch (error) {
       next(error);
     }
@@ -41,7 +42,7 @@ class UsersController {
       const userId = req.headers['userId'] as string;
       const { userInfo, roleList }: any = await this.UserService.findUserAndRoleById({id: Number(userId)});
       const { id, namespace, user, name, job, phone_number, email } = userInfo;
-      return ResponseHandler.success(res, {id, namespace, user, name, job, phone_number, email, roleList})
+      return ResponseHandler.success(res, { id, namespace, user, name, job, phone_number, email, roleList });
     } catch (error) {
       next(error);
     }

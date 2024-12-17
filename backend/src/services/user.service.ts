@@ -66,19 +66,21 @@ class UserService {
       where: { user },
       order: [['create_time', 'DESC']] 
     });
-    if (existingToken && existingToken.dataValues.expired_at > this.now) {
+    console.log("this.now", this.now)
+    const now = getUnixTimestamp()
+    if (existingToken && existingToken.dataValues.expired_at > now) {
       return { jwtToken: existingToken.dataValues.token };
     }else {
-      const jwtToken = generateSignToken({id, user, namespace, create_time: this.now }, TokenSecretKey, TokenExpired)
-      const expired = this.now + 8 * 60 * 60
+      const jwtToken = generateSignToken({id, user, namespace, create_time: now }, TokenSecretKey, TokenExpired)
+      const expired = now + 8 * 60 * 60
       if(jwtToken) {
         try{
           await this.Token.create({
             token: jwtToken,
             user,
             expired_at: expired,
-            create_time: this.now,
-            update_time: this.now
+            create_time: now,
+            update_time: now
           })
           return { jwtToken }
         }catch(err) {

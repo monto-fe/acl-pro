@@ -28,7 +28,7 @@ class NamespaceController {
     try {
       const result: NamespaceResult = await this.NamespaceService.findWithAllChildren(params);
       const { rows, count } = result;
-      return ResponseHandler.success(res, { data: rows, total: count });
+      return ResponseHandler.success(res, { data: rows||[], total: count });
 		} catch (error: any) {
       return ResponseHandler.error(res, error);
 		}

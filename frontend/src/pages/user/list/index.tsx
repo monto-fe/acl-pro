@@ -10,20 +10,22 @@ import {
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 
+import { i18nLocaleDefault, useI18n } from '@/store/i18n';
 import { ResponseData } from '@/utils/request';
 import { createData, queryList, removeData, updateData as updateDataService } from './service';
 import { queryList as queryRoleList } from '@/pages/role/service';
 import { TableListItem as RoleTableListItem } from '@/pages/role/data.d';
-import { TableListItem, TableQueryParam } from './data.d';
+import { TableListItem } from './data.d';
 
 import CreateForm from './components/CreateForm';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
-import CommonTable from '@/pages/component/table';
-import { ITable } from '@/pages/component/table/data';
+import CommonTable from '@/pages/component/Table';
+import { ITable } from '@/pages/component/Table/data';
 import Permission from '@/components/Permission';
 import Preview from './components/Preview';
 
 function App() {
+  const t = useI18n(i18nLocaleDefault);
   const tableRef = useRef<ITable<TableListItem>>();
   const [roleList, setRoleList] = useState<RoleTableListItem[]>([]);
 
@@ -33,7 +35,7 @@ function App() {
       pageSize: 99999,
     }).then((response: ResponseData<RoleTableListItem[]>) => {
       if (response) {
-        setRoleList(response.data || []);
+        setRoleList(response.data.data || []);
       }
     });
   }
@@ -51,7 +53,7 @@ function App() {
   const handleDelete = (id: number) => setDeleteOpen(id);
   const deleteConfirm = (id: number, user: string) => {
     removeData(id, user).then(() => {
-      message.success('删除成功！');
+      message.success(t('app.global.tip.delete.success'));
       reload();
       setDeleteOpen(void 0);
     })
@@ -80,7 +82,7 @@ function App() {
     request({ ...values, id: updateData.id as number }).then(() => {
       form.resetFields();
       setCreateFormVisible(false);
-      message.success(values.id ? '修改成功' : '新增成功！');
+      message.success(t(values.id ? 'app.global.tip.update.success' : 'app.global.tip.create.success'));
       reload();
 
       setCreateSubmitLoading(false);

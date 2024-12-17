@@ -68,4 +68,9 @@ export default {
   'page.home.workshitcard.card.table-column-number': '序号',
   'page.home.workshitcard.card.table-column-title': '标题',
   'page.home.workshitcard.card.table-column-hit': '浏览量',
+
+  'setting.pagestyle': '页面风格',
+  'setting.navigationmode': '导航风格',
+  'setting.headfixed': '固定头部',
+  'setting.navtabs': 'tab导航',
 };

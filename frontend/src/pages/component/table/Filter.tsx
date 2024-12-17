@@ -1,4 +1,4 @@
-import Form from '@/pages/component/form';
+import Form from '@/pages/component/Form';
 import { ITableFilter } from './data';
 
 function Filters(props: ITableFilter) {

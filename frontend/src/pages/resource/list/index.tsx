@@ -14,8 +14,8 @@ import { TableListItem } from '../data.d';
 
 import CreateForm from './components/CreateForm';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
-import CommonTable from '@/pages/component/table';
-import { ITable } from '@/pages/component/table/data';
+import CommonTable from '@/pages/component/Table';
+import { ITable } from '@/pages/component/Table/data';
 
 function App() {
   const tableRef = useRef<ITable<TableListItem>>();

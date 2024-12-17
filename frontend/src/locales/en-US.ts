@@ -2,6 +2,9 @@ export default {
   'app.empty': 'empty',
   'app.global.menu.notfound': 'Not Found',
   'app.global.form.validatefields.catch': 'The validation did not pass, please check the input',
+  'app.global.tip.delete.success': 'Delete successfully',
+  'app.global.tip.update.success': 'Update successfully',
+  'app.global.tip.create.success': 'Create successfully',
 
   'universal-layout.topmenu.userinfo': 'Personal Info',
   'universal-layout.topmenu.logout': 'Logout',
@@ -68,4 +71,9 @@ export default {
   'page.home.workshitcard.card.table-column-number': 'Serial number',
   'page.home.workshitcard.card.table-column-title': 'Title',
   'page.home.workshitcard.card.table-column-hit': 'Hits',
+
+  'setting.pagestyle': 'Page Styles',
+  'setting.navigationmode': 'Nav mode',
+  'setting.headfixed': 'Head fixed',
+  'setting.navtabs': 'Nav tabs',
 };

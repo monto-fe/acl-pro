@@ -1,17 +1,21 @@
 import { memo, useContext } from 'react';
 import { Popover, Divider, Switch } from 'antd';
 import { CheckOutlined, SettingOutlined } from '@ant-design/icons';
+import { observer } from 'mobx-react-lite';
 import classnames from 'classnames';
 
 import { Theme, NavMode } from '@/@types/settings';
 
 import style from './index.module.less';
 import { BasicContext } from '@/store/context';
-import { observer } from 'mobx-react-lite';
+import { i18nLocaleDefault, useI18n } from '@/store/i18n';
 
 export default memo(observer(() => {
+  const t = useI18n(i18nLocaleDefault);
+
   const storeContext = (useContext(BasicContext) as any).storeContext;
   const { globalConfig } = storeContext;
+
   // 模板主题
   const setTheme = (theme: Theme) => {
     storeContext.updateGlobalConfig({ ...globalConfig, theme });
@@ -36,7 +40,7 @@ export default memo(observer(() => {
     <Popover
       content={
         <div className={style.setting}>
-          <div className={style['setting-title']}>页面风格</div>
+          <div className={style['setting-title']}>{t('setting.pagestyle')}</div>
 
           <div className={style['setting-radio']}>
             <div
@@ -82,7 +86,7 @@ export default memo(observer(() => {
 
           <Divider style={{ margin: '10px 0' }} />
 
-          <div className={style['setting-title']}>导航模式</div>
+          <div className={style['setting-title']}>{t('setting.navigationmode')}</div>
           <div className={style['setting-radio']}>
             <div
               className={classnames(style['setting-radio-item'], style['nav-inline'])}
@@ -116,22 +120,22 @@ export default memo(observer(() => {
 
           <div className={style['setting-list']}>
             <div className={style['setting-list-item']}>
-              <span>固定头部</span>
+              <span>{t('setting.headfixed')}</span>
               <span className={style['setting-list-item-action']}>
                 <Switch
-                  checkedChildren='开启'
-                  unCheckedChildren='关闭'
+                  checkedChildren='√'
+                  unCheckedChildren=''
                   checked={globalConfig.headFixed}
                   onChange={onChangeHeadFixed}
                 />
               </span>
             </div>
             <div className={style['setting-list-item']}>
-              <span>NavTabs</span>
+              <span>{t('setting.navtabs')}</span>
               <span className={style['setting-list-item-action']}>
                 <Switch
-                  checkedChildren='开启'
-                  unCheckedChildren='关闭'
+                  checkedChildren='√'
+                  unCheckedChildren=''
                   checked={globalConfig.tabNavEnable}
                   onChange={onChangeTabNavEnable}
                 />
