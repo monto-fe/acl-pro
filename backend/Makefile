@@ -19,7 +19,6 @@ build-m1:
 
 build-amd64:
 	docker build -t acl-pro\
-	docker build -t okr_backend\
 		--platform linux/amd64\
 		--target production-build-stage\
 		-f Dockerfile .

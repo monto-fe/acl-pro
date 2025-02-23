@@ -61,7 +61,7 @@ function SourceConfigForm(props: ISourceConfigFormProps) {
   useEffect(() => {
     setLoading(true);
     querySourceList().then(res => {
-      setDatasource((res.data || []).map((data: RecordType) => { return { ...data, key: +data.id } }));
+      setDatasource((res.data?.data || []).map((data: RecordType) => { return { ...data, key: +data.id } }));
       setLoading(false);
     }).catch(() => {
       setLoading(false);
