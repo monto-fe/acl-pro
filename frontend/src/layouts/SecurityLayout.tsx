@@ -13,37 +13,37 @@ export interface SecurityLayoutProps {
   children: React.ReactNode;
 }
 
-export default memo(observer(({ children }: SecurityLayoutProps) => {
-  const navigate = useNavigate();
-  const context = useContext(BasicContext) as any;
-  const storeContext = context.storeContext;
-  const user = storeContext.userInfo;
+export default memo(
+  observer(({ children }: SecurityLayoutProps) => {
+    const navigate = useNavigate();
+    const context = useContext(BasicContext) as any;
+    const { storeContext } = context;
+    const user = storeContext.userInfo;
 
-  const isLogin = useMemo(() => user.id > 0, [user]);
-  const getUser = useCallback(async () => {
-    try {
-      const response: ResponseData<CurrentUser> = await queryCurrent();
-      const { data } = response;
+    const isLogin = useMemo(() => user.id > 0, [user]);
+    const getUser = useCallback(async () => {
+      try {
+        const response: ResponseData<CurrentUser> = await queryCurrent();
+        const { data } = response;
 
-      storeContext.updateUserInfo({
-        ...data,
-        roles: data.roles || []
-      });
-    } catch (error: any) {
-      if (error.message && error.message === 'CustomError') {
-        const response = error.response;
-        if (response) {
-          navigate('/user/login', { replace: true });
+        storeContext.updateUserInfo({
+          ...data,
+          roles: data.roles || [],
+        });
+      } catch (error: any) {
+        if (error.message && error.message === 'CustomError') {
+          const { response } = error;
+          if (response) {
+            navigate('/user/login', { replace: true });
+          }
         }
       }
-    }
-  }, []);
+    }, []);
 
-  useEffect(() => {
-    getUser();
-  }, []);
+    useEffect(() => {
+      getUser();
+    }, []);
 
-  return <>
-    {isLogin ? children : <PageLoading />}
-  </>;
-}));
+    return <>{isLogin ? children : <PageLoading />}</>;
+  }),
+);

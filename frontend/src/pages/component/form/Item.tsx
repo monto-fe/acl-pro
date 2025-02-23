@@ -52,13 +52,11 @@ function FormItemComponent(props: IFormItem) {
         }}
       >
         {field.options
-          ? field.options.map((item: any, index: number) => {
-            return (
+          ? field.options.map((item: any, index: number) => (
               <Option key={index} value={item.value}>
                 {item.name || item.label}
               </Option>
-            );
-          })
+            ))
           : null}
       </Select>
     ),
@@ -66,7 +64,7 @@ function FormItemComponent(props: IFormItem) {
       <Select
         {...field.option}
         style={{ width: '100%' }}
-        mode="multiple"
+        mode='multiple'
         allowClear={true}
         placeholder={field.label}
         filterOption={(input, option: any) => {
@@ -78,17 +76,15 @@ function FormItemComponent(props: IFormItem) {
         }}
       >
         {field.options
-          ? field.options.map((item: any, index: number) => {
-            return (
+          ? field.options.map((item: any, index: number) => (
               <Option key={index} value={item.value}>
                 {item.name || item.label}
               </Option>
-            );
-          })
+            ))
           : null}
       </Select>
     ),
-    Radio: <Radio.Group options={field.options} optionType="button" buttonStyle="solid" {...field.option} />,
+    Radio: <Radio.Group options={field.options} optionType='button' buttonStyle='solid' {...field.option} />,
     Switch: <Switch {...field.option} />,
     Date: <DatePicker {...field.option} />,
     DateRange: <RangePicker {...field.option} />,

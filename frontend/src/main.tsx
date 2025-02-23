@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
     <BasicContext.Provider value={{ storeContext: observerRoot }}>
       <App />
     </BasicContext.Provider>
-  </BrowserRouter>
+  </BrowserRouter>,
 );

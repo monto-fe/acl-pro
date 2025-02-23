@@ -1,42 +1,38 @@
-import { useRef, useState } from 'react';
-import {
-  Button,
-  FormInstance,
-  message,
-  Popconfirm,
-  PopconfirmProps,
-  Space,
-} from 'antd';
+import { useContext, useRef, useState } from 'react';
+import { Button, FormInstance, message, Popconfirm, PopconfirmProps, Space } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 
-import { createData, queryList, removeData, updateData as updateDataService } from '../service';
-import { TableQueryParam, TableListItem } from '../data.d';
-
-import CreateForm from './components/CreateForm';
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
 import CommonTable from '@/pages/component/Table';
 import { ITable } from '@/pages/component/Table/data';
 import SourceConfigForm from './components/SourceConfigForm';
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
+
+import { createData, queryList, removeData, updateData as updateDataService } from '../service';
+import { TableQueryParam, TableListItem } from '../data.d';
+import CreateForm from './components/CreateForm';
 
 function App() {
   const tableRef = useRef<ITable<TableListItem>>();
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
 
-  const reload = () => {
-    tableRef.current && tableRef.current.reload && tableRef.current.reload()
-  }
+  const reload = () => tableRef.current && tableRef.current.reload && tableRef.current.reload();
 
   // 删除
   const [deleteOpen, setDeleteOpen] = useState<number | undefined>();
   const handleDelete = (id: number) => setDeleteOpen(id);
   const deleteConfirm = (id: number) => {
     removeData(id).then(() => {
-      message.success('删除成功！');
+      message.success(t('app.global.tip.delete.success'));
       reload();
       setDeleteOpen(void 0);
     });
   };
 
-  const deleteCancel: PopconfirmProps['onCancel'] = (e) => {
+  const deleteCancel: PopconfirmProps['onCancel'] = () => {
     setDeleteOpen(void 0);
   };
 
@@ -50,20 +46,22 @@ function App() {
   const handleCreate = () => {
     setUpdateData({});
     setCreateFormVisible(true);
-  }
+  };
   const createSubmit = (values: TableListItem, form: FormInstance) => {
     setCreateSubmitLoading(true);
     const request = updateData.id ? updateDataService : createData;
-    request({ ...values, id: updateData.id as number }).then(() => {
-      form.resetFields();
-      setCreateFormVisible(false);
-      message.success(values.id ? '修改成功' : '新增成功！');
-      reload();
+    request({ ...values, id: updateData.id as number })
+      .then(() => {
+        form.resetFields();
+        setCreateFormVisible(false);
+        message.success(values.id ? t('app.global.tip.update.success') : t('app.global.tip.create.success'));
+        reload();
 
-      setCreateSubmitLoading(false);
-    }).catch(() => {
-      setCreateSubmitLoading(false);
-    });
+        setCreateSubmitLoading(false);
+      })
+      .catch(() => {
+        setCreateSubmitLoading(false);
+      });
   };
 
   const handleUpdate = (record: TableListItem) => {
@@ -87,56 +85,56 @@ function App() {
       key: 'id',
     },
     {
-      title: '角色名',
+      title: t('page.role.name'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: '角色',
+      title: t('page.role.key'),
       dataIndex: 'role',
       key: 'role',
       onFilter: (value, record: any) => record.role_info.findIndex((item: any) => item.role === value) > -1,
     },
     {
-      title: '描述',
+      title: t('page.role.describe'),
       dataIndex: 'describe',
       key: 'describe',
     },
     {
-      title: '更新人',
+      title: t('app.table.operator'),
       dataIndex: 'operator',
       key: 'operator',
     },
     {
-      title: '更新时间',
+      title: t('app.table.updatetime'),
       dataIndex: 'update_time',
       key: 'update_time',
-      render: (text: number) => renderDateFromTimestamp(text, timeFormatType.time)
+      render: (text: number) => renderDateFromTimestamp(text, timeFormatType.time),
     },
     {
-      title: '操作',
+      title: t('app.table.action'),
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
       render: (text, record: TableListItem) => (
         <Space size='small'>
           <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
-            编辑
+            {t('app.global.edit')}
           </Button>
           <Button className='btn-group-cell' size='small' type='link' onClick={() => handleSourceConfig(record)}>
-            资源配置
+            {t('page.role.configresource')}
           </Button>
           <Popconfirm
             open={deleteOpen === record.id}
-            title='Delete the task'
-            description='Are you sure to delete this task?'
+            title={t('app.global.delete')}
+            description={t('app.global.delete.tip')}
             onConfirm={() => deleteConfirm(record.id)}
             onCancel={deleteCancel}
             okText='Yes'
             cancelText='No'
           >
             <Button danger className='btn-group-cell' onClick={() => handleDelete(record.id)} size='small' type='link'>
-              删除
+              {t('app.global.delete')}
             </Button>
           </Popconfirm>
         </Space>
@@ -146,22 +144,22 @@ function App() {
 
   const formItems = [
     {
-      label: '角色名',
+      label: t('page.role.name'),
       name: 'name',
       type: 'Input',
-      span: 8
+      span: 8,
     },
     {
-      label: '角色',
+      label: t('page.role.key'),
       name: 'role',
       type: 'Input',
-      span: 8
+      span: 8,
     },
     {
-      label: '资源',
+      label: t('page.resource.key'),
       name: 'resource',
       type: 'Input',
-      span: 8
+      span: 8,
     },
   ];
 
@@ -173,7 +171,7 @@ function App() {
         queryList={queryList}
         title={
           <Button type='primary' onClick={handleCreate}>
-            新增角色
+            {t('page.role.add')}
           </Button>
         }
         useTools
@@ -190,7 +188,7 @@ function App() {
       />
 
       <SourceConfigForm
-        title="配置角色资源"
+        title={t('configresource')}
         configData={configData}
         visible={configFormVisible}
         setVisible={setConfigFormVisible}

@@ -13,7 +13,7 @@ import {
   TeamOutlined,
   KeyOutlined,
   ToolOutlined,
-  QuestionCircleTwoTone
+  QuestionCircleTwoTone,
 } from '@ant-design/icons';
 
 import { IRouter } from '@/@types/router.d';
@@ -59,8 +59,8 @@ const universalLayoutRotes: IRouter[] = [
     path: 'testMenuPermission',
     meta: {
       icon: QuestionCircleTwoTone,
-      title: '测试菜单权限',
-      roles: ['admin']
+      title: 'test.menuacl',
+      roles: ['admin'],
     },
     component: lazy(() => import('@/pages/test/TestMenuPermission')),
   },
@@ -68,7 +68,7 @@ const universalLayoutRotes: IRouter[] = [
     path: 'testPagePermission',
     meta: {
       icon: QuestionCircleTwoTone,
-      title: '测试页面权限',
+      title: 'test.pageacl',
     },
     component: lazy(() => import('@/pages/test/TestPagePermission')),
   },
@@ -76,7 +76,7 @@ const universalLayoutRotes: IRouter[] = [
     path: 'testAPIPermission',
     meta: {
       icon: QuestionCircleTwoTone,
-      title: '测试API权限',
+      title: 'test.apiacl',
     },
     component: lazy(() => import('@/pages/test/TestAPIPermission')),
   },

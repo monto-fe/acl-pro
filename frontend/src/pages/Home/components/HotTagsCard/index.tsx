@@ -38,7 +38,9 @@ function HotTagsCard() {
         per: pagination.pageSize,
         page: current,
       });
-      const { data: { data, total } } = response;
+      const {
+        data: { data, total },
+      } = response;
       setList(data || []);
       setPagination({
         ...initPagination,
@@ -87,6 +89,6 @@ function HotTagsCard() {
       />
     </Card>
   );
-};
+}
 
 export default observer(HotTagsCard);

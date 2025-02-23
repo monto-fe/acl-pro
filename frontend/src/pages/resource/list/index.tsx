@@ -1,41 +1,39 @@
-import { useRef, useState } from 'react';
-import {
-  Button,
-  FormInstance,
-  message,
-  Popconfirm,
-  PopconfirmProps,
-  Space,
-} from 'antd';
+import { memo, useContext, useRef, useState } from 'react';
+import { Button, FormInstance, message, Popconfirm, PopconfirmProps, Space } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { observer } from 'mobx-react-lite';
+
+import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
+import CommonTable from '@/pages/component/Table';
+import { ITable } from '@/pages/component/Table/data';
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
 
 import { createData, queryList, removeData, updateData as updateDataService } from '../service';
 import { TableListItem } from '../data.d';
 
 import CreateForm from './components/CreateForm';
-import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
-import CommonTable from '@/pages/component/Table';
-import { ITable } from '@/pages/component/Table/data';
 
 function App() {
   const tableRef = useRef<ITable<TableListItem>>();
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
 
-  const reload = () => {
-    tableRef.current && tableRef.current.reload && tableRef.current.reload()
-  }
+  const reload = () => tableRef.current && tableRef.current.reload && tableRef.current.reload();
 
   // 删除
   const [deleteOpen, setDeleteOpen] = useState<number | undefined>();
   const handleDelete = (id: number) => setDeleteOpen(id);
   const deleteConfirm = (id: number) => {
     removeData(id).then(() => {
-      message.success('删除成功！');
+      message.success(t('app.global.tip.delete.success'));
       reload();
       setDeleteOpen(void 0);
-    })
+    });
   };
 
-  const deleteCancel: PopconfirmProps['onCancel'] = (e) => {
+  const deleteCancel: PopconfirmProps['onCancel'] = () => {
     setDeleteOpen(void 0);
   };
 
@@ -46,20 +44,22 @@ function App() {
   const handleCreate = () => {
     setUpdateData({});
     setCreateFormVisible(true);
-  }
+  };
   const createSubmit = async (values: TableListItem, form: FormInstance) => {
     setCreateSubmitLoading(true);
     const request = updateData.id ? updateDataService : createData;
-    request({ ...values, id: updateData.id as number }).then(() => {
-      form.resetFields();
-      setCreateFormVisible(false);
-      message.success(values.id ? '修改成功' : '新增成功！');
-      reload();
+    request({ ...values, id: updateData.id as number })
+      .then(() => {
+        form.resetFields();
+        setCreateFormVisible(false);
+        message.success(values.id ? t('app.global.tip.update.success') : t('app.global.tip.create.success'));
+        reload();
 
-      setCreateSubmitLoading(false);
-    }).catch(() => {
-      setCreateSubmitLoading(false);
-    });
+        setCreateSubmitLoading(false);
+      })
+      .catch(() => {
+        setCreateSubmitLoading(false);
+      });
   };
 
   const handleUpdate = async (record: TableListItem) => {
@@ -74,63 +74,63 @@ function App() {
       title: 'id',
       dataIndex: 'id',
       key: 'id',
-      width: 60
+      width: 60,
     },
     {
-      title: '资源名',
+      title: t('page.resource.name'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: '资源',
+      title: t('page.resource.key'),
       dataIndex: 'resource',
       key: 'resource',
     },
     {
-      title: '类别',
+      title: t('page.resource.category'),
       dataIndex: 'category',
       key: 'category',
       onFilter: (value, record: any) => record.role_info.findIndex((item: any) => item.role === value) > -1,
-      width: 100
+      width: 100,
     },
     {
-      title: '描述',
+      title: t('page.resource.describe'),
       dataIndex: 'describe',
       key: 'describe',
     },
     {
-      title: '更新人',
+      title: t('app.table.operator'),
       dataIndex: 'operator',
       key: 'operator',
     },
     {
-      title: '更新时间',
+      title: t('app.table.updatetime'),
       dataIndex: 'update_time',
       key: 'update_time',
       width: 200,
-      render: (text: number) => renderDateFromTimestamp(text, timeFormatType.time)
+      render: (text: number) => renderDateFromTimestamp(text, timeFormatType.time),
     },
     {
-      title: '操作',
+      title: t('app.table.action'),
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
       render: (text, record: TableListItem) => (
         <Space size='small'>
           <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
-            编辑
+            {t('app.global.edit')}
           </Button>
           <Popconfirm
             open={deleteOpen === record.id}
-            title='Delete the task'
-            description='Are you sure to delete this task?'
-            onConfirm={async () => deleteConfirm(record.id)}
+            title={t('app.global.delete')}
+            description={t('app.global.delete.tip')}
+            onConfirm={() => deleteConfirm(record.id)}
             onCancel={deleteCancel}
             okText='Yes'
             cancelText='No'
           >
             <Button danger className='btn-group-cell' onClick={() => handleDelete(record.id)} size='small' type='link'>
-              删除
+              {t('app.global.delete')}
             </Button>
           </Popconfirm>
         </Space>
@@ -140,16 +140,16 @@ function App() {
 
   const formItems = [
     {
-      label: '资源名	',
+      label: t('page.resource.name'),
       name: 'name',
       type: 'Input',
-      span: 8
+      span: 8,
     },
     {
-      label: '资源',
+      label: t('page.resource.key'),
       name: 'resource',
       type: 'Input',
-      span: 8
+      span: 8,
     },
   ];
 
@@ -161,7 +161,7 @@ function App() {
         queryList={queryList}
         title={
           <Button type='primary' onClick={handleCreate}>
-            新增资源
+            {t('page.resource.add')}
           </Button>
         }
         useTools
@@ -180,4 +180,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(observer(App));

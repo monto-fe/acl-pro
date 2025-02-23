@@ -22,50 +22,48 @@ function CreateForm(props: ICreateFormProps) {
 
   const addFormItems = [
     {
-      label: "英文名",
-      name: "user",
+      label: '英文名',
+      name: 'user',
       required: true,
-      type: "Input"
+      type: 'Input',
     },
     {
-      label: "中文名",
-      name: "name",
+      label: '中文名',
+      name: 'name',
       required: true,
-      type: "Input"
+      type: 'Input',
     },
     {
-      label: "密码",
-      name: "password",
+      label: '密码',
+      name: 'password',
       option: {
-        placeholder: 'default: 12345678'
+        placeholder: 'default: 12345678',
       },
-      type: "Input"
+      type: 'Input',
     },
     {
-      label: "职位",
-      name: "job",
-      type: "Input"
+      label: '职位',
+      name: 'job',
+      type: 'Input',
     },
     {
-      label: "邮箱",
-      name: "email",
-      type: "Input"
+      label: '邮箱',
+      name: 'email',
+      type: 'Input',
     },
     {
-      label: "手机号",
-      name: "phone_number",
-      type: "Input"
+      label: '手机号',
+      name: 'phone_number',
+      type: 'Input',
     },
     {
-      label: "角色",
-      name: "role_ids",
-      type: "SelectMultiple",
-      options: (roleList || []).map((role: RoleTableListItem) => {
-        return {
-          label: `${role.name} (${role.role})`,
-          value: role.id
-        }
-      })
+      label: '角色',
+      name: 'role_ids',
+      type: 'SelectMultiple',
+      options: (roleList || []).map((role: RoleTableListItem) => ({
+        label: `${role.name} (${role.role})`,
+        value: role.id,
+      })),
     },
   ];
 
@@ -73,18 +71,20 @@ function CreateForm(props: ICreateFormProps) {
     onSubmit({ ...values }, form);
   };
 
-  return <>
-    <FormModal
-      visible={visible}
-      setVisible={setVisible}
-      confirmLoading={onSubmitLoading}
-      initialValues={initialValues}
-      title={initialValues?.id ? '编辑用户' : '新增用户'}
-      ItemOptions={addFormItems}
-      onFinish={onFinish}
-      onCancel={onCancel}
-    />
-  </>
-};
+  return (
+    <>
+      <FormModal
+        visible={visible}
+        setVisible={setVisible}
+        confirmLoading={onSubmitLoading}
+        initialValues={initialValues}
+        title={initialValues?.id ? '编辑用户' : '新增用户'}
+        ItemOptions={addFormItems}
+        onFinish={onFinish}
+        onCancel={onCancel}
+      />
+    </>
+  );
+}
 
 export default CreateForm;

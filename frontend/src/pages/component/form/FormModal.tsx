@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Modal, Form } from 'antd';
 import FormItemComponent from './Item';
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
 
 interface IFormModal {
   formInstance?: any;
@@ -15,8 +17,8 @@ interface IFormModal {
   initialValues?: any;
   onFieldsChange?: Function;
   formLayout?: {
-    labelCol: { span: number },
-    wrapperCol: { span: number },
+    labelCol: { span: number };
+    wrapperCol: { span: number };
   };
   onFinish?: Function;
   onCancel?: Function;
@@ -69,6 +71,10 @@ function FormModal(props: IFormModal) {
 
   const [form] = formInstance || Form.useForm();
 
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+
   const onOk = () => {
     form.validateFields().then((values: any) => {
       const data = { ...values };
@@ -79,7 +85,6 @@ function FormModal(props: IFormModal) {
   const handleFieldChange = (field: FieldData[], fields: FieldData[]): void => {
     if (onFieldsChange) {
       onFieldsChange(form, field, fields);
-      return;
     }
   };
 
@@ -96,7 +101,7 @@ function FormModal(props: IFormModal) {
       maskClosable={false}
       onOk={onOk}
       width={width}
-      cancelText={'关闭'}
+      cancelText={t('app.global.close')}
       confirmLoading={confirmLoading}
     >
       {description && <Form.Item>{description}</Form.Item>}
@@ -117,13 +122,16 @@ function FormModal(props: IFormModal) {
                 {...item}
                 rules={
                   item.validators
-                    ? [{ required: item.required, message: `${item.label}必填！` }, ...item.validators]
-                    : [{ required: item.required, message: `${item.label}必填！` }]
+                    ? [
+                        { required: item.required, message: `${item.label} ${t('app.form.required')} ！` },
+                        ...item.validators,
+                      ]
+                    : [{ required: item.required, message: `${item.label} ${t('app.form.required')} ！` }]
                 }
               >
                 {FormItemComponent({ field: item })}
               </Form.Item>
-            )
+            ),
           )}
         </Form>
       ) : null}

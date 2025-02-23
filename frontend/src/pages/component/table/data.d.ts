@@ -6,25 +6,6 @@ export interface PaginationConfig {
   showQuickJumper: boolean;
 }
 
-export interface ITable<T> {
-  queryList: Function;
-  columns: ColumnsType<any>;
-  title?: React.ReactElement | string;
-  rowKey?: string;
-  useTools?: boolean;
-  fuzzySearchKey?: string;
-  fuzzySearchPlaceholder?: string;
-  filterFormItems?: ITableFilterItem[];
-  scroll?: { x?: number, y?: number };
-  reload?: Function;
-}
-
-export interface ITableFilter {
-  items: ITableFilterItem[];
-  size: SizeType;
-  handleSearch?: Function;
-}
-
 export interface ITableFilterItem {
   label: string;
   name: string;
@@ -33,4 +14,23 @@ export interface ITableFilterItem {
   options?: unknown;
   span?: number;
   required?: boolean;
+}
+
+export interface ITable<T> {
+  queryList: Function;
+  columns: ColumnsType<T>;
+  title?: React.ReactElement | string;
+  rowKey?: string;
+  useTools?: boolean;
+  fuzzySearchKey?: string;
+  fuzzySearchPlaceholder?: string;
+  filterFormItems?: ITableFilterItem[];
+  scroll?: { x?: number; y?: number };
+  reload?: Function;
+}
+
+export interface ITableFilter {
+  items: ITableFilterItem[];
+  size: SizeType;
+  handleSearch?: Function;
 }

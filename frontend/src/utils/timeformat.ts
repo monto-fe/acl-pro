@@ -27,7 +27,7 @@ export function renderDateRange(times: number[] | Date[] | dayjs.Dayjs[], type: 
 
 // 区分秒级和毫秒级时间戳来格式化
 export function renderDateFromTimestamp(timestamp: number, type: string) {
-  return renderDate((timestamp + '').length === 10 ? timestamp * 1000 : timestamp, type);
+  return renderDate(`${timestamp}`.length === 10 ? timestamp * 1000 : timestamp, type);
 }
 
 // 获取时间区间，不直接用object是因为这里定义object之后，获取key值就不会获取到实时的时间区间
@@ -71,9 +71,7 @@ export const dateRange: any = {
   后7天: [dayjs().add(1, 'day').startOf('day'), dayjs().add(7, 'days').endOf('day')],
 };
 
-export const getDateRange = (dateKey: string) => {
-  return dateRange[dateKey];
-};
+export const getDateRange = (dateKey: string) => dateRange[dateKey];
 
 export const getCustomDateRange = (times: number[] | Date[] | dayjs.Dayjs[]) => {
   if (times && times.length === 2) {

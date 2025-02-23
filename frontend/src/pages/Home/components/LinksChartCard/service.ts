@@ -7,8 +7,8 @@ export async function annualnewLinks(): Promise<any> {
       num: 34,
       chart: {
         day: [5, 4, 32, 1],
-        num: [1, 2, 3, 4, 5]
-      }
-    }
+        num: [1, 2, 3, 4, 5],
+      },
+    },
   };
 }

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { Form } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import { Modal, Form, Input, Button, message } from 'antd';
 
-// import { queryList as queryRoleList } from '../../service';
+import FormModal from '@/pages/component/Form/FormModal';
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
 
 import { TableListItem } from '../../data.d';
-import FormModal from '@/pages/component/Form/FormModal';
 
 interface ICreateFormProps {
   visible: boolean;
@@ -19,25 +20,29 @@ interface ICreateFormProps {
 const CreateForm: React.FC<ICreateFormProps> = (props) => {
   const { visible, setVisible, initialValues, onSubmit, onSubmitLoading, onCancel } = props;
 
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+
   const [form] = Form.useForm();
 
   const addFormItems = [
     {
-      label: "角色名",
-      name: "name",
+      label: t('page.role.name'),
+      name: 'name',
       required: true,
-      type: "Input"
+      type: 'Input',
     },
     {
-      label: "角色",
-      name: "role",
+      label: t('page.role.key'),
+      name: 'role',
       required: true,
-      type: "Input"
+      type: 'Input',
     },
     {
-      label: "描述",
-      name: "describe",
-      type: "Input"
+      label: t('page.resource.key'),
+      name: 'describe',
+      type: 'Input',
     },
   ];
 
@@ -45,18 +50,20 @@ const CreateForm: React.FC<ICreateFormProps> = (props) => {
     onSubmit({ ...values }, form);
   };
 
-  return <>
-    <FormModal
-      visible={visible}
-      setVisible={setVisible}
-      confirmLoading={onSubmitLoading}
-      initialValues={initialValues}
-      title="新增角色"
-      ItemOptions={addFormItems}
-      onFinish={onFinish}
-      onCancel={onCancel}
-    />
-  </>
+  return (
+    <>
+      <FormModal
+        visible={visible}
+        setVisible={setVisible}
+        confirmLoading={onSubmitLoading}
+        initialValues={initialValues}
+        title={t('page.role.add')}
+        ItemOptions={addFormItems}
+        onFinish={onFinish}
+        onCancel={onCancel}
+      />
+    </>
+  );
 };
 
 export default CreateForm;

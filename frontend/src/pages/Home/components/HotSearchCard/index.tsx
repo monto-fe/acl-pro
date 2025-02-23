@@ -39,7 +39,9 @@ function HotSearchCard() {
         per: pagination.pageSize,
         page: current,
       });
-      const { data: { data, total } } = response;
+      const {
+        data: { data, total },
+      } = response;
       setList(data || []);
       setPagination({
         ...initPagination,
@@ -88,6 +90,6 @@ function HotSearchCard() {
       />
     </Card>
   );
-};
+}
 
 export default observer(HotSearchCard);

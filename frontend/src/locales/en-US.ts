@@ -5,6 +5,26 @@ export default {
   'app.global.tip.delete.success': 'Delete successfully',
   'app.global.tip.update.success': 'Update successfully',
   'app.global.tip.create.success': 'Create successfully',
+  'app.global.close': 'Close',
+  'app.global.delete': 'Delete',
+  'app.global.edit': 'Edit',
+  'app.global.view': 'View',
+  'app.global.delete.tip': 'Are you sure to delete',
+
+  'app.form.required': 'required',
+  'app.form.search': 'search',
+  'app.form.reset': 'reset',
+  'app.form.expand': 'expand',
+  'app.form.refresh': 'refresh',
+
+  'app.table.large': 'large',
+  'app.table.middle': 'middle',
+  'app.table.small': 'small',
+  'app.table.lineheight': 'line height',
+  'app.table.fuzzysearch': 'fuzzy search',
+  'app.table.operator': 'Operator',
+  'app.table.updatetime': 'Update time',
+  'app.table.action': 'Action',
 
   'universal-layout.topmenu.userinfo': 'Personal Info',
   'universal-layout.topmenu.logout': 'Logout',
@@ -72,8 +92,31 @@ export default {
   'page.home.workshitcard.card.table-column-title': 'Title',
   'page.home.workshitcard.card.table-column-hit': 'Hits',
 
+  'page.resource.name': 'Resource name',
+  'page.resource.key': 'Resource',
+  'page.resource.category': 'Category',
+  'page.resource.describe': 'Describe',
+  'page.resource.add': 'Create resource',
+
+  'page.role.name': 'Role name',
+  'page.role.key': 'Role',
+  'page.role.describe': 'Describe',
+  'page.role.configresource': 'Config resource',
+  'page.role.add': 'Create role',
+
+  'page.user.enname': 'English name',
+  'page.user.cnname': 'Chinese name',
+  'page.user.role': 'Role',
+  'page.user.job': 'Job',
+  'page.user.email': 'Email',
+  'page.user.phone': 'Phone',
+
   'setting.pagestyle': 'Page Styles',
   'setting.navigationmode': 'Nav mode',
   'setting.headfixed': 'Head fixed',
   'setting.navtabs': 'Nav tabs',
+
+  'test.menuacl': 'Menu permission',
+  'test.pageacl': 'Page permission',
+  'test.apiacl': 'API permission',
 };

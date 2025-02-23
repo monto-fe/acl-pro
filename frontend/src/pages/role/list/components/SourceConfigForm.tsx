@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Modal, Transfer } from 'antd';
 import type { TransferProps } from 'antd';
 
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
 import { queryList as querySourceList } from '@/pages/resource/service';
+
 import { TableListItem } from '../../data';
 import { assertRolePermission } from '../../service';
 
@@ -28,6 +31,10 @@ interface RecordType {
 function SourceConfigForm(props: ISourceConfigFormProps) {
   const { title, visible, setVisible, onCancel, width, configData, callback } = props;
 
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [datasource, setDatasource] = useState<RecordType[]>([]);
   const [targetKeys, setTargetKeys] = useState<TransferProps['targetKeys']>([]);
@@ -42,30 +49,38 @@ function SourceConfigForm(props: ISourceConfigFormProps) {
   const onOk = () => {
     if (configData?.id && targetKeys) {
       setLoading(true);
-      assertRolePermission(configData.id, targetKeys.map((key) => {
-        return { resource_id: +(key as number) }
-      })).then(() => {
-        setLoading(false);
-        setVisible(false);
-        callback && callback();
-      }).catch(() => {
-        setLoading(false);
-      })
+      assertRolePermission(
+        configData.id,
+        targetKeys.map((key) => ({ resource_id: +(key as number) })),
+      )
+        .then(() => {
+          setLoading(false);
+          setVisible(false);
+          callback && callback();
+        })
+        .catch(() => {
+          setLoading(false);
+        });
     }
-  }
+  };
 
   useEffect(() => {
-    setTargetKeys((configData?.resource || []).map(res => +res.id));
+    setTargetKeys((configData?.resource || []).map((res) => +res.id));
   }, [configData]);
 
   useEffect(() => {
     setLoading(true);
-    querySourceList().then(res => {
-      setDatasource((res.data?.data || []).map((data: RecordType) => { return { ...data, key: +data.id } }));
-      setLoading(false);
-    }).catch(() => {
-      setLoading(false);
-    });
+    querySourceList({
+      current: 1,
+      pageSize: 99999,
+    })
+      .then((res) => {
+        setDatasource((res.data?.data || []).map((data: RecordType) => ({ ...data, key: +data.id })));
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -81,7 +96,7 @@ function SourceConfigForm(props: ISourceConfigFormProps) {
       maskClosable={false}
       onOk={onOk}
       width={width}
-      cancelText={'关闭'}
+      cancelText={t('app.global.close')}
     >
       <Transfer
         dataSource={datasource}
@@ -94,6 +109,6 @@ function SourceConfigForm(props: ISourceConfigFormProps) {
       />
     </Modal>
   );
-};
+}
 
 export default SourceConfigForm;

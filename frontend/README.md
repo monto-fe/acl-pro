@@ -1,6 +1,5 @@
 # monto-acl-frontend
 
-
 ## 开发注意
 
 - node: v18+
@@ -13,10 +12,10 @@
 
 ## 笔记
 
-1. 本地调试mobx内部代理对象，可以这样：
+1. 本地调试 mobx 内部代理对象，可以这样：
 
 ```js
 import { toJS } from 'mobx';
 
-console.log(toJS(user))
+console.log(toJS(user));
 ```

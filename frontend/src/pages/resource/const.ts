@@ -3,5 +3,5 @@ export const resourceCategoryMap = {
   API: 'API',
   Menu: 'Menu',
   Action: 'Action',
-  Other: 'Other'
+  Other: 'Other',
 };

@@ -19,4 +19,4 @@ export interface TableListItem {
 
 export type Permission = {
   resource_id: number;
-}
+};

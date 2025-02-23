@@ -17,7 +17,7 @@ export async function createData(params: TableListItem): Promise<any> {
     method: 'post',
     data: {
       ...params,
-      namespace
+      namespace,
     },
   });
 }
@@ -39,7 +39,7 @@ export async function removeData(id: number): Promise<any> {
     method: 'delete',
     data: {
       id,
-      namespace
+      namespace,
     },
   });
 }
@@ -50,7 +50,7 @@ export async function assertRolePermission(role_id: number, resource_ids: Permis
     method: 'post',
     data: {
       role_id,
-      resource_ids: resource_ids.map((p) => p.resource_id)
+      resource_ids: resource_ids.map((p) => p.resource_id),
     },
   });
 }

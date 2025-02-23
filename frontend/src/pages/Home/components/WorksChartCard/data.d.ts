@@ -3,7 +3,6 @@ export interface ChartDataType {
   num: number[];
 }
 
-
 export interface WorksChartDataType {
   total: number;
   num: number;
