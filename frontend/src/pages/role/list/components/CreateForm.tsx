@@ -5,7 +5,7 @@ import { Modal, Form, Input, Button, message } from 'antd';
 // import { queryList as queryRoleList } from '../../service';
 
 import { TableListItem } from '../../data.d';
-import FormModal from '@/pages/component/form/FormModal';
+import FormModal from '@/pages/component/Form/FormModal';
 
 interface ICreateFormProps {
   visible: boolean;

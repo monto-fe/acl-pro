@@ -27,6 +27,7 @@ export default memo(observer(() => {
     },
     [],
   );
+
   return (
     <Dropdown
       trigger={['hover']}

@@ -10,3 +10,13 @@
 
 - admin
 - heng.du
+
+## 笔记
+
+1. 本地调试mobx内部代理对象，可以这样：
+
+```js
+import { toJS } from 'mobx';
+
+console.log(toJS(user))
+```

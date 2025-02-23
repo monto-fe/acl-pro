@@ -68,4 +68,9 @@ export default {
   'page.home.workshitcard.card.table-column-number': '序號',
   'page.home.workshitcard.card.table-column-title': '標題',
   'page.home.workshitcard.card.table-column-hit': '瀏覽量',
+
+  'setting.pagestyle': '頁面風格',
+  'setting.navigationmode': '導航風格',
+  'setting.headfixed': '固定頭部',
+  'setting.navtabs': 'tab導航',
 };

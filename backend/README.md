@@ -42,3 +42,4 @@ hooks: {
 - API的权限初始化
 - Readme.md更新
 - 构建不同环境的Docker镜像
+- 一键部署
