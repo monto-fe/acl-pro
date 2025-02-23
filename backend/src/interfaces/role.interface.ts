@@ -10,6 +10,21 @@ export interface Role {
     update_time: number;
 }
 
+
+export interface PermissionItems {
+    resource_id: number;
+    describe: string;
+}
+
+export interface UpdateRoleReq {
+    id: number;
+    namespace: string;
+    role: string;
+    name: string;
+    describe: string;
+    permissions: PermissionItems[]
+}
+
 export interface RoleReq {
     namespace: string;
     role: string;

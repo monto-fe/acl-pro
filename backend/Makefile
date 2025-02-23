@@ -11,13 +11,15 @@ build-dev:
 	docker build -t ${APP_NAME}\
 		--target development-build-stage\
 		-f Dockerfile .
-
-# Build the container image - Production
-build:
-	sh deploy.sh
 		
 build-m1:
 	docker build -t ${APP_NAME}\
+		--target production-build-stage\
+		-f Dockerfile .
+
+build-amd64:
+	docker build -t acl-pro\
+		--platform linux/amd64\
 		--target production-build-stage\
 		-f Dockerfile .
 

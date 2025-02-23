@@ -1,6 +1,4 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
-// import { ResourceModel } from './resource.model';
-// import { RolePermissionModel } from './rolePermission.model';
 import { UserRole } from '../interfaces/role.interface';
 
 export type UserRoleCreationAttributes = Optional<UserRole, 'id'>;
@@ -16,14 +14,6 @@ export class UserRoleModel extends Model<UserRole, UserRoleCreationAttributes> i
     public update_time: number;
 }
 
-// UserRoleModel.belongsToMany(ResourceModel, {
-//     through: RolePermissionModel,
-//     foreignKey: 'role_id',
-//     otherKey: 'resource_id'
-// });
-
-// export { UserRoleModel }
-
 export default function (sequelize: Sequelize): typeof UserRoleModel {
     UserRoleModel.init(
     {
@@ -33,13 +23,13 @@ export default function (sequelize: Sequelize): typeof UserRoleModel {
             primaryKey: true,
         },
         namespace: {
-            type: new DataTypes.STRING(512),
+            type: new DataTypes.STRING(128),
             allowNull: false,
             comment: '所属项目组',
             defaultValue: '',
         },
         user: {
-            type: new DataTypes.STRING(512),
+            type: new DataTypes.STRING(255),
             allowNull: false,
             comment: '用户英文名',
             defaultValue: '',
@@ -56,7 +46,7 @@ export default function (sequelize: Sequelize): typeof UserRoleModel {
             comment: '当前状态(-1: 禁用；1: 可用；)',
         },
         operator: {
-            type: new DataTypes.STRING(512),
+            type: new DataTypes.STRING(128),
             allowNull: false,
             comment: '创建人',
             defaultValue: '',

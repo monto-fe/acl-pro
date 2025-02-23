@@ -33,7 +33,7 @@ function App() {
       pageSize: 99999,
     }).then((response: ResponseData<RoleTableListItem[]>) => {
       if (response) {
-        setRoleList(response.data || []);
+        setRoleList(response.data.data || []);
       }
     });
   }

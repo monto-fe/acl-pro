@@ -88,7 +88,7 @@ function CommonTable<T extends AnyObject>(props: ITable<T>, ref: Ref<unknown> | 
 
     queryList(params).then((response: ResponseData<T[]>) => {
       if (response) {
-        setList(response.data || []);
+        setList(Array.isArray(response.data.data) ? response.data.data : []);
         setPagination({
           ...pagination,
           current,

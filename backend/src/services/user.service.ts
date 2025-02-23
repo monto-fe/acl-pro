@@ -1,14 +1,12 @@
 import md5 from 'md5';
 import { Op } from 'sequelize';
+
 import DB from '../databases';
 import { HttpException } from '../exceptions/HttpException';
-import { User, UserResponse, UpdateUserReq, UserReq } from '../interfaces/user.interface';
+import { User, UpdateUserReq, UserReq, LoginParams, UserRole } from '../interfaces/user.interface';
+import { Role } from '../interfaces/role.interface';
 import { getUnixTimestamp, DefaultPassword } from '../utils';
-import { 
-  generateSignToken, 
-  TokenSecretKey, 
-  TokenExpired
-} from '../utils/util'
+import { generateSignToken, TokenSecretKey, TokenExpired } from '../utils/util'
 
 class UserService {
   public User = DB.Users;
@@ -16,11 +14,6 @@ class UserService {
   public UserRole = DB.UserRole;
   public Role = DB.Role;
   public now = getUnixTimestamp()
-
-  public async findAll(query: any): Promise<UserResponse> {
-    const { count, rows }  = await this.User.findAndCountAll(query);
-    return { data: rows, count: count };
-  }
 
   public async findUserById({id}:{id: number}): Promise<User> {
     const findUser: User | null = await this.User.findOne({ where: { id } });
@@ -34,17 +27,17 @@ class UserService {
     if (!findUser) throw new HttpException(409, "You're not user");
     // 查user关联的roleId信息
     const user = findUser.user;
-    const findUserRole: any[] = await this.UserRole.findAll({ where: { user } });
+    const findUserRole: UserRole[] = await this.UserRole.findAll({ where: { user } });
     // 查roleList信息
-    const roleIds = findUserRole.map((item: any) => item.role_id); 
-    const roleList = await this.Role.findAll({ where: { id: roleIds } });
+    const roleIds: number[] = findUserRole.map((item: UserRole) => item.role_id); 
+    const roleList: Role[] = await this.Role.findAll({ where: { id: roleIds } });
     return {
       userInfo: findUser,
       roleList
     }
   }
 
-  public async findUserByUsername({user, namespace}:{user: string, namespace: string}): Promise<User | null> {
+  public async findUserByUsername({user, namespace}:LoginParams): Promise<User | null> {
     const findUser: User | null = await this.User.findOne({
       where: { user, namespace },
       raw: true
@@ -66,27 +59,36 @@ class UserService {
     return user !== null
   }
 
-  public async login(Data: any): Promise<any> {
+  public async login(Data: LoginParams): Promise<any> {
     const { id, user, namespace } = Data;
     // TODO: 先检查当前的有效期是否过期，如果不过期则取最新的值
-    const jwtToken = generateSignToken({id, user, namespace, create_time: this.now }, TokenSecretKey, TokenExpired)
-    const expired = this.now + 8 * 60 * 60
-    if(jwtToken) {
-      try{
-        await this.Token.create({
-          token: jwtToken,
-          user,
-          expired_at: expired,
-          create_time: this.now,
-          update_time: this.now
-        })
-        return { jwtToken }
-      }catch(err) {
-        console.log("err", err)
-        return { jwtToken: '' }
+    const existingToken = await this.Token.findOne({ 
+      where: { user },
+      order: [['create_time', 'DESC']] 
+    });
+    console.log("this.now", this.now)
+    const now = getUnixTimestamp()
+    if (existingToken && existingToken.dataValues.expired_at > now) {
+      return { jwtToken: existingToken.dataValues.token };
+    }else {
+      const jwtToken = generateSignToken({id, user, namespace, create_time: now }, TokenSecretKey, TokenExpired)
+      const expired = now + 8 * 60 * 60
+      if(jwtToken) {
+        try{
+          await this.Token.create({
+            token: jwtToken,
+            user,
+            expired_at: expired,
+            create_time: now,
+            update_time: now
+          })
+          return { jwtToken }
+        }catch(err) {
+          console.log("err", err)
+          return { jwtToken: '' }
+        }
       }
     }
-    return { jwtToken: '' }
   }
 
   public async createUser(Data: User): Promise<User> {
@@ -95,8 +97,16 @@ class UserService {
     return createUser;
   }
 
-  public async updateUser(Data: any, Id: number): Promise<any> {
-    const res: any = await this.User.update({...Data}, {where: {id: Id}})
+  public async updateUser(Data: UpdateUserReq): Promise<any> {
+    const { user, name, email, phone_number, job } = Data;
+    const { id } = Data;
+    const res: any = await this.User.update({
+      user, name, email, phone_number, job
+    }, {
+      where: {
+        id
+      }
+    })
     return res
   }
 
@@ -142,7 +152,6 @@ class UserService {
         email,
         phone_number
       }, { transaction: t });
-      // if role_ids.length = 0
       if(Array.isArray(role_ids) && role_ids.length > 0){
         const batchRoles = role_ids.map((item: any) => {
           return {
@@ -167,12 +176,12 @@ class UserService {
   }
   // updateInnerUser
   public async updateInnerUser(Data: UpdateUserReq): Promise<any> {
-    const { namespace, id, user, role_ids, operator, ...params } = Data;
+    const { namespace, id, role_ids, operator, password, name, phone_number, job, email, user } = Data;
     const t = await DB.sequelize.transaction();
     try {
       await this.User.update({
-        ...params
-      }, { where: { id, namespace, user } }, { transaction: t });
+        password, name, phone_number, job, email
+      }, { where: { id, namespace } }, { transaction: t });
       // 更新角色信息
       if(Array.isArray(role_ids) && role_ids.length > 0){
         await this.UserRole.destroy({where: {

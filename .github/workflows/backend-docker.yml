@@ -1,0 +1,53 @@
+name: 构建docker推送docker hub 
+
+on:
+  push:
+    branches:
+      - "deploy/api"
+    tags:
+      - "*"
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub (command line)
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_NAME }}" --password-stdin
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: all
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Get Git Tag
+        id: get_tag
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "tag_name=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          else
+            echo "This is not a tag push. Exiting..."
+            exit 1
+          fi
+
+      - name: Build and Push Docker Images
+        if: env.tag_name
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend/
+          file: ./backend/Dockerfile.prod
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_HUB_NAME }}/uacl:${{ env.tag_name }}
+            ${{ secrets.DOCKER_HUB_NAME }}/uacl:latest
+          platforms: linux/amd64,linux/arm64
+
+      - name: Post Build Success
+        run: echo "Docker images built and pushed successfully!"

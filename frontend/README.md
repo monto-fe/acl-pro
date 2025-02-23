@@ -5,3 +5,8 @@
 
 - node: v18+
 - 需使用 pnpm
+
+## 账号
+
+- admin
+- heng.du

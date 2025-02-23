@@ -28,7 +28,7 @@ export const pageSize = {
   limit: 10
 }
 
-export const TokenSecretKey = "okr_backend_token"
+export const TokenSecretKey = "acl"
 export const TokenExpired = '8h'
 export const RefreshTokenExpired = '3 days'
 export const RetCodeMap = {

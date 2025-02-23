@@ -12,10 +12,17 @@ export interface Resource {
     update_time: number;
 }
 
+export enum CategoryEnum {
+    Action = "Action",
+    Api = "API",
+    Menu = "Menu",
+    Other = "Other"
+}
+
 export interface ResourceReq {
     id?: number;
     namespace: string;
-    category: string;
+    category: CategoryEnum;
     resource: string;
     properties: string;
     name: string;

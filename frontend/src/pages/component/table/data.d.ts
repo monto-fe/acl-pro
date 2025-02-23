@@ -8,7 +8,7 @@ export interface PaginationConfig {
 
 export interface ITable<T> {
   queryList: Function;
-  columns: ColumnsType<T>;
+  columns: ColumnsType<any>;
   title?: React.ReactElement | string;
   rowKey?: string;
   useTools?: boolean;

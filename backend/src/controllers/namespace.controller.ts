@@ -1,14 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { NamespaceReq, Namespace, NamespaceReqList } from '../interfaces/namespace.interface';
 import NamespaceService from '../services/namespace.service';
-import { ResponseMap, HttpCodeSuccess } from '../utils/const';
+import { ResponseMap } from '../utils/const';
 import { pageCompute } from '../utils/pageCompute';
+import ResponseHandler from '../utils/responseHandler';
 
-const { Success, ParamsError } = ResponseMap
+const { ParamsError } = ResponseMap
 
 interface NamespaceResult {
-  rows: any[]; // 假设`rows`是一个数组，具体类型未知
-  count: number; // `count`是一个数字
+  rows: any[]; 
+  count: number; 
 }
 
 class NamespaceController {
@@ -27,28 +28,20 @@ class NamespaceController {
     try {
       const result: NamespaceResult = await this.NamespaceService.findWithAllChildren(params);
       const { rows, count } = result;
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: rows || [],
-        total: count 
-      });
+      return ResponseHandler.success(res, { data: rows||[], total: count });
 		} catch (error: any) {
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        message: error.message 
-      });
+      return ResponseHandler.error(res, error);
 		}
   }
 
   public createProject = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query: NamespaceReq = req.body;
-      const remoteUser = req.headers['remoteUser']
+      const remoteUser = req.headers['remoteUser'] as string;
       const { namespace, parent, name, describe } = query;
       
       if (!namespace || !name ) {
-        res.status(HttpCodeSuccess).json({ ...ParamsError });
-        return;
+        return ResponseHandler.error(res, ParamsError);
       }
 
       const result = await this.NamespaceService.checkNamespace({
@@ -57,11 +50,7 @@ class NamespaceController {
       });
 
       if(result){
-        res.status(HttpCodeSuccess).json({ 
-          ...ParamsError, 
-          message: 'namespace or name already exists'
-        });
-        return
+        return ResponseHandler.error(res, ParamsError, 'namespace or name already exists');
       }
 
       const namespaceParams: any = {
@@ -77,10 +66,7 @@ class NamespaceController {
       }
 
 			const createData: any = await this.NamespaceService.create(namespaceParams);
-      res.status(HttpCodeSuccess).json({ 
-        ...Success, 
-        data: createData
-      });
+      return ResponseHandler.success(res, createData);
 		} catch (error) {
 			next(error);
 		}
@@ -91,22 +77,13 @@ class NamespaceController {
       const body: Namespace = req.body;
       const { id } = body;
       if(!id){
-        res.status(HttpCodeSuccess).json({ 
-          ...Error, 
-          message: 'id is required'
-        });
-        return
+        return ResponseHandler.error(res, ParamsError, 'id is required');
       }
       const response: any = await this.NamespaceService.update(body)
       if(response){
-        res.status(HttpCodeSuccess).json({ 
-          ...Success, 
-          data: response
-        });
+        return ResponseHandler.success(res, response);
       }else{
-        res.status(HttpCodeSuccess).json({ 
-          ...ParamsError
-        });
+        return ResponseHandler.error(res, ParamsError);
       }
 		} catch (error) {
 			next(error);
@@ -115,20 +92,12 @@ class NamespaceController {
 
   public deleteProject = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body: {id: number } = req.body;
-      const { id } = body;
-    
-      const result: any = await this.NamespaceService.deleteSelf({
-				id
-      });
+      const { id } = req.body as any;
+      const result: any = await this.NamespaceService.deleteSelf({ id });
       if(result){
-        res.status(HttpCodeSuccess).json({ 
-          ...Success
-        });
+        return ResponseHandler.success(res);
       }else{
-        res.status(HttpCodeSuccess).json({ 
-          ...ParamsError
-        });
+        return ResponseHandler.error(res, ParamsError);
       }
 		} catch (error) {
 			next(error);

@@ -1,16 +1,12 @@
 # Common build stage
 FROM node:18-alpine as common-build-stage
 
-COPY ./backend ./app
+COPY ./* ./app
 
 WORKDIR /app
 
 RUN npm i -g pm2
 RUN yarn install && yarn build
-
-# RUN npm cache clean --force && npm install pm2 -g && npm install
-
-# RUN npm prune --production
 
 EXPOSE 3000
 
