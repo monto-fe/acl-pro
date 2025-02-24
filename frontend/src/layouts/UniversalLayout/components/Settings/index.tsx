@@ -85,7 +85,7 @@ export default memo(
               </div>
             </div>
 
-            <Divider style={{ margin: '10px 0' }} />
+            <Divider />
 
             <div className={style['setting-title']}>{t('setting.navigationmode')}</div>
             <div className={style['setting-radio']}>
@@ -117,7 +117,7 @@ export default memo(
               </div>
             </div>
 
-            <Divider style={{ margin: '10px 0' }} />
+            <Divider />
 
             <div className={style['setting-list']}>
               <div className={style['setting-list-item']}>

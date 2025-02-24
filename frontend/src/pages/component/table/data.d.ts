@@ -1,3 +1,5 @@
+import { FormType } from "@/@types/enum";
+
 export interface PaginationConfig {
   total: number;
   current: number;
@@ -9,7 +11,7 @@ export interface PaginationConfig {
 export interface ITableFilterItem {
   label: string;
   name: string;
-  type: string;
+  type: FormType;
   option?: unknown;
   options?: unknown;
   span?: number;

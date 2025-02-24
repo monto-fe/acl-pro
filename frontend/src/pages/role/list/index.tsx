@@ -1,6 +1,7 @@
-import { useContext, useRef, useState } from 'react';
+import { memo, useContext, useRef, useState } from 'react';
 import { Button, FormInstance, message, Popconfirm, PopconfirmProps, Space } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { observer } from 'mobx-react-lite';
 
 import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
 import CommonTable from '@/pages/component/Table';
@@ -116,6 +117,7 @@ function App() {
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
+      width: 220,
       render: (text, record: TableListItem) => (
         <Space size='small'>
           <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
@@ -198,4 +200,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(observer(App));

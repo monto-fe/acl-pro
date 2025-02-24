@@ -1,24 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useContext, useEffect, useRef, useState } from 'react';
 import { Button, FormInstance, message, Popconfirm, PopconfirmProps, Popover, Space } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { observer } from 'mobx-react-lite';
 
-import { i18nLocaleDefault, useI18n } from '@/store/i18n';
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
 import { ResponseData } from '@/utils/request';
 import { createData, queryList, removeData, updateData as updateDataService } from './service';
 import { queryList as queryRoleList } from '@/pages/role/service';
 import { TableListItem as RoleTableListItem } from '@/pages/role/data.d';
-import { TableListItem } from './data.d';
-
-import CreateForm from './components/CreateForm';
-import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
 import CommonTable from '@/pages/component/Table';
 import { ITable } from '@/pages/component/Table/data';
 import Permission from '@/components/Permission';
+import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
+
+import CreateForm from './components/CreateForm';
 import Preview from './components/Preview';
+import { TableListItem } from './data.d';
 
 function App() {
-  const t = useI18n(i18nLocaleDefault);
   const tableRef = useRef<ITable<TableListItem>>();
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+
   const [roleList, setRoleList] = useState<RoleTableListItem[]>([]);
 
   const getRoleList = () => {
@@ -186,6 +191,7 @@ function App() {
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
+      width: 150,
       render: (text, record: TableListItem) => (
         <Permission
           role='admin'
@@ -196,6 +202,9 @@ function App() {
           }
         >
           <Space size='small'>
+            <Button className='btn-group-cell' size='small' type='link' onClick={() => handlePreview(record)}>
+              {t('app.global.view')}
+            </Button>
             <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
               {t('app.global.edit')}
             </Button>
@@ -226,13 +235,13 @@ function App() {
 
   const formItems = [
     {
-      label: '英文名	',
+      label: t('page.user.enname'),
       name: 'user',
       type: 'Input',
       span: 8,
     },
     {
-      label: '姓名',
+      label: t('page.user.cnname'),
       name: 'userName',
       type: 'Input',
       span: 8,
@@ -248,7 +257,7 @@ function App() {
         title={
           <Permission role='admin' noNode={null}>
             <Button type='primary' onClick={handleCreate}>
-              新增用户
+              {t('page.user.add')}
             </Button>
           </Permission>
         }
@@ -269,4 +278,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(observer(App));

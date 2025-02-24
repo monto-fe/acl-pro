@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { FormInstance } from 'antd/lib/form';
+import { useContext } from 'react';
 import { Form } from 'antd';
 
 import { BasicContext } from '@/store/context';
@@ -9,14 +8,8 @@ import FormModal from '@/pages/component/Form/FormModal';
 import { TableListItem } from '../../data.d';
 import { resourceCategories } from '../../const';
 
-interface ICreateFormProps {
-  visible: boolean;
-  setVisible: Function;
-  initialValues?: Partial<TableListItem>;
-  onSubmitLoading: boolean;
-  onSubmit: (values: TableListItem, form: FormInstance) => void;
-  onCancel?: () => void;
-}
+import { ICreateFormProps, IFormItem } from '@/@types/form';
+import { FormType } from '@/@types/enum';
 
 function CreateForm(props: ICreateFormProps) {
   const { visible, setVisible, initialValues, onSubmit, onSubmitLoading, onCancel } = props;
@@ -26,24 +19,24 @@ function CreateForm(props: ICreateFormProps) {
   const { i18nLocale } = context.storeContext;
   const t = useI18n(i18nLocale);
 
-  const addFormItems = [
+  const addFormItems: IFormItem[] = [
     {
       label: t('page.resource.name'),
       name: 'name',
       required: true,
-      type: 'Input',
+      type: FormType.Input,
     },
     {
       label: t('page.resource.key'),
       name: 'resource',
       required: true,
-      type: 'Input',
+      type: FormType.Input,
     },
     {
       label: t('page.resource.category'),
       name: 'category',
       required: true,
-      type: 'Select',
+      type: FormType.Select,
       options: resourceCategories.map((item: string) => ({
         label: item,
         value: item,
@@ -52,7 +45,7 @@ function CreateForm(props: ICreateFormProps) {
     {
       label: t('page.resource.describe'),
       name: 'describe',
-      type: 'Input',
+      type: FormType.Input,
     },
   ];
 
@@ -68,6 +61,10 @@ function CreateForm(props: ICreateFormProps) {
         confirmLoading={onSubmitLoading}
         initialValues={initialValues}
         title={t('page.resource.add')}
+        formLayout={{
+          labelCol: { span: 8 },
+          wrapperCol: { span: 14 }
+        }}
         ItemOptions={addFormItems}
         onFinish={onFinish}
         onCancel={onCancel}

@@ -151,12 +151,12 @@ function CommonTable<T extends AnyObject>(props: ITable<T>, ref: Ref<unknown> | 
   return (
     <>
       {filterFormItems ? (
-        <Card bordered={false} className='mb-16'>
+        <Card variant="outlined" className='mb-16'>
           <Filters items={filterFormItems} size={size} handleSearch={handleSearch} />
         </Card>
       ) : null}
       <Card
-        bordered={false}
+        variant="outlined"
         title={title}
         extra={
           <Flex align='center'>

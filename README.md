@@ -217,8 +217,4 @@ _以下是一个关于你如何指导你的受众安装和设置你的应用程�
 
 See the [open issues](https://github.com/monto-fe/acl-pro/issues) for a full list of proposed features (and known issues).
 
-<<<<<<< HEAD
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-=======
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
->>>>>>> aa7068986c360a8ad42971c2aa2687e19d6203cb

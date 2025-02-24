@@ -1,21 +1,13 @@
 import React, { useContext } from 'react';
 import { Form } from 'antd';
-import { FormInstance } from 'antd/lib/form';
 
 import FormModal from '@/pages/component/Form/FormModal';
 import { BasicContext } from '@/store/context';
 import { useI18n } from '@/store/i18n';
 
+import { ICreateFormProps, IFormItem } from '@/@types/form';
+import { FormType } from '@/@types/enum';
 import { TableListItem } from '../../data.d';
-
-interface ICreateFormProps {
-  visible: boolean;
-  setVisible: Function;
-  initialValues?: Partial<TableListItem>;
-  onSubmitLoading: boolean;
-  onSubmit: (values: TableListItem, form: FormInstance) => void;
-  onCancel?: () => void;
-}
 
 const CreateForm: React.FC<ICreateFormProps> = (props) => {
   const { visible, setVisible, initialValues, onSubmit, onSubmitLoading, onCancel } = props;
@@ -26,23 +18,23 @@ const CreateForm: React.FC<ICreateFormProps> = (props) => {
 
   const [form] = Form.useForm();
 
-  const addFormItems = [
+  const addFormItems: IFormItem[] = [
     {
       label: t('page.role.name'),
       name: 'name',
       required: true,
-      type: 'Input',
+      type: FormType.Input,
     },
     {
       label: t('page.role.key'),
       name: 'role',
       required: true,
-      type: 'Input',
+      type: FormType.Input,
     },
     {
       label: t('page.resource.key'),
       name: 'describe',
-      type: 'Input',
+      type: FormType.Input,
     },
   ];
 

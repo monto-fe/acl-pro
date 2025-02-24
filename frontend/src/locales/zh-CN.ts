@@ -106,10 +106,13 @@ export default {
 
   'page.user.enname': '英文名',
   'page.user.cnname': '中文名',
+  'page.user.password': '密码',
   'page.user.role': '角色',
   'page.user.job': '职位',
   'page.user.email': '邮箱',
   'page.user.phone': '手机号',
+  'page.user.add': '创建用户',
+  'page.user.view': '查看用户',
 
   'setting.pagestyle': '页面风格',
   'setting.navigationmode': '导航风格',

@@ -9,9 +9,10 @@ export type NavMode = 'inline' | 'horizontal';
 
 export interface SettingsType {
   /**
-   * 站点名称
+   * 站点名称 & 名称缩写
    */
   siteTitle: string;
+  siteAbbreviationTitle: string;
 
   /**
    * 站点本地存储Token 的 Key值

@@ -35,6 +35,7 @@ export default memo(
     const {
       token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
     const t = useI18n(i18nLocale);
     // 框架所有菜单路由 与 patch key格式的所有菜单路由
     const routerPathKeyRouter = useMemo(() => formatRoutes(layoutRotes), []);
@@ -69,13 +70,13 @@ export default memo(
             ? '#001529'
             : colorBgContainer
           : globalConfig.theme === 'light'
-          ? colorBgContainer
-          : '#001529',
+            ? colorBgContainer
+            : '#001529',
       [globalConfig.navMode, globalConfig.theme],
     );
 
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout className='universallayout'>
         {globalConfig.navMode === 'inline' ? (
           <Sider collapsible trigger={null} collapsed={globalConfig.collapsed} theme={globalConfig.theme}>
             <LeftSider
@@ -87,26 +88,24 @@ export default memo(
             />
           </Sider>
         ) : null}
-        <Layout id='universallayout-right-main'>
+        <Layout className='universallayout-right-main'>
+          {/* 右侧顶部导航 */}
           <Header
-            style={{ padding: 0, background: getHeaderStyle }}
+            style={{ background: getHeaderStyle }}
             className={classnames({
               fixed: globalConfig.headFixed,
               collapsed: globalConfig.collapsed,
               horizontal: globalConfig.navMode === 'horizontal',
+              'p-0': true
             })}
           >
-            <Flex style={{ height: 64, width: '100%' }}>
+            <Flex className='header-layout'>
               {globalConfig.navMode === 'inline' ? (
                 <Button
                   type='text'
                   icon={globalConfig.collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                   onClick={() => updateCollapsed(!globalConfig.collapsed)}
-                  style={{
-                    fontSize: '16px',
-                    width: 64,
-                    height: 64,
-                  }}
+                  className='collapse'
                 />
               ) : null}
               <RightTop
@@ -117,14 +116,16 @@ export default memo(
               />
             </Flex>
           </Header>
+
+          {/* 右下中间主要内容插槽 */}
           <Content
             style={{
-              padding: 24,
               borderRadius: borderRadiusLG,
             }}
             className={classnames({
               headerfixed: globalConfig.headFixed,
               horizontal: globalConfig.navMode === 'horizontal',
+              'main-layout': true
             })}
           >
             <Permission role={routeItem?.meta?.roles}>
@@ -135,7 +136,7 @@ export default memo(
               {children}
             </Permission>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
+          <Footer className='text-center'>
             <RightFooter />
           </Footer>
         </Layout>

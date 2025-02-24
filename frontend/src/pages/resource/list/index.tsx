@@ -115,6 +115,7 @@ function App() {
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
+      width: 100,
       render: (text, record: TableListItem) => (
         <Space size='small'>
           <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>

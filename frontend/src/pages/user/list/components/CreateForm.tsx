@@ -1,9 +1,15 @@
+import { useContext } from 'react';
 import { FormInstance } from 'antd/lib/form';
 import { Form } from 'antd';
 
-import { TableListItem, TableQueryParam } from '../data.d';
 import { TableListItem as RoleTableListItem } from '@/pages/role/data.d';
 import FormModal from '@/pages/component/Form/FormModal';
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
+
+import { TableListItem, TableQueryParam } from '../data.d';
+import { IFormItem } from '@/@types/form';
+import { FormType } from '@/@types/enum';
 
 interface ICreateFormProps {
   visible: boolean;
@@ -18,48 +24,52 @@ interface ICreateFormProps {
 function CreateForm(props: ICreateFormProps) {
   const { visible, setVisible, roleList, initialValues, onSubmit, onSubmitLoading, onCancel } = props;
 
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+
   const [form] = Form.useForm();
 
-  const addFormItems = [
+  const addFormItems: IFormItem[] = [
     {
-      label: '英文名',
+      label: t('page.user.enname'),
       name: 'user',
       required: true,
-      type: 'Input',
+      type: FormType.Input,
     },
     {
-      label: '中文名',
+      label: t('page.user.cnname'),
       name: 'name',
       required: true,
-      type: 'Input',
+      type: FormType.Input,
     },
     {
-      label: '密码',
+      label: t('page.user.password'),
       name: 'password',
       option: {
         placeholder: 'default: 12345678',
       },
-      type: 'Input',
+      type: FormType.Input,
     },
     {
-      label: '职位',
+      label: t('page.user.job'),
       name: 'job',
-      type: 'Input',
+      type: FormType.Input,
     },
     {
-      label: '邮箱',
+      label: t('page.user.email'),
       name: 'email',
-      type: 'Input',
+      type: FormType.Input,
     },
     {
-      label: '手机号',
+      label: t('page.user.phone'),
       name: 'phone_number',
-      type: 'Input',
+      type: FormType.Input,
     },
     {
-      label: '角色',
+      label: t('page.user.role'),
       name: 'role_ids',
-      type: 'SelectMultiple',
+      type: FormType.SelectMultiple,
       options: (roleList || []).map((role: RoleTableListItem) => ({
         label: `${role.name} (${role.role})`,
         value: role.id,
@@ -78,7 +88,7 @@ function CreateForm(props: ICreateFormProps) {
         setVisible={setVisible}
         confirmLoading={onSubmitLoading}
         initialValues={initialValues}
-        title={initialValues?.id ? '编辑用户' : '新增用户'}
+        title={initialValues?.id ? t('app.global.edit') : t('page.user.add')}
         ItemOptions={addFormItems}
         onFinish={onFinish}
         onCancel={onCancel}

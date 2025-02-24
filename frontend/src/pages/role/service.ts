@@ -51,6 +51,7 @@ export async function assertRolePermission(role_id: number, resource_ids: Permis
     data: {
       role_id,
       resource_ids: resource_ids.map((p) => p.resource_id),
+      namespace,
     },
   });
 }
