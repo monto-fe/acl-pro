@@ -213,9 +213,9 @@ class AICheckService {
     }
 
     public async postCommentToGitLab({
-      comment, projectId, mergeRequestId, gitlabToken
+      comment, projectId, mergeRequestId, gitlabToken, gitlabAPI
     }:{
-      comment: string, projectId: number, mergeRequestId: number, gitlabToken: string
+      comment: string, projectId: number, mergeRequestId: number, gitlabToken: string, gitlabAPI: string
     }): Promise<any> {
         console.log("comment:", `${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/notes`)
         const response = await axios.post(`${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/notes`, 
