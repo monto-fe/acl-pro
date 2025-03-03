@@ -44,7 +44,7 @@ export default function (sequelize: Sequelize): typeof GitlabModel {
           comment: 'GitLab 版本',
       },
       expired: {
-          type: DataTypes.DATE,
+          type: DataTypes.INTEGER,
           allowNull: false,
           comment: '过期时间',
       },
