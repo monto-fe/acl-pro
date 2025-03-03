@@ -185,14 +185,13 @@ class AICheckService {
         `;
 
         console.log("currentRule:", currentRule, formattedInfo)
-        console.log("openai", this.openai)
         
         const completion = await this.openai.chat.completions.create({
           messages: [
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: formattedInfo }
           ],
-          model: AI_MODEL,
+          model: AI_MODEL
         });
 
         // 将对应的信息，输入ai_message表，并返回结果
@@ -218,6 +217,7 @@ class AICheckService {
     }:{
       comment: string, projectId: number, mergeRequestId: number, gitlabToken: string
     }): Promise<any> {
+        console.log("comment:", `${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/notes`)
         const response = await axios.post(`${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/notes`, 
           {
             body: comment,  // 这里是 AI 的检查结果
