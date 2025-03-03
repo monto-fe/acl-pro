@@ -20,16 +20,6 @@ class WebhookController {
     }
     const { api: gitlabAPI, token: gitlabToken, expired } = gitlabInfo[0].dataValues;
     console.log("gitlabInfo", gitlabAPI, gitlabToken, expired)
-    // 获取AI模型信息
-    const aiModelInfo = await this.AIService.getAIToken();
-    // console.log("aiModel", aiModelInfo)
-    const { rows, count } = aiModelInfo;
-    if(count === 0){
-        ResponseHandler.error(res, {}, '请配置AI Token');
-        return 
-    }
-    const { model, api: aiApi, api_key } = rows[0].dataValues;
-    console.log("ai info", model, aiApi, api_key)
     
     // 获取merge信息
     const mergeRequest = await this.AICheckService.getMergeRequestInfo({
@@ -51,8 +41,7 @@ class WebhookController {
     const result:any = await this.AICheckService.checkMergeRequestWithAI({
       mergeRequest, 
       diff,
-      gitlabToken: gitlabToken,
-      ai_model: model
+      gitlabToken: gitlabToken
     });
 
     console.log("AI检查结果:", result);

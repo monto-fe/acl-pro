@@ -5,10 +5,9 @@ import DB from '../databases';
 import AIRuleService from './aiRule.service';
 import AIService from './ai.service';
 import { getUnixTimestamp } from '../utils';
-
+import { AI_MODEL, AI_API, AI_KEY } from '../config';
 
 const gitlabAPI = "" 
-const enAbleStatus = 1
 
 class AICheckService {
     public AIManager = DB.AIManager;
@@ -20,32 +19,12 @@ class AICheckService {
     public now:number = getUnixTimestamp();
     public cache: any = {};
     public openai: any = {
-        apiKey: '',
-        baseURL: ''
+        apiKey: AI_API,
+        baseURL: AI_KEY
     };
-    constructor() {
-      this.initDatabase();
-    }
-
-    public async initDatabase() {
-        try {
-            // 假设你有一些数据库表是常用的，可以先查询并缓存
-            const aiManagerData = await this.AIManager.findAll()
-            console.log("aiManagerData", aiManagerData)
-            const { model, api, api_key } = aiManagerData.dataValues;
-            // 缓存查询结果
-            this.cache['model'] = model;
-            this.cache['api'] = api;
-            this.cache['api_key'] = api_key;
-            this.openai = new OpenAI({
-              apiKey: api_key,
-              dangerouslyAllowBrowser: true,
-              baseURL: api,
-              maxRetries: 3,
-              timeout: 60000
-            })
-        } catch (error) {
-            console.error('初始化数据库失败:', error);
+    constructor () {
+        if(!AI_MODEL || !AI_API || !AI_KEY){
+            console.error("AI 信息未配置")
         }
     }
 
@@ -158,13 +137,11 @@ class AICheckService {
     public async checkMergeRequestWithAI({
       mergeRequest,
       diff,
-      gitlabToken,
-      ai_model
+      gitlabToken
     }:{
       mergeRequest: any,
       diff: any[], 
-      gitlabToken: string,
-      ai_model: string
+      gitlabToken: string
     }) {
         const { project_id, iid, title, description, web_url, author, updated_at } = mergeRequest;
         console.log("mergeRequest:", mergeRequest);
@@ -206,7 +183,7 @@ class AICheckService {
           根据description描述信息，检查代码中疑似的Bug，如果没有可以不输出。
         `;
 
-        console.log("currentRule:", currentRule, formattedInfo, ai_model)
+        console.log("currentRule:", currentRule, formattedInfo)
       
         
         const completion = await this.openai.chat.completions.create({
@@ -214,7 +191,7 @@ class AICheckService {
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: formattedInfo }
           ],
-          model: ai_model,
+          model: AI_MODEL,
         });
 
         // 将对应的信息，输入ai_message表，并返回结果
@@ -224,7 +201,7 @@ class AICheckService {
           this.AIMessage.create({
             project_id: project_id,
             merge_id: iid,
-            ai_model: ai_model,
+            ai_model: AI_MODEL,
             rule: 1,
             rule_id: 1,
             result: comments,
