@@ -34,7 +34,7 @@ class AICheckService {
     public async initDatabase() {
         try {
             // 假设你有一些数据库表是常用的，可以先查询并缓存
-            const aiManagerData = this.AIManager.findAll()
+            const aiManagerData = await this.AIManager.findAll()
             console.log("aiManagerData", aiManagerData)
             // 缓存查询结果
             this.cache['AIManager'] = aiManagerData;
