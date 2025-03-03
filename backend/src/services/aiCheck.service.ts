@@ -140,26 +140,6 @@ class AICheckService {
     }) {
         const { project_id, iid, title, description, web_url, author, updated_at } = mergeRequest;
         console.log("mergeRequest:", mergeRequest);
-        // 1、获取项目信息和AI基本信息
-        const gitlabInfo = await this.GitlabInfo.findOne({
-          where: {
-            status: enAbleStatus,
-            expired: {
-              [Op.gt]: Date.now()
-            }
-          }
-        });
-        const { gitlabAPI, gitlabToken } = gitlabInfo;
-        console.log("gitlabInfo", gitlabInfo)
-        const AIInfo = await this.AIManager.findOne({
-          where: {
-            status: enAbleStatus,
-            expired: {
-              [Op.gt]: Date.now()
-            }
-          }
-        });
-        console.log("AIInfo", AIInfo)
         // 在这里获取merge项目信息，匹配配置的代码规范，组合成AI提示词
         // TODO: 
         let currentRule = ''
@@ -173,6 +153,7 @@ class AICheckService {
           const commonRule = await this.AIRuleService.getCommonRule({ language })
           currentRule = commonRule;
         }
+        console.log("currentRule:", currentRule)
         // 3、组合提示词，调用AI模型进行检查
         // 4、将检查结果同步到数据库
       
