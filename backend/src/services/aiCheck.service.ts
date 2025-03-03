@@ -229,6 +229,7 @@ class AICheckService {
             }
           }
         );
+        console.log("response:", response)
       
         if (!response.data) {
           throw new Error('Failed to post comment to GitLab');

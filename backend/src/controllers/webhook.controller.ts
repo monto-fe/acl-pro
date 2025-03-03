@@ -54,6 +54,7 @@ class WebhookController {
       gitlabToken,
       gitlabAPI
     });
+    
     console.log("评论已成功提交:", commentResponse);
     ResponseHandler.success(res, { projectId: id, mergeRequestId: iid, comment: result}, 'AI检查结果');
   }
