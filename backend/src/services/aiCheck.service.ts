@@ -18,10 +18,32 @@ class AICheckService {
     public AIService = new AIService();
 
     public now:number = getUnixTimestamp();
-    public openai = new OpenAI({
-        baseURL: "",
-        apiKey: "",
-    });
+    public cache: any = {};
+    public openai: OpenAI = new OpenAI({
+      apiKey: "",
+      dangerouslyAllowBrowser: true,
+      baseURL: "",
+      maxRetries: 3,
+      timeout: 60000
+    })
+    constructor() {
+      this.initDatabase();
+    }
+
+    public async initDatabase() {
+        try {
+            // 假设你有一些数据库表是常用的，可以先查询并缓存
+            const aiManagerData = this.AIManager.findAll()
+            console.log("aiManagerData", aiManagerData)
+            // 缓存查询结果
+            this.cache['AIManager'] = aiManagerData;
+            
+
+            console.log('数据库初始化并缓存完成');
+        } catch (error) {
+            console.error('初始化数据库失败:', error);
+        }
+    }
 
     // 获取项目语言
     public async getProjectLanguages({
@@ -182,7 +204,7 @@ class AICheckService {
 
         console.log("currentRule:", currentRule, formattedInfo, ai_model)
       
-        // 调用 AI 模型进行检查
+        
         const completion = await this.openai.chat.completions.create({
           messages: [
             { role: "system", content: "You are a helpful assistant." },
@@ -193,6 +215,7 @@ class AICheckService {
 
         // 将对应的信息，输入ai_message表，并返回结果
         const comments = completion.choices[0].message.content;
+
         try{
           this.AIMessage.create({
             project_id: project_id,
