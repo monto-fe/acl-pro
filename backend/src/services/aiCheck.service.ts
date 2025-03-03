@@ -121,6 +121,7 @@ class AICheckService {
       mergeRequestId: string,
       gitlabToken: string
     }) {
+        console.log("mergeRequestId11111", `${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/changes`)
         const response = await axios.get(`${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/changes`, {
           headers: {
             'PRIVATE-TOKEN': gitlabToken
