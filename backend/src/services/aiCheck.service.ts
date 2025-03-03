@@ -25,7 +25,6 @@ class AICheckService {
     constructor () {
         console.log("AI", AI_MODEL, AI_API, AI_KEY)
         if(!AI_MODEL || !AI_API || !AI_KEY){
-            
             console.error("AI 信息未配置")
         }
     }
@@ -186,7 +185,7 @@ class AICheckService {
         `;
 
         console.log("currentRule:", currentRule, formattedInfo)
-      
+        console.log("openai", this.openai)
         
         const completion = await this.openai.chat.completions.create({
           messages: [
