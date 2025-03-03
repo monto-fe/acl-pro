@@ -26,13 +26,16 @@ class WebhookController {
       gitlabAPI: gitlabAPI, projectId: id, gitlabToken
     });
 
+    let diff:any = [];
     // 读取diff信息
-    const diff = await this.AICheckService.getMergeRequestDiff({
-      gitlabAPI: gitlabAPI,
-      projectId: id,
-      gitlabToken,
-      mergeRequestId: iid
-    });
+    if(gitlabAPI && id && iid){
+        diff = await this.AICheckService.getMergeRequestDiff({
+            gitlabAPI: gitlabAPI,
+            projectId: id,
+            gitlabToken,
+            mergeRequestId: iid
+        });
+    }
     
     // TODO: 根据项目gitlab token和项目id获取对应的规则：优先自定义规则
     // TODO: 如果没有自定义规则，则根据项目的语言，获取通用规则
