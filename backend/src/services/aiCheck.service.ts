@@ -155,7 +155,6 @@ class AICheckService {
           const commonRule = await this.AIRuleService.getCommonRule({ language })
           currentRule = commonRule;
         }
-        console.log("currentRule:", currentRule)
         // 3、组合提示词，调用AI模型进行检查
         // 4、将检查结果同步到数据库
       
@@ -180,6 +179,8 @@ class AICheckService {
           
           根据description描述信息，检查代码中疑似的Bug，如果没有可以不输出。
         `;
+
+        console.log("currentRule:", currentRule, formattedInfo, ai_model)
       
         // 调用 AI 模型进行检查
         const completion = await this.openai.chat.completions.create({
