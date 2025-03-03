@@ -27,6 +27,7 @@ class AICheckService {
       timeout: 60000
     })
     constructor() {
+        console.error("this is init")
       this.initDatabase();
     }
 
