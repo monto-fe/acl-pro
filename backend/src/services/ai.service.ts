@@ -28,11 +28,8 @@ class AIService {
         const res: any = await this.AIManager.create({ ...data });
         return res;
     }
-    public async getAIToken(Data: any): Promise<any> {
-      const { limit, offset } = Data;
+    public async getAIToken(): Promise<any> {
       const { count, rows } = await this.AIManager.findAndCountAll({
-        limit,
-        offset,
         order: [
           ['id', 'DESC']
         ]

@@ -16,10 +16,10 @@ class WebhookController {
     const AI_MODEL = ""
 
     // 获取gitlab信息
-    const gitlabInfo = await this.GitlabService.getGitlabInfo;
+    const gitlabInfo = await this.GitlabService.getGitlabInfo();
     console.log("gitlabInfo", gitlabInfo)
     // 获取AI模型信息
-    const aiModel = await this.AIService.getAIToken;
+    const aiModel = await this.AIService.getAIToken();
     console.log("aiModel", aiModel)
 
     const gitlabToken = GITLAB_TOKEN
