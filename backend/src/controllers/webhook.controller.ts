@@ -18,9 +18,20 @@ class WebhookController {
     // 获取gitlab信息
     const gitlabInfo = await this.GitlabService.getGitlabInfo();
     console.log("gitlabInfo", gitlabInfo)
+    if(gitlabInfo.length === 0){
+        ResponseHandler.error(res, {}, '请配置gitlab Token');
+        return
+    }
+    
     // 获取AI模型信息
-    const aiModel = await this.AIService.getAIToken();
-    console.log("aiModel", aiModel)
+    const aiModelInfo = await this.AIService.getAIToken();
+    console.log("aiModel", aiModelInfo)
+    const { rows, count } = aiModelInfo;
+    if(count === 0){
+        ResponseHandler.error(res, {}, '请配置AI Token');
+        return 
+    }
+    
 
     const gitlabToken = GITLAB_TOKEN
     const { project: { id }, object_attributes: { iid } } = req.body;

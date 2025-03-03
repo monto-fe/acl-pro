@@ -26,6 +26,9 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
     collate: 'utf8mb4_general_ci',
     freezeTableName: true,
   },
+  createdAt: 'create_time',
+  updatedAt: 'update_time',
+  deletedAt: 'delete_time',
   paranoid: true,
   pool: {
     min: 0,
