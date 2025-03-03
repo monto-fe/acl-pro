@@ -19,8 +19,8 @@ class AICheckService {
     public now:number = getUnixTimestamp();
     public cache: any = {};
     public openai: any = {
-        apiKey: AI_API,
-        baseURL: AI_KEY
+        apiKey: AI_KEY,
+        baseURL: AI_API
     };
     constructor () {
         console.log("AI", AI_MODEL, AI_API, AI_KEY)
