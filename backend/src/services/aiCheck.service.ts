@@ -132,10 +132,12 @@ class AICheckService {
     public async checkMergeRequestWithAI({
       mergeRequest,
       diff,
+      gitlabToken,
       ai_model
     }:{
       mergeRequest: any,
       diff: any[], 
+      gitlabToken: string,
       ai_model: string
     }) {
         const { project_id, iid, title, description, web_url, author, updated_at } = mergeRequest;
