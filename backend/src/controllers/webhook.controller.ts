@@ -10,10 +10,7 @@ class WebhookController {
   public GitlabService = new GitlabService();
 
   public AICheck = async (req: Request, res: Response, next: NextFunction) => {
-
-    const GITLAB_TOKEN = ""
-    const GITLAB_API = ""
-    const AI_MODEL = ""
+    const { project: { id }, object_attributes: { iid } } = req.body;
 
     // 获取gitlab信息
     const gitlabInfo = await this.GitlabService.getGitlabInfo();
@@ -21,8 +18,8 @@ class WebhookController {
         ResponseHandler.error(res, {}, '请配置gitlab Token');
         return
     }
-    const { api: gitlabApi, token, expired } = gitlabInfo[0].dataValues;
-    console.log("gitlabInfo", gitlabApi, token, expired)
+    const { api: gitlabAPI, token: gitlabToken, expired } = gitlabInfo[0].dataValues;
+    console.log("gitlabInfo", gitlabAPI, gitlabToken, expired)
     // 获取AI模型信息
     const aiModelInfo = await this.AIService.getAIToken();
     // console.log("aiModel", aiModelInfo)
@@ -33,17 +30,15 @@ class WebhookController {
     }
     const { model, api: aiApi, api_key } = rows[0].dataValues;
     console.log("ai info", model, aiApi, api_key)
-
-    const gitlabToken = GITLAB_TOKEN
-    const { project: { id }, object_attributes: { iid } } = req.body;
+    
     // 获取merge信息
     const mergeRequest = await this.AICheckService.getMergeRequestInfo({
-      gitlabAPI: GITLAB_API, projectId: id, gitlabToken
+      gitlabAPI: gitlabAPI, projectId: id, gitlabToken
     });
 
     // 读取diff信息
     const diff = await this.AICheckService.getMergeRequestDiff({
-      gitlabAPI: GITLAB_API,
+      gitlabAPI: gitlabAPI,
       projectId: id,
       gitlabToken,
       mergeRequestId: iid
@@ -56,7 +51,7 @@ class WebhookController {
     const result:any = await this.AICheckService.checkMergeRequestWithAI({
       mergeRequest, 
       diff,
-      ai_model: AI_MODEL
+      ai_model: model
     });
 
     console.log("AI检查结果:", result);
