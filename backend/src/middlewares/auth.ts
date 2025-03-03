@@ -5,7 +5,8 @@ import { checkSignToken, TokenSecretKey, IsTokenExpired } from '../utils/util';
 const { TokenExpired } = ResponseMap;
 const whitePathList: string[] = [
     '/v1/login',
-    '/v1/register'
+    '/v1/register',
+    '/v1/webhook/merge'
 ]
 // 自定义中间件，用于检查 JWT
 const authenticateJwt = async (req: Request, res: Response, next: NextFunction) => {
