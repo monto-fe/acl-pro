@@ -23,7 +23,9 @@ class AICheckService {
         baseURL: AI_KEY
     };
     constructor () {
+        console.log("AI", AI_MODEL, AI_API, AI_KEY)
         if(!AI_MODEL || !AI_API || !AI_KEY){
+            
             console.error("AI 信息未配置")
         }
     }
