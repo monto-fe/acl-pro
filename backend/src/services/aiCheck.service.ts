@@ -18,10 +18,10 @@ class AICheckService {
 
     public now:number = getUnixTimestamp();
     public cache: any = {};
-    public openai: any = {
+    public openai: any = new OpenAI({
         apiKey: AI_KEY,
         baseURL: AI_API
-    };
+    });
     constructor () {
         console.log("AI", AI_MODEL, AI_API, AI_KEY)
         if(!AI_MODEL || !AI_API || !AI_KEY){
