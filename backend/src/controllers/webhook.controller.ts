@@ -48,15 +48,18 @@ class WebhookController {
     });
 
     console.log("AI检查结果:", result);
-    
+
     // 将 AI 检查结果作为评论写入 GitLab
-    const commentResponse = await this.AICheckService.postCommentToGitLab({
-      comment: result,
-      mergeRequestId: iid,
-      projectId: id,
-      gitlabToken,
-      gitlabAPI
-    });
+    let commentResponse = ''
+    if(result && iid && id && gitlabToken && gitlabAPI){
+        commentResponse = await this.AICheckService.postCommentToGitLab({
+            comment: result,
+            mergeRequestId: iid,
+            projectId: id,
+            gitlabToken,
+            gitlabAPI
+        });
+    }
 
     console.log("评论已成功提交:", commentResponse);
     ResponseHandler.success(res, { projectId: id, mergeRequestId: iid, comment: result}, 'AI检查结果');
