@@ -17,21 +17,22 @@ class WebhookController {
 
     // 获取gitlab信息
     const gitlabInfo = await this.GitlabService.getGitlabInfo();
-    console.log("gitlabInfo", gitlabInfo)
     if(gitlabInfo.length === 0){
         ResponseHandler.error(res, {}, '请配置gitlab Token');
         return
     }
-    
+    const { api: gitlabApi, token, expired } = gitlabInfo[0].dataValues;
+    console.log("gitlabInfo", gitlabApi, token, expired)
     // 获取AI模型信息
     const aiModelInfo = await this.AIService.getAIToken();
-    console.log("aiModel", aiModelInfo)
+    // console.log("aiModel", aiModelInfo)
     const { rows, count } = aiModelInfo;
     if(count === 0){
         ResponseHandler.error(res, {}, '请配置AI Token');
         return 
     }
-    
+    const { model, api: aiApi, api_key } = rows[0].dataValues;
+    console.log("ai info", model, aiApi, api_key)
 
     const gitlabToken = GITLAB_TOKEN
     const { project: { id }, object_attributes: { iid } } = req.body;
