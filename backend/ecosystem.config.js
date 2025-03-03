@@ -29,8 +29,8 @@
       env_production: {
         PORT: 9000,
         NODE_ENV: 'production',
-        DOMAIN: 'http://150.158.119.41:9000',
-        DB_HOST: "150.158.119.41",
+        DOMAIN: 'http://localhost:9000',
+        DB_HOST: "localhost",
         DB_PORT: 3306,
         DB_USER: "root",
         DB_PASSWORD: "mysql123456",

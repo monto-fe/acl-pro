@@ -4,6 +4,7 @@ import namespaceRouter from './routes/namespace.route';
 import resourceRouter from './routes/resource.route';
 import roleRouter from './routes/role.route';
 import rolePermissionRouter from './routes/permission.route';
+import webhookRouter from './routes/webhook.route';
 
 const app = new App(
     [
@@ -11,7 +12,8 @@ const app = new App(
         new resourceRouter(),
         new roleRouter(),
         new userRouter(),
-        new rolePermissionRouter()
+        new rolePermissionRouter(),
+        new webhookRouter()
     ]
 );
 

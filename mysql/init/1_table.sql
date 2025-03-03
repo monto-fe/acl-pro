@@ -110,3 +110,96 @@ CREATE TABLE IF NOT EXISTS `t_user_role` (
   KEY `user` (`user`),
   KEY `role_id` (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+-- ai table --
+
+-- 表1: t_ai_manager
+CREATE TABLE IF NOT EXISTS `t_ai_manager` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `model` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'AI 模型名称',
+  `api` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'API 名称',
+  `api_key` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'API 密钥',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态(-1: 禁用；1: 可用)',
+  `expired` int unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
+  `operator` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '操作人',
+  `create_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `model` (`model`),
+  KEY `api` (`api`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='AI 管理表';
+
+
+CREATE TABLE IF NOT EXISTS `t_gitlab_info` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `api` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'GitLab API 名称',
+  `token` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'GitLab 访问令牌',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态(-1: 禁用；1: 可用)',
+  `gitlab_version` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'GitLab 版本',
+  `expired` int unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
+  `gitlab_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'GitLab 服务器地址',
+  `operator` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '操作人',
+  `create_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `api` (`api`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='GitLab 信息表';
+
+
+-- 表3: t_common_rule
+CREATE TABLE IF NOT EXISTS `t_common_rule` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '规则名称',
+  `language` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '语言类型 (Python, Java, JavaScript, Go, Ruby, C++, other)',
+  `rule` text COLLATE utf8mb4_general_ci NOT NULL COMMENT '规则内容',
+  `description` text COLLATE utf8mb4_general_ci COMMENT '规则描述',
+  `operator` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '操作人',
+  `create_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`),
+  KEY `language` (`language`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='通用规则表';
+
+
+-- 表4: t_custom_rule
+CREATE TABLE IF NOT EXISTS `t_custom_rule` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `project_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '项目名称',
+  `project_id` int unsigned NOT NULL COMMENT '项目 ID',
+  `rule` text COLLATE utf8mb4_general_ci NOT NULL COMMENT '项目自定义规则内容',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '规则状态 (1: enable, -1: disabled)',
+  `operator` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '操作人',
+  `create_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `project_id` (`project_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='自定义规则表';
+
+
+-- 表5: t_ai_message
+CREATE TABLE IF NOT EXISTS `t_ai_message` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键 ID',
+  `project_id` varchar(255) NOT NULL COMMENT '项目 ID',
+  `merge_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '合并请求的 URL',
+  `ai_model` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'AI 模型名称',
+  `rule` tinyint NOT NULL COMMENT '规则类型 (1: common, 2: custom)',
+  `rule_id` int unsigned NOT NULL COMMENT '规则 ID',
+  `result` text COLLATE utf8mb4_general_ci NOT NULL COMMENT '检测结果',
+  `passed` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否通过检测 (0: 否, 1: 是)',
+  `checked_by` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '检测员（为空表示自动检测）',
+  `create_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `operator` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '操作人',
+  PRIMARY KEY (`id`),
+  KEY `project_id` (`project_id`),
+  KEY `rule_id` (`rule_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='AI 检测消息表';
+
+
+-- 为优化查询性能添加索引
+CREATE INDEX idx_project_id ON t_ai_message(project_id);
+CREATE INDEX idx_rule_id ON t_ai_message(rule_id);
+CREATE INDEX idx_status ON t_gitlab_info(status);

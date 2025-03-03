@@ -23,6 +23,624 @@
       "title": "ACL-Pro",
       "version": "1.0"
     },
+    "/v1/ai-manager": {
+      "get": {
+        "tags": [
+          "AI Manager"
+        ],
+        "summary": "获取 AI 管理列表",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          },
+          {
+            "$ref": "#/components/parameters/Current"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiManagerListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "AI Manager"
+        ],
+        "summary": "创建 AI 管理",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiManagerRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiManagerResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "AI Manager"
+        ],
+        "summary": "更新 AI 管理",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiManagerPutRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiManagerResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AI Manager"
+        ],
+        "summary": "删除 AI 管理",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "description": "待删除的 AI 管理 ID",
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiManagerResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/ai/message": {
+      "get": {
+        "tags": [
+          "AI Manager"
+        ],
+        "summary": "获取AI生成的评论列表",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiCommentsListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/v1/common-rule": {
+      "get": {
+        "tags": [
+          "CommonRule"
+        ],
+        "summary": "获取规则列表",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          },
+          {
+            "$ref": "#/components/parameters/Current"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取规则列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommonRuleListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CommonRule"
+        ],
+        "summary": "创建新规则",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommonRule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "成功创建规则",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommonRule"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      }
+    },
+    "/v1/common-rule/{id}": {
+      "put": {
+        "tags": [
+          "CommonRule"
+        ],
+        "summary": "更新规则",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "规则ID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommonRule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功更新规则",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommonRule"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CommonRule"
+        ],
+        "summary": "删除规则",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "规则ID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功删除规则"
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      }
+    },
+    "/v1/custom-rule": {
+      "get": {
+        "tags": [
+          "CustomRule"
+        ],
+        "summary": "获取自定义规则列表",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          },
+          {
+            "$ref": "#/components/parameters/Current"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功获取自定义规则列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomRuleListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CustomRule"
+        ],
+        "summary": "创建自定义规则",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomRule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "成功创建自定义规则",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomRule"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      }
+    },
+    "/v1/custom-rule/{id}": {
+      "put": {
+        "tags": [
+          "CustomRule"
+        ],
+        "summary": "更新自定义规则",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "自定义规则ID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomRule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功更新自定义规则",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomRule"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CustomRule"
+        ],
+        "summary": "删除自定义规则",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "自定义规则ID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功删除自定义规则"
+          },
+          "500": {
+            "description": "服务器错误"
+          }
+        }
+      }
+    },
+    "/v1/gitlab-info": {
+      "get": {
+        "tags": [
+          "GitLab Info"
+        ],
+        "summary": "获取 GitLab 配置信息",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GitLabInfoListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "GitLab Info"
+        ],
+        "summary": "创建 GitLab 配置信息",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GitLabInfoRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GitLabInfoResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "GitLab Info"
+        ],
+        "summary": "更新 GitLab 配置信息",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GitLabInfoPutRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GitLabInfoResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "GitLab Info"
+        ],
+        "summary": "删除 GitLab 配置信息",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/JWTToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "description": "待删除的 GitLab 配置 ID",
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GitLabInfoResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
     "/v1/permission/assertRolePermission": {
       "post": {
         "tags": [
@@ -1262,27 +1880,80 @@
           }
         }
       }
+    },
+    "/v1/webhook/merge": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "监听Gitlab仓库合并事件",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/XGitlabToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "projectId": {
+                          "type": "string",
+                          "description": "项目ID",
+                          "example": 1
+                        },
+                        "mergeRequestId": {
+                          "type": "string",
+                          "description": "merge Id",
+                          "example": 1
+                        },
+                        "comment": {
+                          "type": "string",
+                          "description": "ai 评论"
+                        }
+                      }
+                    },
+                    "ret_code": {
+                      "type": "number",
+                      "description": "返回码",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "返回信息",
+                      "example": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          },
+          "default": {
+            "description": "Server Error"
+          }
+        }
+      }
     }
   },
   "components": {
     "parameters": {
       "JWTToken": {
-        "in": "header",
         "name": "jwt_token",
+        "in": "header",
         "schema": {
           "type": "string"
         },
         "required": true,
         "description": "JWT 令牌"
-      },
-      "Namespace": {
-        "name": "namespace",
-        "in": "query",
-        "schema": {
-          "type": "string"
-        },
-        "required": false,
-        "description": "项目组名称"
       },
       "Current": {
         "name": "current",
@@ -1301,6 +1972,15 @@
           "default": 10
         },
         "description": "每页条数"
+      },
+      "Namespace": {
+        "name": "namespace",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "项目组名称"
       },
       "NamespaceQuery": {
         "name": "namespace",
@@ -1364,9 +2044,531 @@
         },
         "required": false,
         "description": "指定角色"
+      },
+      "XGitlabToken": {
+        "name": "X-Gitlab-Token",
+        "in": "header",
+        "schema": {
+          "type": "string"
+        },
+        "required": true,
+        "description": "webhook令牌"
       }
     },
     "schemas": {
+      "AiManager": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "model": {
+            "type": "string",
+            "example": "GPT-3"
+          },
+          "api": {
+            "type": "string",
+            "example": "openai"
+          },
+          "api_key": {
+            "type": "string",
+            "example": "sk-xxxxxx"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ],
+            "example": 1
+          },
+          "expired": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "过期时间"
+          },
+          "create_time": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "创建时间"
+          },
+          "update_time": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "更新时间"
+          },
+          "created_by": {
+            "type": "string",
+            "example": "admin"
+          },
+          "updated_by": {
+            "type": "string",
+            "example": "admin"
+          }
+        }
+      },
+      "AiManagerRequestBody": {
+        "type": "object",
+        "required": [
+          "name",
+          "model",
+          "api",
+          "api_key",
+          "status",
+          "expired"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "AI 管理名称"
+          },
+          "model": {
+            "type": "string",
+            "description": "AI 模型名称"
+          },
+          "api": {
+            "type": "string",
+            "description": "API 名称"
+          },
+          "api_key": {
+            "type": "string",
+            "description": "API 密钥"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ],
+            "example": 1
+          },
+          "expired": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "过期时间"
+          }
+        }
+      },
+      "AiManagerPutRequestBody": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "AI 管理 ID"
+          },
+          "model": {
+            "type": "string"
+          },
+          "api": {
+            "type": "string"
+          },
+          "api_key": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ]
+          },
+          "expired": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "过期时间"
+          }
+        }
+      },
+      "AiManagerResponse": {
+        "type": "object",
+        "properties": {
+          "ret_code": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AiManager"
+          }
+        }
+      },
+      "AiManagerListResponse": {
+        "type": "object",
+        "properties": {
+          "ret_code": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "成功"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiManager"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
+      "AiMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "project_id": {
+            "type": "string",
+            "example": "1"
+          },
+          "merge_id": {
+            "type": "string",
+            "example": "123"
+          },
+          "ai_model": {
+            "type": "string",
+            "example": "DeepSeek"
+          },
+          "rule": {
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ],
+            "example": 1
+          },
+          "rule_id": {
+            "type": "integer",
+            "example": 10
+          },
+          "result": {
+            "type": "string",
+            "example": "Rule passed successfully"
+          },
+          "passed": {
+            "type": "boolean",
+            "example": false
+          },
+          "checked_by": {
+            "type": "string",
+            "example": "auto-checker"
+          },
+          "create_time": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "创建时间"
+          }
+        }
+      },
+      "AiCommentsListResponse": {
+        "type": "object",
+        "properties": {
+          "ret_code": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "成功"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiMessage"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+      "CommonRule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Rule 1"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "Python",
+              "Java",
+              "JavaScript",
+              "Go",
+              "Ruby",
+              "C++",
+              "other"
+            ],
+            "example": "Python"
+          },
+          "rule": {
+            "type": "string",
+            "example": "def check_code_quality(): # Rule logic here"
+          },
+          "description": {
+            "type": "string",
+            "example": "This is a rule to check code quality."
+          }
+        }
+      },
+      "CommonRuleListResponse": {
+        "type": "object",
+        "properties": {
+          "ret_code": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "成功"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommonRule"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
+      "CustomRule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "project_name": {
+            "type": "string",
+            "example": "Project A"
+          },
+          "project_id": {
+            "type": "integer",
+            "example": 101
+          },
+          "rule": {
+            "type": "string",
+            "example": "def custom_rule(): # Custom rule logic here"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ],
+            "example": 1
+          }
+        }
+      },
+      "CustomRuleListResponse": {
+        "type": "object",
+        "properties": {
+          "ret_code": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "成功"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomRule"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
+      "GitLabInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "api": {
+            "type": "string",
+            "example": "GitLab API v4"
+          },
+          "token": {
+            "type": "string",
+            "example": "gitlab-access-token"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ],
+            "example": 1
+          },
+          "gitlab_version": {
+            "type": "string",
+            "example": "14.0.0"
+          },
+          "expired": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "过期时间"
+          },
+          "gitlab_url": {
+            "type": "string",
+            "example": "https://gitlab.example.com"
+          },
+          "create_time": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "过期时间"
+          },
+          "update_time": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "更新时间"
+          }
+        }
+      },
+      "GitLabInfoRequestBody": {
+        "type": "object",
+        "required": [
+          "api",
+          "token",
+          "status",
+          "gitlab_version",
+          "expired",
+          "gitlab_url"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "description": "GitLab API 名称"
+          },
+          "token": {
+            "type": "string",
+            "description": "GitLab 访问令牌"
+          },
+          "status": {
+            "type": "integer",
+            "enum": [
+              1,
+              -1
+            ],
+            "description": "状态: 1启用 -1禁用"
+          },
+          "gitlab_version": {
+            "type": "string",
+            "description": "GitLab 版本"
+          },
+          "expired": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "过期时间"
+          },
+          "gitlab_url": {
+            "type": "string",
+            "description": "GitLab 服务器地址"
+          }
+        }
+      },
+      "GitLabInfoPutRequestBody": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "GitLab 配置信息 ID"
+          },
+          "api": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              1,
+              -1
+            ]
+          },
+          "gitlab_version": {
+            "type": "string"
+          },
+          "expired": {
+            "type": "integer",
+            "example": 1728401258,
+            "description": "过期时间"
+          },
+          "gitlab_url": {
+            "type": "string"
+          }
+        }
+      },
+      "GitLabInfoResponse": {
+        "type": "object",
+        "properties": {
+          "ret_code": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "成功"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GitLabInfo"
+          }
+        }
+      },
+      "GitLabInfoListResponse": {
+        "type": "object",
+        "properties": {
+          "ret_code": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "成功"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GitLabInfo"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
       "CommonResponse": {
         "type": "object",
         "properties": {
@@ -1891,6 +3093,22 @@
     {
       "name": "User",
       "description": "登录注册"
+    },
+    {
+      "name": "Webhook",
+      "description": "webhook"
+    },
+    {
+      "name": "AI Manager",
+      "description": "AI 管理"
+    },
+    {
+      "name": "CommonRule",
+      "description": "通用规则"
+    },
+    {
+      "name": "CustomRule",
+      "description": "自定义规则"
     }
   ]
 }

@@ -7,6 +7,11 @@ import RoleModel from '../models/role.model';
 import TokenModel from '../models/token.model';
 import RolePermissionModel from '../models/rolePermission.model';
 import UserRoleModel from '../models/userRole.model';
+import AIManagerModel from '../models/aiManager.model';
+import AIMessageModel from '../models/aiMessage.model';
+import CommonRuleModel from '../models/commonRule.model';
+import CustomRuleModel from '../models/customRule.model';
+import GitlabInfoModel from '../models/gitlab.model';
 
 console.log('数据库地址：' + DB_HOST + ': ' + DB_PORT)
 console.log('NODE_ENV', NODE_ENV)
@@ -44,6 +49,11 @@ const DB:any = {
   UserRole: UserRoleModel(sequelize),
   Role: RoleModel(sequelize),
   RolePermission: RolePermissionModel(sequelize),
+  GitlabInfo: GitlabInfoModel(sequelize),
+  AIManager: AIManagerModel(sequelize),
+  AIMessage: AIMessageModel(sequelize),
+  CommonRule: CommonRuleModel(sequelize),
+  CustomRule: CustomRuleModel(sequelize),
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };
