@@ -19,15 +19,11 @@ class AICheckService {
 
     public now:number = getUnixTimestamp();
     public cache: any = {};
-    public openai: OpenAI = new OpenAI({
-      apiKey: "",
-      dangerouslyAllowBrowser: true,
-      baseURL: "",
-      maxRetries: 3,
-      timeout: 60000
-    })
+    public openai: any = {
+        apiKey: '',
+        baseURL: ''
+    };
     constructor() {
-        console.error("this is init")
       this.initDatabase();
     }
 
@@ -36,11 +32,18 @@ class AICheckService {
             // 假设你有一些数据库表是常用的，可以先查询并缓存
             const aiManagerData = await this.AIManager.findAll()
             console.log("aiManagerData", aiManagerData)
+            const { model, api, api_key } = aiManagerData.dataValues;
             // 缓存查询结果
-            this.cache['AIManager'] = aiManagerData;
-            
-
-            console.log('数据库初始化并缓存完成');
+            this.cache['model'] = model;
+            this.cache['api'] = api;
+            this.cache['api_key'] = api_key;
+            this.openai = new OpenAI({
+              apiKey: api_key,
+              dangerouslyAllowBrowser: true,
+              baseURL: api,
+              maxRetries: 3,
+              timeout: 60000
+            })
         } catch (error) {
             console.error('初始化数据库失败:', error);
         }
