@@ -1,12 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import AICheckService from '../services/aiCheck.service';
 import GitlabService from '../services/gitlab.service';
-import AIService from '../services/ai.service';
 import ResponseHandler from '../utils/responseHandler';
 
 class WebhookController {
   public AICheckService = new AICheckService();
-  public AIService = new AIService();
   public GitlabService = new GitlabService();
 
   public AICheck = async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +17,6 @@ class WebhookController {
         return
     }
     const { api: gitlabAPI, token: gitlabToken, expired } = gitlabInfo[0].dataValues;
-    console.log("gitlabInfo", gitlabAPI, gitlabToken, expired)
     
     // 获取merge信息
     const mergeRequest = await this.AICheckService.getMergeRequestInfo({
@@ -40,7 +37,6 @@ class WebhookController {
     // TODO: 根据项目gitlab token和项目id获取对应的规则：优先自定义规则
     // TODO: 如果没有自定义规则，则根据项目的语言，获取通用规则
     // 组装AI提示词，发送给AI，获取结果
-    console.log("获取的合并请求差异:", diff);
     const result:any = await this.AICheckService.checkMergeRequestWithAI({
       mergeRequest, 
       diff,

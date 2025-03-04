@@ -7,7 +7,6 @@ import RoleModel from '../models/role.model';
 import TokenModel from '../models/token.model';
 import RolePermissionModel from '../models/rolePermission.model';
 import UserRoleModel from '../models/userRole.model';
-import AIManagerModel from '../models/aiManager.model';
 import AIMessageModel from '../models/aiMessage.model';
 import CommonRuleModel from '../models/commonRule.model';
 import CustomRuleModel from '../models/customRule.model';
@@ -50,7 +49,6 @@ const DB:any = {
   Role: RoleModel(sequelize),
   RolePermission: RolePermissionModel(sequelize),
   GitlabInfo: GitlabInfoModel(sequelize),
-  AIManager: AIManagerModel(sequelize),
   AIMessage: AIMessageModel(sequelize),
   CommonRule: CommonRuleModel(sequelize),
   CustomRule: CustomRuleModel(sequelize),

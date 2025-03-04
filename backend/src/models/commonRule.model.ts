@@ -34,7 +34,7 @@ export default function (sequelize: Sequelize): typeof CommonRuleModel {
           defaultValue: '',
       },
       rule: {
-          type: new DataTypes.STRING(255),
+          type: new DataTypes.TEXT,
           allowNull: false,
           comment: '规则',
           defaultValue: '',

@@ -1,10 +1,9 @@
-import { Op } from 'sequelize';
 import OpenAI from "openai";
 import axios from 'axios';
 import DB from '../databases';
 import AIRuleService from './aiRule.service';
-import AIService from './ai.service';
 import { getUnixTimestamp } from '../utils';
+import { generatePrompt } from '../utils/prompt';
 import { AI_MODEL, AI_API, AI_KEY } from '../config';
 
 const gitlabAPI = "" 
@@ -14,7 +13,6 @@ class AICheckService {
     public GitlabInfo = DB.GitlabInfo;
     public AIMessage = DB.AIMessage;
     public AIRuleService = new AIRuleService();
-    public AIService = new AIService();
 
     public now:number = getUnixTimestamp();
     public cache: any = {};
@@ -23,7 +21,6 @@ class AICheckService {
         baseURL: AI_API
     });
     constructor () {
-        console.log("AI", AI_MODEL, AI_API, AI_KEY)
         if(!AI_MODEL || !AI_API || !AI_KEY){
             console.error("AI 信息未配置")
         }
@@ -121,7 +118,6 @@ class AICheckService {
       mergeRequestId: string,
       gitlabToken: string
     }) {
-        console.log("mergeRequestId11111", `${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/changes`)
         const response = await axios.get(`${gitlabAPI}/v4/projects/${projectId}/merge_requests/${mergeRequestId}/changes`, {
           headers: {
             'PRIVATE-TOKEN': gitlabToken
@@ -146,10 +142,9 @@ class AICheckService {
       gitlabToken: string
     }) {
         const { project_id, iid, title, description, web_url, author, updated_at } = mergeRequest;
-        console.log("mergeRequest:", mergeRequest);
         // 在这里获取merge项目信息，匹配配置的代码规范，组合成AI提示词
         // TODO: 
-        let currentRule = ''
+        let currentRule = '符合代码行业的常规写法'
         // 2、获取项目的对应规则
         const customRule = await this.AIRuleService.getCustomRuleByProjectId({project_id})
         console.log("customRule:", customRule);
@@ -160,33 +155,18 @@ class AICheckService {
           const commonRule = await this.AIRuleService.getCommonRule({ language })
           currentRule = commonRule;
         }
+      
         // 3、组合提示词，调用AI模型进行检查
-        // 4、将检查结果同步到数据库
-      
-        // 格式化信息
-        const formattedInfo = `
-          合并请求标题: ${title}
-          描述: ${description || '无描述'}
-          提交人: ${author.name}
-          更新时间: ${updated_at}
-          查看合并请求: ${web_url}
-      
-          代码差异:
-          ${diff.map(change => `文件: ${change.new_path}\n差异:\n${change.diff}`).join('\n')}
-      
-          请检查上面的diff代码，要求上面代码符合以下原则：
-            1. 表单必有校验
-            2. 变量命名不要用1/2/3、尽量驼峰式、常量用全大写+下划线
-            3. 公共链接只能用config配置的，根域名统一拿一套配置
-            4. 枚举在代码里专用const.js里的，不要硬编码
-          请输出：
-          1. 如果diff代码不符合要求的规范，输出表格，展示不符合的代码、不符合的原则、修改建议。
-          
-          根据description描述信息，检查代码中疑似的Bug，如果没有可以不输出。
-        `;
-
-        console.log("currentRule:", currentRule, formattedInfo)
+        const formattedInfo = generatePrompt({
+          rule: currentRule,
+          title,
+          description,
+          author_name: author.name,
+          web_url,
+          diff
+        })
         
+        console.log("currentRule:", currentRule, formattedInfo)
         const completion = await this.openai.chat.completions.create({
           messages: [
             { role: "system", content: "You are a helpful assistant." },
@@ -197,7 +177,6 @@ class AICheckService {
 
         // 将对应的信息，输入ai_message表，并返回结果
         const comments = completion.choices[0].message.content;
-
         try{
           this.AIMessage.create({
             project_id: project_id,
