@@ -149,7 +149,7 @@ class AICheckService {
         const customRule = await this.AIRuleService.getCustomRuleByProjectId({project_id})
         const { rule: userCustomRule } = customRule.dataValues;
         console.log("customRule:", userCustomRule);
-        if(!userCustomRule){
+        if(userCustomRule){
           currentRule = userCustomRule; 
         }else{
           const language: string = await this.getDominantLanguage({ gitlabAPI, projectId: project_id, gitlabToken })

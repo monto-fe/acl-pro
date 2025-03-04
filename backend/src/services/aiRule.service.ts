@@ -1,7 +1,5 @@
 import { Op } from 'sequelize';
 import DB from '../databases';
-import { } from '../interfaces/common.interface';
-// import { } from '../interfaces/custom.interface'
 import { getUnixTimestamp } from '../utils';
 
 class AIRuleService {
@@ -10,12 +8,11 @@ class AIRuleService {
 	public now:number = getUnixTimestamp();
 
     public async getCommonRule({ language }: { language: string}): Promise<any> {
-		// const { namespace, parent, name, describe, operator } = Data;
-        // 先通过projectid获取对应的规则
-        // 如果没有则通过language获取通用规则
         const rule = await this.CommonRule.findAll({
             where: {
-                language: language,
+                language: {
+                    [Op.iLike]: language
+                },
                 status: 1
             }
         })
