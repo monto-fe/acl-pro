@@ -147,12 +147,13 @@ class AICheckService {
         let currentRule = '符合代码行业的常规写法'
         // 2、获取项目的对应规则
         const customRule = await this.AIRuleService.getCustomRuleByProjectId({project_id})
-        console.log("customRule:", customRule);
         const { rule: userCustomRule } = customRule.dataValues;
+        console.log("customRule:", userCustomRule);
         if(!userCustomRule){
           currentRule = userCustomRule; 
         }else{
           const language: string = await this.getDominantLanguage({ gitlabAPI, projectId: project_id, gitlabToken })
+          console.log("language:", language)
           const commonRule = await this.AIRuleService.getCommonRule({ language })
           currentRule = commonRule;
         }

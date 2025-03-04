@@ -19,6 +19,7 @@ class AIRuleService {
                 status: 1
             }
         })
+        console.log('rule', rule);
         /* 循环rule，pick出language === language的规则，language全部转小写对比*/
         if(!rule.length){
             return [];
