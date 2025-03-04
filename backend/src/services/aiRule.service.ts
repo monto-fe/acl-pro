@@ -13,8 +13,7 @@ class AIRuleService {
             where: {
                 [Op.and]: [
                     Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('language')), Op.eq, language.toLowerCase())
-                ],
-                status: 1
+                ]
             }
         })
         console.log('rule', rule);
