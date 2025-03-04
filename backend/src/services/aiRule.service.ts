@@ -1,3 +1,4 @@
+import Sequelize from 'sequelize';
 import { Op } from 'sequelize';
 import DB from '../databases';
 import { getUnixTimestamp } from '../utils';
@@ -10,9 +11,9 @@ class AIRuleService {
     public async getCommonRule({ language }: { language: string}): Promise<any> {
         const rule = await this.CommonRule.findAll({
             where: {
-                language: {
-                    [Op.iLike]: language
-                },
+                [Op.and]: [
+                    Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('language')), Op.eq, language.toLowerCase())
+                ],
                 status: 1
             }
         })
