@@ -6,8 +6,6 @@ import { getUnixTimestamp } from '../utils';
 import { generatePrompt } from '../utils/prompt';
 import { AI_MODEL, AI_API, AI_KEY } from '../config';
 
-const gitlabAPI = "" 
-
 class AICheckService {
     public AIManager = DB.AIManager;
     public GitlabInfo = DB.GitlabInfo;
@@ -135,10 +133,12 @@ class AICheckService {
     public async checkMergeRequestWithAI({
       mergeRequest,
       diff,
+      gitlabAPI,
       gitlabToken
     }:{
       mergeRequest: any,
       diff: any[], 
+      gitlabAPI: string,
       gitlabToken: string
     }) {
         const { project_id, iid, title, description, web_url, author, updated_at } = mergeRequest;

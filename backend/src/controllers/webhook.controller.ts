@@ -40,6 +40,7 @@ class WebhookController {
     const result:any = await this.AICheckService.checkMergeRequestWithAI({
       mergeRequest, 
       diff,
+      gitlabAPI: gitlabAPI,
       gitlabToken: gitlabToken
     });
 
