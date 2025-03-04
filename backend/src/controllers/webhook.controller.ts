@@ -16,7 +16,7 @@ class WebhookController {
         ResponseHandler.error(res, {}, '请配置gitlab Token');
         return
     }
-    const { api: gitlabAPI, token: gitlabToken, expired } = gitlabInfo[0].dataValues;
+    const { api: gitlabAPI, token: gitlabToken } = gitlabInfo[0].dataValues;
     
     // 获取merge信息
     const mergeRequest = await this.AICheckService.getMergeRequestInfo({

@@ -184,8 +184,8 @@ class AICheckService {
             project_id: project_id,
             merge_id: iid,
             ai_model: AI_MODEL,
-            rule: currentRule,
-            rule_id: ruleId,
+            rule: 1,
+            rule_id: 1,
             result: comments,
           })
         }catch(err){
