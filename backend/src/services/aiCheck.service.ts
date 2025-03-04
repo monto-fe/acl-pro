@@ -148,7 +148,7 @@ class AICheckService {
         // 2、获取项目的对应规则
         const customRule = await this.AIRuleService.getCustomRuleByProjectId({ project_id })
         console.log("customRule:", customRule);
-        const { rule: userCustomRule, id: ruleId } = customRule?.dataValues || { rule: '' };
+        const { rule: userCustomRule, id: ruleId } = customRule?.dataValues || { rule: '', id: 1 };
         if(userCustomRule){
           currentRule = userCustomRule; 
         }else{
