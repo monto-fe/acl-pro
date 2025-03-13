@@ -27,9 +27,14 @@ module.exports = {
         allowForLoopAfterthoughts: true,
       },
     ],
+    'camelcase': 'off',
+    'no-void': 'off',
+    'no-alert': 'off',
+    'no-unused-expressions': 'off',
+    'no-nested-ternary': 'off',
     'react/display-name': 'off',
-    "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off",
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
     // jsx 单引号
     'jsx-quotes': [2, 'prefer-single'],
     'import/no-cycle': 'off', // TODO: remove

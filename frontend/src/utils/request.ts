@@ -2,11 +2,10 @@
  * 自定义 request 网络请求工具,基于axios
  * @author duheng1992
  */
-import axios, { AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { notification } from 'antd';
 import settings from '@/config/settings';
 import { getToken } from '@/utils/localToken';
-import { localeKey } from './i18n';
 
 export interface ResponseData<T = unknown> {
   ret_code: number;
@@ -43,7 +42,6 @@ const serverCodeMessage: { [key: number]: string } = {
   504: 'Gateway Timeout',
 };
 
-
 const errorHandler = (error: any) => {
   const { response, message } = error;
   if (message === 'CustomError') {
@@ -59,7 +57,7 @@ const errorHandler = (error: any) => {
         description: customCodeMessage[ret_code] || message || 'Error',
       });
 
-      console.log('当前code: ' + ret_code)
+      console.log(`当前code: ${ret_code}`);
       if (ret_code === 10005 && ret_code === 10009) {
         setTimeout(() => {
           window.location.href = '/user/login';

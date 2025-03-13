@@ -12,11 +12,14 @@ import {
   UserOutlined,
   TeamOutlined,
   KeyOutlined,
-  ToolOutlined
+  ToolOutlined,
+  QuestionCircleTwoTone,
 } from '@ant-design/icons';
 
 import { IRouter } from '@/@types/router.d';
 
+// 这里是业务路由
+// 若要配置权限，请使用 meta.roles
 const universalLayoutRotes: IRouter[] = [
   {
     path: '/home',
@@ -53,12 +56,37 @@ const universalLayoutRotes: IRouter[] = [
     },
   },
   {
+    path: 'testMenuPermission',
+    meta: {
+      icon: QuestionCircleTwoTone,
+      title: 'test.menuacl',
+      roles: ['admin'],
+    },
+    component: lazy(() => import('@/pages/test/TestMenuPermission')),
+  },
+  {
+    path: 'testPagePermission',
+    meta: {
+      icon: QuestionCircleTwoTone,
+      title: 'test.pageacl',
+    },
+    component: lazy(() => import('@/pages/test/TestPagePermission')),
+  },
+  {
+    path: 'testAPIPermission',
+    meta: {
+      icon: QuestionCircleTwoTone,
+      title: 'test.apiacl',
+    },
+    component: lazy(() => import('@/pages/test/TestAPIPermission')),
+  },
+  {
     path: '/acl',
     redirect: '/acl/user',
     meta: {
       icon: InsuranceOutlined,
       title: 'universal-layout.menu.roles',
-      // roles: ['admin'],
+      roles: ['admin'],
     },
     children: [
       {
@@ -67,7 +95,7 @@ const universalLayoutRotes: IRouter[] = [
           icon: UserOutlined,
           title: 'universal-layout.menu.roles.user',
         },
-        component: lazy(() => import('@/pages/user/list')),
+        component: lazy(() => import('@/pages/user/List')),
       },
       {
         path: 'role',
@@ -75,7 +103,7 @@ const universalLayoutRotes: IRouter[] = [
           icon: TeamOutlined,
           title: 'universal-layout.menu.roles.role',
         },
-        component: lazy(() => import('@/pages/role/list')),
+        component: lazy(() => import('@/pages/role/List')),
       },
       {
         path: 'resource',
@@ -83,7 +111,7 @@ const universalLayoutRotes: IRouter[] = [
           icon: KeyOutlined,
           title: 'universal-layout.menu.roles.resource',
         },
-        component: lazy(() => import('@/pages/resource/list')),
+        component: lazy(() => import('@/pages/resource/List')),
       },
     ],
   },

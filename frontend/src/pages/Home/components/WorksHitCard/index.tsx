@@ -38,7 +38,9 @@ function WorksHitCard() {
         per: pagination.pageSize,
         page: current,
       });
-      const { data: { data, total} } = response;
+      const {
+        data: { data, total },
+      } = response;
       setList(data || []);
       setPagination({
         ...initPagination,
@@ -87,6 +89,6 @@ function WorksHitCard() {
       />
     </Card>
   );
-};
+}
 
 export default observer(WorksHitCard);

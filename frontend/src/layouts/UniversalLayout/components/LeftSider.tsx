@@ -5,9 +5,9 @@ import { ItemType } from 'antd/lib/menu/interface';
 import { MenuTheme } from 'antd/lib';
 import { observer } from 'mobx-react-lite';
 
+import settings from '@/config/settings';
 import logoDark from '@/assets/images/logo-dark.svg';
 import logoWhite from '@/assets/images/logo-white.svg';
-
 import { IRouter } from '@/@types/router';
 import { IRoleInfo } from '@/@types/permission';
 import ALink from '@/components/ALink';
@@ -64,9 +64,7 @@ const createMenuItems = (
         key: path,
         label: (
           <Flex align='center'>
-            {Icon && (
-              <Icon />
-            )}
+            {Icon && <Icon />}
             <span>{t(title)}</span>
           </Flex>
         ),
@@ -78,9 +76,7 @@ const createMenuItems = (
         label: (
           <ALink to={path}>
             <Flex align='center'>
-              {Icon && (
-                <Icon />
-              )}
+              {Icon && <Icon />}
               <span>{t(title)}</span>
             </Flex>
           </ALink>
@@ -92,73 +88,78 @@ const createMenuItems = (
   return items;
 };
 
-export default memo(observer(
-  ({
-    menuData,
-    routeItem,
-    userRoles = [],
-    collapsed = false,
-    theme = 'dark',
-    mode = 'inline',
-  }: LeftSiderProps) => {
-    const context = useContext(BasicContext) as any;
-    const storeContext = context.storeContext;
-    const { i18nLocale } = storeContext;
+export default memo(
+  observer(
+    ({ menuData, routeItem, userRoles = [], collapsed = false, theme = 'dark', mode = 'inline' }: LeftSiderProps) => {
+      const context = useContext(BasicContext) as any;
+      const { storeContext } = context;
+      const { i18nLocale } = storeContext;
 
-    const t = useI18n(i18nLocale);
-    const {
-      token: { colorTextLightSolid, colorTextBase },
-    } = antdTheme.useToken();
+      const t = useI18n(i18nLocale);
+      const {
+        token: { colorTextLightSolid, colorTextBase },
+      } = antdTheme.useToken();
 
-    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-    const [openKeys, setOpenKeys] = useState<string[]>([]);
+      const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+      const [openKeys, setOpenKeys] = useState<string[]>([]);
 
-    const onOpenChange = (opens: string[]) => {
-      setOpenKeys(opens);
-    }
+      const onOpenChange = (opens: string[]) => {
+        setOpenKeys(opens);
+      };
 
-    useEffect(() => {
-      if (routeItem) {
-        setSelectedKeys([routeItem.path]);
-        if (collapsed) {
-          setOpenKeys([]);
-        } else {
-          if (routeItem.meta?.parentPath && mode === 'inline') {
+      useEffect(() => {
+        if (routeItem) {
+          setSelectedKeys([routeItem.path]);
+          if (collapsed) {
+            setOpenKeys([]);
+          } else if (routeItem.meta?.parentPath && mode === 'inline') {
             setOpenKeys([routeItem.meta?.parentPath[0]]);
           }
         }
-      }
-    }, [routeItem, collapsed, mode]);
+      }, [routeItem, collapsed, mode]);
 
-    return <div id='universallayout-left'>
-      <div className='universallayout-left-sider'>
-        {mode === 'inline' ? (
-          <Flex align='center' justify='center' style={{ height: 64 }}>
-            <Link to='/' style={{ color: theme === 'light' ? colorTextBase : colorTextLightSolid }}>
-              {collapsed ? 'MA' : <img alt='' src={theme === 'light' ? logoDark : logoWhite} height='100' style={{ marginTop: '12px' }} />}
-            </Link>
-          </Flex>
-        ) : null}
-        <div className='universallayout-left-menu'>
-          {mode === 'inline' ? (
-            <Menu
-              theme={theme === 'light' ? 'light' : 'dark'}
-              mode={mode}
-              selectedKeys={selectedKeys}
-              openKeys={openKeys}
-              onOpenChange={onOpenChange}
-              items={createMenuItems(t, userRoles, menuData)}
-            />
-          ) : (
-            <Menu
-              theme={theme === 'light' ? 'light' : 'dark'}
-              mode={mode}
-              selectedKeys={selectedKeys}
-              items={createMenuItems(t, userRoles, menuData)}
-            />
-          )}
+      if (mode !== 'inline') {
+        return (
+          <Menu
+            theme={theme === 'light' ? 'light' : 'dark'}
+            mode={mode}
+            selectedKeys={selectedKeys}
+            className='menu'
+            items={createMenuItems(t, userRoles, menuData)}
+          />
+        )
+      }
+
+      return (
+        <div className='universallayout-left'>
+          <div className='universallayout-left-sider'>
+            <Flex align='center' justify='center' className='logo'>
+              <Link to='/' style={{ color: theme === 'light' ? colorTextBase : colorTextLightSolid }}>
+                {collapsed ? (
+                  settings.siteAbbreviationTitle
+                ) : (
+                  <img
+                    alt=''
+                    src={theme === 'light' ? logoDark : logoWhite}
+                    height='100'
+                    className='mt-12'
+                  />
+                )}
+              </Link>
+            </Flex>
+            <div className='universallayout-left-menu'>
+              <Menu
+                theme={theme === 'light' ? 'light' : 'dark'}
+                mode={mode}
+                selectedKeys={selectedKeys}
+                openKeys={openKeys}
+                onOpenChange={onOpenChange}
+                items={createMenuItems(t, userRoles, menuData)}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  }
-));
+      );
+    },
+  ),
+);

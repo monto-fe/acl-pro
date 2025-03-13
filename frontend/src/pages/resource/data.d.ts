@@ -15,4 +15,3 @@ export interface TableListItem {
   create_time: number;
   update_time: number;
 }
-

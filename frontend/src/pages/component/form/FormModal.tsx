@@ -1,34 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Modal, Form } from 'antd';
 import FormItemComponent from './Item';
-
-interface IFormModal {
-  formInstance?: any;
-  visible: boolean;
-  setVisible: Function;
-  width?: number;
-  title: React.ReactElement | string | undefined;
-  description?: React.ReactElement | string | undefined;
-  footer?: React.ReactElement | string | undefined;
-  confirmLoading?: boolean;
-  ItemOptions: any[];
-  initialValues?: any;
-  onFieldsChange?: Function;
-  formLayout?: {
-    labelCol: { span: number },
-    wrapperCol: { span: number },
-  };
-  onFinish?: Function;
-  onCancel?: Function;
-}
-
-interface FieldData {
-  name: string | number | (string | number)[];
-  value?: any;
-  touched?: boolean;
-  validating?: boolean;
-  errors?: string[];
-}
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
+import { FieldData, IFormModal } from '@/@types/form';
 
 const layout = {
   labelCol: { span: 6 },
@@ -69,6 +44,10 @@ function FormModal(props: IFormModal) {
 
   const [form] = formInstance || Form.useForm();
 
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+
   const onOk = () => {
     form.validateFields().then((values: any) => {
       const data = { ...values };
@@ -79,7 +58,6 @@ function FormModal(props: IFormModal) {
   const handleFieldChange = (field: FieldData[], fields: FieldData[]): void => {
     if (onFieldsChange) {
       onFieldsChange(form, field, fields);
-      return;
     }
   };
 
@@ -96,7 +74,7 @@ function FormModal(props: IFormModal) {
       maskClosable={false}
       onOk={onOk}
       width={width}
-      cancelText={'关闭'}
+      cancelText={t('app.global.close')}
       confirmLoading={confirmLoading}
     >
       {description && <Form.Item>{description}</Form.Item>}
@@ -110,21 +88,27 @@ function FormModal(props: IFormModal) {
           onFieldsChange={handleFieldChange}
           clearOnDestroy
         >
-          {ItemOptions.map((item, index) =>
-            item.hidden ? null : (
+          {ItemOptions.map((item, index) => {
+            if (item.hidden) return null;
+            const itemGenerator = FormItemComponent[item.type || 'Content'] as Function;
+
+            return (
               <Form.Item
                 key={index}
                 {...item}
                 rules={
                   item.validators
-                    ? [{ required: item.required, message: `${item.label}必填！` }, ...item.validators]
-                    : [{ required: item.required, message: `${item.label}必填！` }]
+                    ? [
+                      { required: item.required, message: `${item.label} ${t('app.form.required')} ！` },
+                      ...item.validators,
+                    ]
+                    : [{ required: item.required, message: `${item.label} ${t('app.form.required')} ！` }]
                 }
               >
-                {FormItemComponent({ field: item })}
+                {itemGenerator({ field: item })}
               </Form.Item>
             )
-          )}
+          })}
         </Form>
       ) : null}
       {footer}

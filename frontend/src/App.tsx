@@ -8,24 +8,27 @@ import Routes from '@/config/routes';
 import { BasicContext } from '@/store/context';
 import { getAntdI18nMessage } from '@/store/i18n';
 
-export default memo(observer(() => {
-  const context = useContext(BasicContext) as any;
-  const { i18nLocale, globalConfig } = context.storeContext;
-  const antdMessage = getAntdI18nMessage(i18nLocale.toLocaleLowerCase());
+export default memo(
+  observer(() => {
+    const context = useContext(BasicContext) as any;
+    const { i18nLocale, globalConfig } = context.storeContext;
+    const antdMessage = getAntdI18nMessage(i18nLocale);
 
-  dayjs.locale(i18nLocale.toLocaleLowerCase());
+    dayjs.locale(i18nLocale.toLocaleLowerCase());
 
-  useEffect(() => {
-    setHtmlLang(i18nLocale);
-  }, []);
+    useEffect(() => {
+      setHtmlLang(i18nLocale);
+    }, []);
 
-  return (
-    <ConfigProvider
-      locale={antdMessage}
-      theme={{
-        algorithm: globalConfig.theme === 'all-dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
-      }}>
-      <Routes />
-    </ConfigProvider>
-  );
-}));
+    return (
+      <ConfigProvider
+        locale={antdMessage}
+        theme={{
+          algorithm: globalConfig.theme === 'all-dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        }}
+      >
+        <Routes />
+      </ConfigProvider>
+    );
+  }),
+);

@@ -27,18 +27,21 @@ export interface RightTopProps {
 }
 
 export default memo(({ menuData, routeItem, userRoles = [], breadCrumbs = [] }: RightTopProps) => {
-  const storeContext = (useContext(BasicContext) as any).storeContext;
+  const { storeContext } = useContext(BasicContext) as any;
   const { globalConfig } = storeContext;
   const {
     token: { colorTextLightSolid, colorTextBase },
   } = theme.useToken();
+
   return (
-    <div
-      id='universallayout-right-top'
-      style={{ flex: 1 }}
-    >
-      <Flex className='universallayout-right-top-header' style={{ height: '100%' }}>
-        <Flex className='universallayout-right-top-top' align='center' justify="space-between" style={{ width: '100%', padding: '0 24px' }}>
+    <div className='universallayout-right-top'>
+      <Flex className='universallayout-right-top-header'>
+        <Flex
+          className='universallayout-right-top-top'
+          align='center'
+          justify='space-between'
+          wrap="nowrap"
+        >
           {globalConfig.navMode === 'inline' ? (
             <>
               <div className='universallayout-top-menu'>
@@ -55,22 +58,28 @@ export default memo(({ menuData, routeItem, userRoles = [], breadCrumbs = [] }: 
             </>
           ) : (
             <>
-              <Link to='/' className='logo-url' style={{ width: 200, color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}>
+              <Link
+                to='/'
+                className='logo-url'
+                style={{ color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}
+              >
                 <Flex align='center' gap={8}>
                   <img alt='' src={globalConfig.theme === 'light' ? logoDark : logoWhite} width='130' />
                 </Flex>
               </Link>
-              <Flex flex={1}>
-                <LeftSider
-                  collapsed={globalConfig.collapsed}
-                  userRoles={userRoles}
-                  menuData={menuData}
-                  routeItem={routeItem}
-                  theme={globalConfig.theme}
-                  mode='horizontal'
-                />
-              </Flex>
-              <Flex gap={12} className='universallayout-top-menu-right' style={{ color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}>
+              <LeftSider
+                collapsed={globalConfig.collapsed}
+                userRoles={userRoles}
+                menuData={menuData}
+                routeItem={routeItem}
+                theme={globalConfig.theme}
+                mode='horizontal'
+              />
+              <Flex
+                gap={12}
+                className='universallayout-top-menu-right'
+                style={{ color: globalConfig.theme === 'light' ? colorTextBase : colorTextLightSolid }}
+              >
                 <Suspense fallback={<>loading...</>}>
                   <RightTopMessage />
                 </Suspense>

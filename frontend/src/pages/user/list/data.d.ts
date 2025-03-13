@@ -1,4 +1,4 @@
-import { TableListItem as RoleTableListItem } from '@/pages/role/data.d'
+import { TableListItem as RoleTableListItem } from '@/pages/role/data.d';
 
 export interface TableQueryParam {
   id?: number;
@@ -30,4 +30,3 @@ export interface TableListItem {
   create_time: number;
   update_time: number;
 }
-

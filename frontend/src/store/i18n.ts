@@ -19,9 +19,9 @@ export const antdMessages: { [key in I18nKey]: any } = {
 // 语言配置
 const sysLocale = getLocale();
 export const i18nLocaleDefault = antdMessages[sysLocale] ? sysLocale : defaultLang;
-export const getI18nLocale: (i18n: I18nKey) => I18nVal = (i18n: I18nKey) => (globalLocales[i18n] || globalLocales['zh-CN']) as I18nVal;
+export const getI18nLocale: (i18n: I18nKey) => I18nVal = (i18n: I18nKey) =>
+  (globalLocales[i18n] || globalLocales['zh-CN']) as I18nVal;
 export const getAntdI18nMessage = (i18n: I18nKey) => antdMessages[i18n] || antdMessages['zh-CN'];
 
-export const useI18n = (i18n: I18nKey) => {
-  return (key: string) => getI18nLocale(i18n)[key] || getAntdI18nMessage(i18n)[key] || key;
-}
+export const useI18n = (i18n: I18nKey) => (key: string) =>
+  getI18nLocale(i18n)[key] || getAntdI18nMessage(i18n)[key] || key;

@@ -1,30 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import {
-  Button,
-  FormInstance,
-  message,
-  Popconfirm,
-  PopconfirmProps,
-  Popover,
-  Space,
-} from 'antd';
+import { memo, useContext, useEffect, useRef, useState } from 'react';
+import { Button, FormInstance, message, Popconfirm, PopconfirmProps, Popover, Space } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { observer } from 'mobx-react-lite';
 
+import { BasicContext } from '@/store/context';
+import { useI18n } from '@/store/i18n';
 import { ResponseData } from '@/utils/request';
 import { createData, queryList, removeData, updateData as updateDataService } from './service';
 import { queryList as queryRoleList } from '@/pages/role/service';
 import { TableListItem as RoleTableListItem } from '@/pages/role/data.d';
-import { TableListItem, TableQueryParam } from './data.d';
+import CommonTable from '@/pages/component/Table';
+import { ITable } from '@/pages/component/Table/data';
+import Permission from '@/components/Permission';
+import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
 
 import CreateForm from './components/CreateForm';
-import { renderDateFromTimestamp, timeFormatType } from '@/utils/timeformat';
-import CommonTable from '@/pages/component/table';
-import { ITable } from '@/pages/component/table/data';
-import Permission from '@/components/Permission';
 import Preview from './components/Preview';
+import { TableListItem } from './data.d';
 
 function App() {
   const tableRef = useRef<ITable<TableListItem>>();
+  const context = useContext(BasicContext) as any;
+  const { i18nLocale } = context.storeContext;
+  const t = useI18n(i18nLocale);
+
   const [roleList, setRoleList] = useState<RoleTableListItem[]>([]);
 
   const getRoleList = () => {
@@ -36,11 +35,9 @@ function App() {
         setRoleList(response.data.data || []);
       }
     });
-  }
+  };
 
-  const reload = () => {
-    tableRef.current && tableRef.current.reload && tableRef.current.reload()
-  }
+  const reload = () => tableRef.current && tableRef.current.reload && tableRef.current.reload();
 
   useEffect(() => {
     getRoleList();
@@ -51,13 +48,13 @@ function App() {
   const handleDelete = (id: number) => setDeleteOpen(id);
   const deleteConfirm = (id: number, user: string) => {
     removeData(id, user).then(() => {
-      message.success('删除成功！');
+      message.success(t('app.global.tip.delete.success'));
       reload();
       setDeleteOpen(void 0);
-    })
+    });
   };
 
-  const deleteCancel: PopconfirmProps['onCancel'] = (e) => {
+  const deleteCancel: PopconfirmProps['onCancel'] = () => {
     setDeleteOpen(void 0);
   };
 
@@ -72,28 +69,30 @@ function App() {
   const handleCreate = () => {
     setUpdateData({});
     setCreateFormVisible(true);
-  }
+  };
 
   const createSubmit = async (values: TableListItem, form: FormInstance) => {
     setCreateSubmitLoading(true);
     const request = updateData.id ? updateDataService : createData;
-    request({ ...values, id: updateData.id as number }).then(() => {
-      form.resetFields();
-      setCreateFormVisible(false);
-      message.success(values.id ? '修改成功' : '新增成功！');
-      reload();
+    request({ ...values, id: updateData.id as number })
+      .then(() => {
+        form.resetFields();
+        setCreateFormVisible(false);
+        message.success(t(values.id ? 'app.global.tip.update.success' : 'app.global.tip.create.success'));
+        reload();
 
-      setCreateSubmitLoading(false);
-    }).catch(() => {
-      setCreateSubmitLoading(false);
-    });
+        setCreateSubmitLoading(false);
+      })
+      .catch(() => {
+        setCreateSubmitLoading(false);
+      });
   };
 
   const handleUpdate = (record: TableListItem) => {
     setUpdateData({
       ...record,
-      password: '●●●●●●●●',
-      role_ids: (record.role || []).map(role => role.id)
+      password: '※※※※※※',
+      role_ids: (record.role || []).map((role) => role.id),
     });
     setCreateFormVisible(true);
   };
@@ -101,11 +100,11 @@ function App() {
   const handlePreview = (record: TableListItem) => {
     setPreviewData({
       ...record,
-      password: '●●●●●●●●',
-      role_ids: (record.role || []).map(role => role.id)
+      password: '※※※※※※',
+      role_ids: (record.role || []).map((role) => role.id),
     });
     setPreviewVisible(true);
-  }
+  };
 
   const columns: ColumnsType<TableListItem> = [
     {
@@ -114,17 +113,17 @@ function App() {
       key: 'id',
     },
     {
-      title: '英文名',
+      title: t('page.user.enname'),
       dataIndex: 'user',
       key: 'user',
     },
     {
-      title: '姓名',
+      title: t('page.user.cnname'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: '角色',
+      title: t('page.user.role'),
       dataIndex: 'roleName',
       key: 'roleName',
       width: 120,
@@ -144,7 +143,7 @@ function App() {
                   }
                   trigger='hover'
                 >
-                  {record.role[0]?.name + '...'}
+                  {`${record.role[0]?.name}...`}
                 </Popover>
               ) : (
                 record.role[0]?.name
@@ -163,54 +162,69 @@ function App() {
       filterSearch: true,
     },
     {
-      title: '职位',
+      title: t('page.user.job'),
       dataIndex: 'job',
       key: 'job',
     },
     {
-      title: '邮箱',
+      title: t('page.user.email'),
       dataIndex: 'email',
       key: 'email',
       width: 200,
     },
     {
-      title: '手机号',
+      title: t('page.user.phone'),
       dataIndex: 'phone_number',
       key: 'phone_number',
       width: 150,
     },
     {
-      title: '更新时间',
+      title: t('app.table.updatetime'),
       dataIndex: 'update_time',
       key: 'update_time',
       width: 200,
       sorter: true,
-      render: (text: number) => renderDateFromTimestamp(text, timeFormatType.time)
+      render: (text: number) => renderDateFromTimestamp(text, timeFormatType.time),
     },
     {
-      title: '操作',
+      title: t('app.table.action'),
       dataIndex: 'action',
       key: 'action',
       fixed: 'right',
+      width: 150,
       render: (text, record: TableListItem) => (
-        <Permission role="admin" noNode={<Button className='btn-group-cell' size='small' type='link' onClick={() => handlePreview(record)}>
-          查看
-        </Button>}>
+        <Permission
+          role='admin'
+          noNode={
+            <Button className='btn-group-cell' size='small' type='link' onClick={() => handlePreview(record)}>
+              {t('app.global.view')}
+            </Button>
+          }
+        >
           <Space size='small'>
+            <Button className='btn-group-cell' size='small' type='link' onClick={() => handlePreview(record)}>
+              {t('app.global.view')}
+            </Button>
             <Button className='btn-group-cell' size='small' type='link' onClick={() => handleUpdate(record)}>
-              编辑
+              {t('app.global.edit')}
             </Button>
             <Popconfirm
               open={deleteOpen === record.id}
-              title='Delete the task'
-              description='Are you sure to delete this task?'
+              title={t('app.global.delete')}
+              description={t('app.global.delete.tip')}
               onConfirm={() => deleteConfirm(record.id, record.user)}
               onCancel={deleteCancel}
               okText='Yes'
               cancelText='No'
             >
-              <Button danger className='btn-group-cell' onClick={() => handleDelete(record.id)} size='small' type='link'>
-                删除
+              <Button
+                danger
+                className='btn-group-cell'
+                onClick={() => handleDelete(record.id)}
+                size='small'
+                type='link'
+              >
+                {t('app.global.delete')}
               </Button>
             </Popconfirm>
           </Space>
@@ -221,16 +235,16 @@ function App() {
 
   const formItems = [
     {
-      label: '英文名	',
+      label: t('page.user.enname'),
       name: 'user',
       type: 'Input',
-      span: 8
+      span: 8,
     },
     {
-      label: '姓名',
+      label: t('page.user.cnname'),
       name: 'userName',
       type: 'Input',
-      span: 8
+      span: 8,
     },
   ];
 
@@ -241,9 +255,9 @@ function App() {
         columns={columns}
         queryList={queryList}
         title={
-          <Permission role="admin" noNode={null}>
+          <Permission role='admin' noNode={null}>
             <Button type='primary' onClick={handleCreate}>
-              新增用户
+              {t('page.user.add')}
             </Button>
           </Permission>
         }
@@ -259,14 +273,9 @@ function App() {
         onSubmit={createSubmit}
         onSubmitLoading={createSubmitLoading}
       />
-      <Preview
-        visible={previewVisible}
-        setVisible={setPreviewVisible}
-        data={previewData}
-        roleList={roleList}
-      />
+      <Preview visible={previewVisible} setVisible={setPreviewVisible} data={previewData} roleList={roleList} />
     </div>
   );
 }
 
-export default App;
+export default memo(observer(App));

@@ -64,7 +64,6 @@ function ArticleChartCard() {
               ) : (
                 <span className={styles.color19be6b}>
                   <DownOutlined />
-
                 </span>
               )}
             </span>
@@ -92,6 +91,6 @@ function ArticleChartCard() {
       </Card>
     </Spin>
   );
-};
+}
 
 export default observer(ArticleChartCard);

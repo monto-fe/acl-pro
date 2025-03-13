@@ -2,6 +2,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
+    "types": [
+      "vite/client"
+    ],
     "lib": [
       "DOM",
       "DOM.Iterable",
@@ -14,19 +17,16 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": [
-      "vite/client"
-    ],
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
     }
   },
   "include": [

@@ -136,6 +136,6 @@ function WorksChartCard() {
       </Card>
     </Spin>
   );
-};
+}
 
 export default observer(WorksChartCard);

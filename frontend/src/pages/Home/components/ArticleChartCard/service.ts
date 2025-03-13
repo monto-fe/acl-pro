@@ -7,6 +7,6 @@ export async function dailynewArticles(): Promise<any> {
       num: 99,
       week: 4,
       day: 30,
-    }
+    },
   };
 }

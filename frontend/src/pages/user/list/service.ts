@@ -17,7 +17,7 @@ export async function createData(params: TableListItem): Promise<any> {
     method: 'post',
     data: {
       ...params,
-      namespace
+      namespace,
     },
   });
 }
@@ -40,7 +40,7 @@ export async function removeData(id: number, user: string): Promise<any> {
     data: {
       id,
       user,
-      namespace
+      namespace,
     },
   });
 }

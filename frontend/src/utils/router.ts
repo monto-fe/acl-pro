@@ -159,7 +159,7 @@ export const hasPermissionRoles = (userRoles: IRoleInfo[], roles?: string | stri
     return true;
   }
 
-  if (userRoles.find(role => role.role === 'admin')) {
+  if (userRoles.find((role) => role.role === 'admin')) {
     return true;
   }
 
@@ -168,7 +168,7 @@ export const hasPermissionRoles = (userRoles: IRoleInfo[], roles?: string | stri
   }
 
   if (typeof roles === 'string') {
-    return userRoles.findIndex(role => role.role === roles) > -1;
+    return userRoles.findIndex((role) => role.role === roles) > -1;
   }
 
   if (roles instanceof Array && roles.length === 0) {
@@ -176,7 +176,7 @@ export const hasPermissionRoles = (userRoles: IRoleInfo[], roles?: string | stri
   }
 
   if (roles instanceof Array && roles.length > 0) {
-    return roles.some((role) => userRoles.findIndex(currentRole => currentRole.role === role) > -1);
+    return roles.some((role) => userRoles.findIndex((currentRole) => currentRole.role === role) > -1);
   }
 
   return false;
@@ -225,7 +225,7 @@ export const getBreadcrumbRoutes = (pathname: string, jsonRoutesData: IPathKeyRo
       bread.push({
         title: element.meta?.title || '',
         path: element.path,
-        redirect: element.redirect
+        redirect: element.redirect,
       });
     }
 
@@ -236,7 +236,7 @@ export const getBreadcrumbRoutes = (pathname: string, jsonRoutesData: IPathKeyRo
     bread.push({
       title: route.meta?.title || '',
       path: route.path,
-      redirect: route.redirect
+      redirect: route.redirect,
     });
 
     return bread;
